@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-06-27T19:32:18.733Z</updated>
+    <updated>2020-06-27T19:36:57.281Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -11,26 +11,48 @@
     <icon>https://geckoc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, RichardTech</rights>
     <entry>
-        <title type="html"><![CDATA[Hello Gridea]]></title>
-        <id>https://geckoc.github.io/post/hello-gridea/</id>
-        <link href="https://geckoc.github.io/post/hello-gridea/">
+        <title type="html"><![CDATA[关于Java异常深入理解 ]]></title>
+        <id>https://geckoc.github.io/post/guan-yu-java-yi-chang-shen-ru-li-jie/</id>
+        <link href="https://geckoc.github.io/post/guan-yu-java-yi-chang-shen-ru-li-jie/">
         </link>
-        <updated>2018-12-11T16:00:00.000Z</updated>
-        <content type="html"><![CDATA[<h2 id="特性">特性👇</h2>
-<p>📝  你可以使用最酷的 <strong>Markdown</strong> 语法，进行快速创作</p>
-<p>🌉  你可以给文章配上精美的封面图和在文章任意位置插入图片</p>
-<p>🏷️  你可以对文章进行标签分组</p>
-<p>📋  你可以自定义菜单，甚至可以创建外部链接菜单</p>
-<p>💻  你可以在 <strong>Windows</strong>，<strong>MacOS</strong> 或 <strong>Linux</strong> 设备上使用此客户端</p>
-<p>🌎  你可以使用 <strong>𝖦𝗂𝗍𝗁𝗎𝖻 𝖯𝖺𝗀𝖾𝗌</strong> 或 <strong>Coding Pages</strong> 向世界展示，未来将支持更多平台</p>
-<p>💬  你可以进行简单的配置，接入 <a href="https://github.com/gitalk/gitalk">Gitalk</a> 或 <a href="https://github.com/SukkaW/DisqusJS">DisqusJS</a> 评论系统</p>
-<p>🇬🇧  你可以使用<strong>中文简体</strong>或<strong>英语</strong></p>
-<p>🌁  你可以任意使用应用内默认主题或任意第三方主题，强大的主题自定义能力</p>
-<p>🖥  你可以自定义源文件夹，利用 OneDrive、百度网盘、iCloud、Dropbox 等进行多设备同步</p>
-<p>🌱 当然 <strong>Gridea</strong> 还很年轻，有很多不足，但请相信，它会不停向前 🏃</p>
-<p>未来，它一定会成为你离不开的伙伴</p>
-<p>尽情发挥你的才华吧！</p>
-<p>😘 Enjoy~</p>
+        <updated>2020-06-27T19:32:58.000Z</updated>
+        <content type="html"><![CDATA[<p>throws | try catch Day_27<br>
+◾不建议在main()方法中直接调用throws，因为一旦出现异常JVM将会直接终止，一般采用try catch<br>
+◾关于throws和try...catch的选择，当需要反馈给调用者异常信息时，则throws<br>
+◾异常在Java程序中是以类和对象存在的<br>
+◾异常的作用：增强程序的j健壮性</p>
+<p>异常中的关键字<br>
+◾try<br>
+◾try 和 finally 可以联合使用，try不可单独使用</p>
+<p>◾catch<br>
+◾catch可以捕捉多个异常<br>
+◾catch的异常顺序必须遵循自上而下从小到大的原则</p>
+<p>◾finally<br>
+1.finally子语句必须和try...catch使用<br>
+2.finally语句块中的代码一旦会执行且在最后执行<br>
+3.finally多用于资源的释放和关闭，因执行有保障</p>
+<p>◾throws<br>
+◾throws可以抛出多个异常以逗号隔开<br>
+◾在方法声明位置上使用，表示上报异常给调用者</p>
+<p>◾throw 手动抛出异常</p>
+<p>自定义异常Exception<br>
+1.创建的类中继承Exception或者RuntimeException<br>
+2.创建构造方法，一个无参数的，一个有参数String的</p>
+<p>final	finally	finalize 三者间的区别</p>
+<p>final ---- 关键字<br>
+◾final修饰的类无法继承<br>
+◾final修饰的方法无法重载/重写override<br>
+◾final修饰的变量无法重写赋值</p>
+<p>finally ---- 关键字<br>
+◾finally语句块的代码必须执行<br>
+◾finally和try可以联合使用<br>
+◾System.exit(0)，终止JVM时finally语句块的代码无法执行</p>
+<p>finalize ---- 标识符<br>
+◾这是一个Object类中的方法名<br>
+◾此方法是由垃圾回收器GC调用的<br>
+◾finalize 已经过时<br>
+在方法重写Override中，重写的方法抛出的异常不能比父类的多（宽泛性）<br>
+<img src="https://geckoc.github.io//post-images/1593286607347.jpg" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
 </feed>
