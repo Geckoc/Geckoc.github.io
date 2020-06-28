@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
   <head>
       <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,14 +9,14 @@
   <meta name="keywords" content="">
   <meta name="description" content="">
   <meta name="author" content="kveln">
-  <title>RichardTech</title>
+  <title>Collection Essential | RichardTech</title>
   <link href="https://cdn.bootcss.com/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
   <!-- <link href="https://geckoc.github.io//media/css/bootstrap.min.css" rel="stylesheet"> -->
   <!--  <link href="https://geckoc.github.io//media/css/all.min.css" rel="stylesheet" type="text/css"> -->
   <link href="https://cdn.bootcss.com/font-awesome/5.11.2/css/all.min.css" rel="stylesheet">
   <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-  <link rel="alternate" type="application/rss+xml" title="RichardTech » Feed" href="https://geckoc.github.io//atom.xml">
+  <link rel="alternate" type="application/rss+xml" title="Collection Essential | RichardTech » Feed" href="https://geckoc.github.io//atom.xml">
   <link rel="stylesheet"href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.15.10/build/styles/androidstudio.min.css">
   <link href="https://geckoc.github.io//styles/main.css" rel="stylesheet">
   <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
@@ -25,9 +25,15 @@
   <script>hljs.initHighlightingOnLoad();</script>
   
 
+    <meta property="og:description" content="Collection Essential"/>
+    <meta property="og:url" content="https://geckoc.github.io/post/collection-essential/"/>
+    <meta property="og:locale" content="zh-CN"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:site_name" content="RichardTech"/>
   </head>
   <body>
-     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+  	<!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
     <div class="container">
       <a class="navbar-brand" href="https://geckoc.github.io/">RichardTech</a>
       <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,31 +71,35 @@
       </div>
     </div>
   </nav>
+  <!-- Page Header -->
   <header class="masthead" style="background-image: url('https://geckoc.github.io//media/images/home-bg.jpg')">
     <div class="overlay"></div>
     <div class="container">
       <div class="row">
         <div class="col-lg-8 col-md-10 mx-auto">
-          <div class="site-heading">
-            <h1>RichardTech</h1>
-            <span class="subheading">温故而知新</span>
+          <div class="post-heading">
+          	<span class="tags">
+          	 
+            <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">JavaNote</a>
+            
+        </span>
+            <h1>Collection Essential</h1>
+            <span class="meta">
+            	Posted on
+              2020-06-29，3 min read
+            </span>
           </div>
         </div>
       </div>
     </div>
   </header>
-      <div class="container">
-    <div class="row">
-      <div class="col-lg-8 col-md-10 mx-auto">
-       
-        <div class="post-preview">
-          <a href="https://geckoc.github.io/post/collection-essential/">
-            <h2 class="post-title">
-              Collection Essential
-            </h2>
-            </a>
-            <h3 class="post-subtitle">
-              <h3 id="collection当中可存放-的元素"><em>Collection</em>当中可存放 的元素</h3>
+
+  <!-- Post Content -->
+  <article>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 col-md-10 mx-auto">
+          <h3 id="collection当中可存放-的元素"><em>Collection</em>当中可存放 的元素</h3>
 <ul>
 <li>没有使用**&quot;泛型&quot;**之前， <em>Collection</em> 中可以存储Object的所有子类型</li>
 <li>使用了**&quot;泛型&quot;**之后，<em>Collection</em> 只能存储某个具体的类型</li>
@@ -189,64 +199,56 @@ class User{
 </code></pre>
 <h3 id="结论存放在集合中的类型一种要重写equals方法"><strong><em>结论：存放在集合中的类型，一种要重写equals方法</em></strong></h3>
 <hr>
+<!-- more -->
+<h3 id="关于集合遍历-迭代器"><strong>关于集合遍历 迭代器</strong></h3>
+<ol>
+<li><em>boolean hasNext()</em>  如果仍有元素可迭代，则返回 <em>true</em></li>
+<li><em>Object next()</em> 让迭代器前进一位且返回所迭代中指向的元素。</li>
+<li><em>remove()</em> 从底层集合中删除此迭代器返回的最后一个元素（可选操作）。
+<blockquote>
+<p><em>Collection</em>通用迭代方法，在<em>Map</em>集合中不能使用</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="list集合存储元素特点有序可重复元素有下标-实现类-arrayslist-linkedlist-vector">List集合存储元素特点：有序可重复，元素有下标   实现类 <em>ArraysList、LinkedList、Vector</em></h4>
+<h4 id="set集合存储元素特点无序不可重复元素没有下标-实现类-hashset-treeset">Set集合存储元素特点：无序不可重复，元素没有下标  实现类 <em>HashSet、TreeSet</em></h4>
 
-            </h3>
-          <p class="post-meta">
-             <span class="time">2020-06-29</span>
-             <span>,</span>
-             <span class="post-stats">3 min read</span>
-            </p>
-        </div>
-        <hr>
-        <div class="clearfix">
-        </div>
-        
-        <div class="post-preview">
-          <a href="https://geckoc.github.io/post/javawebthe-superclass-javaxservlethttphttpservlet-was-not-found-on-the-java-build-path/">
-            <h2 class="post-title">
-              JavaWeb:The superclass &#34;javax.servlet.http.HttpServlet&#34; was not found on the Java Build Path
-            </h2>
+          
+          <p class="next-post">下一篇：
+            <a href="https://geckoc.github.io/post/javawebthe-superclass-javaxservlethttphttpservlet-was-not-found-on-the-java-build-path/">
+              <span class="post-title">
+                JavaWeb:The superclass &#34;javax.servlet.http.HttpServlet&#34; was not found on the Java Build Path&rarr;
+              </span>
             </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2020-06-28</span>
-             <span>,</span>
-             <span class="post-stats">1 min read</span>
-            </p>
-        </div>
-        <hr>
-        <div class="clearfix">
-        </div>
+          </p>
         
-        <div class="post-preview">
-          <a href="https://geckoc.github.io/post/guan-yu-java-yi-chang-shen-ru-li-jie/">
-            <h2 class="post-title">
-              关于Java异常深入理解 
-            </h2>
-            </a>
-            <h3 class="post-subtitle">
-              
-            </h3>
-          <p class="post-meta">
-             <span class="time">2020-06-28</span>
-             <span>,</span>
-             <span class="post-stats">2 min read</span>
-            </p>
+        <div class="comment">
+          
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<div id="gitalk-container"></div>
+<script>
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
+    repo: 'https://geckoc.github.io/',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+  gitalk.render('gitalk-container')
+</script>
+
+          
+          
+        
         </div>
-        <hr>
-        <div class="clearfix">
-        </div>
-        
-        
-        
       </div>
     </div>
-  </div>
-
-  
-    <!-- Footer -->
+  </article>
+ <!-- Footer -->
   <footer>
     <div class="container">
       <div class="row">
@@ -317,3 +319,4 @@ class User{
   })(this));</script>
   </body>
 </html>
+

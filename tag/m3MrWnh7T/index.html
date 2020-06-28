@@ -46,12 +46,6 @@
           
           <li class="nav-item">
               
-              <a class="nav-link" href="/life">LIFE</a>
-              
-          </li>
-          
-          <li class="nav-item">
-              
               <a class="nav-link" href="/tags">标签</a>
               
           </li>
@@ -89,6 +83,125 @@
     <div class="row">
       <div class="col-lg-8 col-md-10 mx-auto">
        
+        <div class="post-preview">
+          <a href="https://geckoc.github.io/post/collection-essential/">
+            <h2 class="post-title">
+              Collection Essential
+            </h2>
+            </a>
+            <h3 class="post-subtitle">
+              <h3 id="collection当中可存放-的元素"><em>Collection</em>当中可存放 的元素</h3>
+<ul>
+<li>没有使用**&quot;泛型&quot;**之前， <em>Collection</em> 中可以存储Object的所有子类型</li>
+<li>使用了**&quot;泛型&quot;**之后，<em>Collection</em> 只能存储某个具体的类型</li>
+</ul>
+<blockquote>
+<p>集合中不能直接存储基本数据类型和Java对象，只能存储对象的内存地址（引用）<br>
+<em>Collection</em>是接口，无法实例化对象</p>
+</blockquote>
+<h3 id="collection中的常用方法"><em>Collection</em>中的常用方法</h3>
+<blockquote>
+<p>boolean add(Object e)<br>
+<em>boolean contains(Object o)</em><br>
+<em>boolean remove(Object o)</em><br>
+<em>int size()</em><br>
+<em>boolean isEmpty()</em><br>
+<em>Object[] toArray()</em> <s>把集合转换为数组</s></p>
+</blockquote>
+<hr>
+<pre><code>public class ContainTest {
+	public static void main(String[] args) {
+		Collection c = new ArrayList();
+		String s1 = new String(&quot;abc&quot;);
+		c.add(s1);
+		String s2 = new String(&quot;edf&quot;);
+		c.add(s2);
+		
+		String x = new String(&quot;abc&quot;);
+		/*
+		 * 	如果此集合包含指定的元素，则返回true 。 
+		 * 	更正式地，返回true
+		 * 	如果且仅当该集合至少包含一个元素e使得(o==null ? e==null : o.equals(e)) 
+		 *  contains底层调用了equals(),而String已经重写了equals方法
+		 *	所以比较的不是内存地址 ，而是内容
+		 */
+		System.out.println(c.contains(x)); //true
+	}
+}
+</code></pre>
+<pre><code>public class DeepContains {
+	public static void main(String[] args) {
+		Collection c = new ArrayList();
+		User u1 = new User(&quot;abc&quot;);
+		User u2 = new User(&quot;abc&quot;);
+		c.add(u1);
+		/*
+		 * 	User没有重写equals方法，底层Object的equals使用的是==
+		 * 	比较的是内存地址，返回false
+		 */
+//		System.out.println(c.contains(u2));
+		/*
+		 * 	重写User的equals方法后，返回true
+		 * 	比较的是内容
+		 */
+		System.out.println(c.contains(u2));
+		
+		Collection collection = new ArrayList();
+		String x1 = new String(&quot;jack&quot;);
+		String x2 = new String(&quot;jack&quot;);
+		collection.add(x1);
+		System.out.println(collection.size());
+		/*
+		 * remove方法底层调用了equals
+		 * 	删除x2的时候，既是删除了x1
+		 */
+		collection.remove(x2);
+		System.out.println(collection.size());
+		
+	}
+	
+}
+class User{
+	String name;
+	public User() {
+		// TODO Auto-generated constructor stub
+	}
+	public User(String name) {
+		
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+}
+</code></pre>
+<h3 id="结论存放在集合中的类型一种要重写equals方法"><strong><em>结论：存放在集合中的类型，一种要重写equals方法</em></strong></h3>
+<hr>
+
+            </h3>
+          <p class="post-meta">
+             <span class="time">2020-06-29</span>
+             <span>,</span>
+             <span class="post-stats">3 min read</span>
+            </p>
+        </div>
+        <hr>
+        <div class="clearfix">
+        </div>
+        
         <div class="post-preview">
           <a href="https://geckoc.github.io/post/javawebthe-superclass-javaxservlethttphttpservlet-was-not-found-on-the-java-build-path/">
             <h2 class="post-title">
