@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-06-28T19:31:16.228Z</updated>
+    <updated>2020-06-28T19:45:14.247Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -27,30 +27,12 @@
 </blockquote>
 <h3 id="collection中的常用方法"><em>Collection</em>中的常用方法</h3>
 <ul>
-<li>
-<pre><code>      * boolean add(Object e)*
-</code></pre>
-</li>
-<li>
-<pre><code>  	*boolean contains(Object o)*
-</code></pre>
-</li>
-<li>
-<pre><code>  	*boolean remove(Object o)*
-</code></pre>
-</li>
-<li>
-<pre><code>  	*int size()*
-</code></pre>
-</li>
-<li>
-<pre><code>  	*boolean isEmpty()*
-</code></pre>
-</li>
-<li>
-<pre><code>  	*Object[] toArray()* ~~把集合转换为数组~~
-</code></pre>
-</li>
+<li><strong><em>boolean add(Object e)</em></strong></li>
+<li><strong><em>boolean contains(Object o)</em></strong></li>
+<li><strong><em>boolean remove(Object o)</em></strong></li>
+<li><strong><em>nt size()</em></strong></li>
+<li><strong><em>boolean isEmpty()</em></strong></li>
+<li><strong><em>Object[] toArray()</em></strong>   <s>把集合转换为数组</s></li>
 </ul>
 <pre><code>public class ContainTest {
 	public static void main(String[] args) {
@@ -131,7 +113,7 @@ class User{
 	}
 }
 </code></pre>
-<h3 id="结论存放在集合中的类型一种要重写equals方法"><strong><em>结论：存放在集合中的类型，一种要重写equals方法</em></strong></h3>
+<h4 id="结论存放在集合中的类型一种要重写equals方法"><strong><em>结论：存放在集合中的类型，一种要重写equals方法</em></strong></h4>
 <hr>
 <h3 id="关于集合遍历-迭代器"><strong>关于集合遍历 迭代器</strong></h3>
 <ol>
@@ -145,7 +127,8 @@ class User{
 </ol>
 <ul>
 <li>List集合存储元素特点：有序可重复，元素有下标   实现类 <em>ArraysList、LinkedList、Vector</em></li>
-<li>Set集合存储元素特点：无序不可重复，元素没有下标  实现类 <em>HashSet、TreeSet</em></li>
+<li>Set集合存储元素特点：无序不可重复，元素没有下标  实现类 <em>HashSet、TreeSet</em><br>
+<img src="https://geckoc.github.io//post-images/1593373353494.jpg" alt="" loading="lazy"></li>
 </ul>
 ]]></content>
     </entry>
