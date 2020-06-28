@@ -101,23 +101,40 @@
         <div class="col-lg-8 col-md-10 mx-auto">
           <h3 id="collection当中可存放-的元素"><em>Collection</em>当中可存放 的元素</h3>
 <ul>
-<li>没有使用**&quot;泛型&quot;**之前， <em>Collection</em> 中可以存储Object的所有子类型</li>
-<li>使用了**&quot;泛型&quot;**之后，<em>Collection</em> 只能存储某个具体的类型</li>
+<li>没有使用&quot;泛型&quot;之前， <em>Collection</em> 中可以存储Object的所有子类型</li>
+<li>使用了&quot;泛型&quot;之后，<em>Collection</em> 只能存储某个具体的类型</li>
 </ul>
 <blockquote>
 <p>集合中不能直接存储基本数据类型和Java对象，只能存储对象的内存地址（引用）<br>
 <em>Collection</em>是接口，无法实例化对象</p>
 </blockquote>
 <h3 id="collection中的常用方法"><em>Collection</em>中的常用方法</h3>
-<blockquote>
-<p>boolean add(Object e)<br>
-<em>boolean contains(Object o)</em><br>
-<em>boolean remove(Object o)</em><br>
-<em>int size()</em><br>
-<em>boolean isEmpty()</em><br>
-<em>Object[] toArray()</em> <s>把集合转换为数组</s></p>
-</blockquote>
-<hr>
+<ul>
+<li>
+<pre><code>      * boolean add(Object e)*
+</code></pre>
+</li>
+<li>
+<pre><code>  	*boolean contains(Object o)*
+</code></pre>
+</li>
+<li>
+<pre><code>  	*boolean remove(Object o)*
+</code></pre>
+</li>
+<li>
+<pre><code>  	*int size()*
+</code></pre>
+</li>
+<li>
+<pre><code>  	*boolean isEmpty()*
+</code></pre>
+</li>
+<li>
+<pre><code>  	*Object[] toArray()* ~~把集合转换为数组~~
+</code></pre>
+</li>
+</ul>
 <pre><code>public class ContainTest {
 	public static void main(String[] args) {
 		Collection c = new ArrayList();
@@ -199,7 +216,6 @@ class User{
 </code></pre>
 <h3 id="结论存放在集合中的类型一种要重写equals方法"><strong><em>结论：存放在集合中的类型，一种要重写equals方法</em></strong></h3>
 <hr>
-<!-- more -->
 <h3 id="关于集合遍历-迭代器"><strong>关于集合遍历 迭代器</strong></h3>
 <ol>
 <li><em>boolean hasNext()</em>  如果仍有元素可迭代，则返回 <em>true</em></li>
@@ -210,8 +226,10 @@ class User{
 </blockquote>
 </li>
 </ol>
-<h4 id="list集合存储元素特点有序可重复元素有下标-实现类-arrayslist-linkedlist-vector">List集合存储元素特点：有序可重复，元素有下标   实现类 <em>ArraysList、LinkedList、Vector</em></h4>
-<h4 id="set集合存储元素特点无序不可重复元素没有下标-实现类-hashset-treeset">Set集合存储元素特点：无序不可重复，元素没有下标  实现类 <em>HashSet、TreeSet</em></h4>
+<ul>
+<li>List集合存储元素特点：有序可重复，元素有下标   实现类 <em>ArraysList、LinkedList、Vector</em></li>
+<li>Set集合存储元素特点：无序不可重复，元素没有下标  实现类 <em>HashSet、TreeSet</em></li>
+</ul>
 
           
           <p class="next-post">下一篇：
