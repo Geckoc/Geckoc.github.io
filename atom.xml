@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-06-28T07:26:27.908Z</updated>
+    <updated>2020-06-28T08:05:47.279Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -10,6 +10,24 @@
     <logo>https://geckoc.github.io/images/avatar.png</logo>
     <icon>https://geckoc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, RichardTech</rights>
+    <entry>
+        <title type="html"><![CDATA[JavaWeb:The superclass "javax.servlet.http.HttpServlet" was not found on the Java Build Path]]></title>
+        <id>https://geckoc.github.io/post/javawebthe-superclass-javaxservlethttphttpservlet-was-not-found-on-the-java-build-path/</id>
+        <link href="https://geckoc.github.io/post/javawebthe-superclass-javaxservlethttphttpservlet-was-not-found-on-the-java-build-path/">
+        </link>
+        <updated>2020-06-28T07:59:08.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="jsp页面顶端出现红色的报错信息"><em><strong>JSP页面顶端出现“红色”的报错信息:</strong></em></h2>
+<p><em><strong>The superclass &quot;javax.servlet.http.HttpServlet&quot; was not found on the Java Build Path。</strong></em><br>
+<em>原来Javaweb工程类中没有添加Tomcat运行时相关类导致。<br>
+下面是具体的解决方法：</em></p>
+<ol>
+<li><em>右击web工程-》属性或Build Path-》Java Build Path-&gt;Libraries-&gt; Add Libray...-&gt;Server Runtime -》Tomcat Server</em></li>
+<li><em>切换到Java Build Path界面中的Orader and Export，选择Tomcat。</em></li>
+</ol>
+<h3 id="注意"><strong>注意</strong></h3>
+<p>按以上方法操作时，若打开<em>Server Runtime</em>后一片空白，需要设置<em>Apache</em>服务器。设置方法为：<em>window-&gt;Preferences-&gt;Server-&gt;Runtime Environment -&gt; add --&gt;</em> 选择<em>Apache</em>的版本后点<em>Next</em>，再填入你<em>apache</em>服务器软件的安装（解压后）地址。</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[关于Java异常深入理解 ]]></title>
         <id>https://geckoc.github.io/post/guan-yu-java-yi-chang-shen-ru-li-jie/</id>
