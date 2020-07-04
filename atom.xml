@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-07-04T13:49:50.436Z</updated>
+    <updated>2020-07-04T13:59:02.355Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -294,8 +294,7 @@ class User{
 ◾这是一个Object类中的方法名<br>
 ◾此方法是由垃圾回收器GC调用的<br>
 ◾finalize 已经过时<br>
-在方法重写Override中，重写的方法抛出的异常不能比父类的多（宽泛性）<br>
-<img src="https://geckoc.github.io//post-images/1593286607347.jpg" alt="" loading="lazy"></p>
+在方法重写Override中，重写的方法抛出的异常不能比父类的多（宽泛性）</p>
 ]]></content>
     </entry>
 </feed>
