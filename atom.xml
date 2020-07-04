@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
-    <title>RichardTech</title>
-    <updated>2020-07-04T14:50:42.055Z</updated>
+    <title>碎片储存罐</title>
+    <updated>2020-07-04T15:13:25.970Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
     <subtitle>温故而知新</subtitle>
     <logo>https://geckoc.github.io/images/avatar.png</logo>
     <icon>https://geckoc.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2020, RichardTech</rights>
+    <rights>All rights reserved 2020, 碎片储存罐</rights>
+    <entry>
+        <title type="html"><![CDATA[让子弹飞]]></title>
+        <id>https://geckoc.github.io/post/rang-zi-dan-fei/</id>
+        <link href="https://geckoc.github.io/post/rang-zi-dan-fei/">
+        </link>
+        <updated>2020-07-04T14:55:59.000Z</updated>
+        <content type="html"><![CDATA[<p>马匪：“我好不容易把女生追到手，该结婚了，居然要30万彩礼”<br>
+师爷：“对。”<br>
+马匪：“还必须有车有房？”<br>
+师爷：“对。”<br>
+马匪：“还必须时刻担心回到单身生活?”<br>
+师爷：“对。”<br>
+马匪：“我不成了跪着要饭的吗?”<br>
+师爷：“那要你这么说，结婚的男性就是跪着要饭的，就这，三千万想跪还没这路子呢!”<br>
+马匪：“我上大学，学毛概，学马克思，就是因为腿脚不利索，跪不下去!”<br>
+师爷：“原来想站着结婚啊?那还是去欧美吧”<br>
+马匪：“哎?这我就不明白了，咱们新时代独立女青年怎么就赶不上欧美资本主义的女性？”<br>
+师爷：“咱们眼里，你是有志向高远的有为青年。在她们眼里，那你就是跪着要饭的。结婚嘛，跪着，不寒碜。”<br>
+马匪：“寒碜!很T.M寒碜!”<br>
+师爷：“那你是想站着，还是想结婚呢?”<br>
+马匪：“我是想站着，还把婚结了。”<br>
+师爷：“结不成。”<br>
+马匪：“结不成?”<br>
+师爷：“结不成!”<br>
+马匪：“这个（年入百万）能不能把婚结了？”<br>
+师爷：“能结，跪着。”<br>
+马匪：“那这个（英俊帅气）能不能结婚？”<br>
+师爷：“能结，好的不一定能找到。”<br>
+马匪：“那我这个（年入百万）再加这个（英俊帅气），能不能把婚好好结了？”<br>
+师爷：“敢问英雄贵姓？”马匪：“社会主义接班人”</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Java集合继承关系图]]></title>
         <id>https://geckoc.github.io/post/java-collection-line/</id>
