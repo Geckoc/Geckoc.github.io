@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-07-04T13:59:02.355Z</updated>
+    <updated>2020-07-04T14:04:20.838Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -230,15 +230,14 @@ class User{
 </ol>
 <ul>
 <li>List集合存储元素特点：有序可重复，元素有下标   实现类 <em>ArraysList、LinkedList、Vector</em></li>
-<li>Set集合存储元素特点：无序不可重复，元素没有下标  实现类 <em>HashSet、TreeSet</em><br>
-<img src="https://geckoc.github.io//post-images/1593373353494.jpg" alt="" loading="lazy"></li>
+<li>Set集合存储元素特点：无序不可重复，元素没有下标  实现类 <em>HashSet、TreeSet</em></li>
 </ul>
 ]]></content>
     </entry>
     <entry>
         <title type="html"><![CDATA[JavaWeb:The superclass "javax.servlet.http.HttpServlet" was not found on the Java Build Path]]></title>
-        <id>https://geckoc.github.io/post/javawebthe-superclass-javaxservlethttphttpservlet-was-not-found-on-the-java-build-path/</id>
-        <link href="https://geckoc.github.io/post/javawebthe-superclass-javaxservlethttphttpservlet-was-not-found-on-the-java-build-path/">
+        <id>https://geckoc.github.io/post/javaweb/</id>
+        <link href="https://geckoc.github.io/post/javaweb/">
         </link>
         <updated>2020-06-28T07:59:08.000Z</updated>
         <content type="html"><![CDATA[<h2 id="jsp页面顶端出现红色的报错信息"><em><strong>JSP页面顶端出现“红色”的报错信息:</strong></em></h2>

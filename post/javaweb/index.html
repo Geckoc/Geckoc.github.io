@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>关于 | RichardTech</title>
+<title>JavaWeb:The superclass &#34;javax.servlet.http.HttpServlet&#34; was not found on the Java Build Path | RichardTech</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,15 +24,10 @@
 
 
 
-    <meta name="description" content="I do not live in the world alone, but in a thousand worlds.
-
-🏠 关于本站
-记录生活随想
-👨‍💻 博主是谁
-⛹ 兴趣爱好
-📬 联系我呀
-..." />
-    <meta name="keywords" content="" />
+    <meta name="description" content="JSP页面顶端出现“红色”的报错信息:
+The superclass &quot;javax.servlet.http.HttpServlet&quot; was not found on the Java Build Path。
+原来Ja..." />
+    <meta name="keywords" content="Debug" />
   </head>
   <body>
     <div id="app" class="main">
@@ -103,20 +98,43 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">关于</h2>
+            <h2 class="post-title">JavaWeb:The superclass &#34;javax.servlet.http.HttpServlet&#34; was not found on the Java Build Path</h2>
             <div class="post-date">2020-06-28</div>
             
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/javaweb.jpg')">
+              </div>
+            
             <div class="post-content" v-pre>
-              <h4 id="i-do-not-live-in-the-world-alone-but-in-a-thousand-worlds"><em>I do not live in the world alone, but in a thousand worlds.</em></h4>
-<figure data-type="image" tabindex="1"><img src="https://geckoc.github.io//post-images/1593332316591.jpg" alt="" loading="lazy"></figure>
-<h2 id="关于本站">🏠 关于本站</h2>
-<p><strong><em>记录生活随想</em></strong></p>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<h2 id="联系我呀">📬 联系我呀</h2>
+              <h2 id="jsp页面顶端出现红色的报错信息"><em><strong>JSP页面顶端出现“红色”的报错信息:</strong></em></h2>
+<p><em><strong>The superclass &quot;javax.servlet.http.HttpServlet&quot; was not found on the Java Build Path。</strong></em><br>
+<em>原来Javaweb工程类中没有添加Tomcat运行时相关类导致。<br>
+下面是具体的解决方法：</em></p>
+<ol>
+<li><em>右击web工程-》属性或Build Path-》Java Build Path-&gt;Libraries-&gt; Add Libray...-&gt;Server Runtime -》Tomcat Server</em></li>
+<li><em>切换到Java Build Path界面中的Orader and Export，选择Tomcat。</em></li>
+</ol>
+<h3 id="注意"><strong>注意</strong></h3>
+<p>按以上方法操作时，若打开<em>Server Runtime</em>后一片空白，需要设置<em>Apache</em>服务器。设置方法为：<em>window-&gt;Preferences-&gt;Server-&gt;Runtime Environment -&gt; add --&gt;</em> 选择<em>Apache</em>的版本后点<em>Next</em>，再填入你<em>apache</em>服务器软件的安装（解压后）地址。</p>
 
             </div>
             
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/dX4IqNQnK/" class="tag">
+                    Debug
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/guan-yu-java-yi-chang-shen-ru-li-jie/">
+                  <h3 class="post-title">
+                    关于Java异常深入理解 
+                  </h3>
+                </a>
+              </div>
             
 
             
