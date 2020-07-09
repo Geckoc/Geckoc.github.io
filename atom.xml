@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-07-07T11:57:18.855Z</updated>
+    <updated>2020-07-09T18:22:53.940Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -10,6 +10,57 @@
     <logo>https://geckoc.github.io/images/avatar.png</logo>
     <icon>https://geckoc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, RichardTech</rights>
+    <entry>
+        <title type="html"><![CDATA[Gitalk配置教程]]></title>
+        <id>https://geckoc.github.io/post/gitalk-pei-zhi-jiao-cheng/</id>
+        <link href="https://geckoc.github.io/post/gitalk-pei-zhi-jiao-cheng/">
+        </link>
+        <updated>2020-07-09T17:42:50.000Z</updated>
+        <content type="html"><![CDATA[<p>gitalk配置分享，使用Gridea初步</p>
+<h3 id="获得权限">获得权限</h3>
+<p>在使用该脚本之前首先要在 GitHub 创建一个新的 Oauth Application<br>
+<a href="https://github.com/settings/apps">点击此处 Click Here</a></p>
+<p>点击Oauth Apps，然后新建<br>
+<img src="https://geckoc.github.io//post-images/1594317386736.png" alt="" loading="lazy"></p>
+<p>Application name: 随便填写<br>
+Homepage URL: 填写博客所在的仓库名。比如我的博客就填写: https://geckoc.github.io/<br>
+Application description: 可以不用填写<br>
+Authorization callback URL: 如果有把域名通过CNAME解析到仓库上就填写自己的域名。如果没有就填写仓库名即可</p>
+<p>点击Register Application就可以创建<br>
+接着就可以看到该应用的Client ID和Client Secret</p>
+<h3 id="创建仓库">创建仓库</h3>
+<p>完成以上步骤后，<a href="https://github.com/new">点此创建</a>仓库来保存评论<br>
+<img src="https://geckoc.github.io//post-images/1594318018870.png" alt="" loading="lazy"></p>
+<p>比如填写仓库名为Comments，其余都不用填写</p>
+<h3 id="配置">配置</h3>
+<p>博客配置</p>
+<pre><code>&lt;section class=&quot;post-full-comments&quot;&gt;
+    {{!-- gittalk --}}
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css&quot;&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js&quot;&gt;&lt;/script&gt;
+    &lt;div id=&quot;gitalk-container&quot;&gt;&lt;/div&gt;
+    &lt;script&gt;
+        var gitalk = new Gitalk({
+            clientID: '修改：之前创建Oauth Apps保存的Client ID',
+            clientSecret: '修改：之前创建Oauth Apps保存的Client Secret',
+            repo: '修改：之前创建的repo名称，就是前面例子中的Comments',
+            owner: '修改：GitHub的个人名称',
+            admin: ['修改：GitHub的个人名称'], //这里可以填写具有写权限的用户名列表，用来初始化Issues的
+            id: '{{comment_id}}',
+            distractionFreeMode: false // Facebook-like distraction free mode
+        });
+        gitalk.render('gitalk-container');
+    &lt;/script&gt;
+&lt;/section&gt;
+</code></pre>
+<p>使用Gridea的话可以直接在设置中打开评论，填写以下内容</p>
+<pre><code>clientID: '修改：之前创建Oauth Apps保存的Client ID',
+clientSecret: '修改：之前创建Oauth Apps保存的Client Secret',
+repo: '修改：之前创建的repo名称，就是前面例子中的Comments',
+owner: '修改：GitHub的个人名称',
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[THE LIE WE LIVE]]></title>
         <id>https://geckoc.github.io/post/the-lie-we-live/</id>
