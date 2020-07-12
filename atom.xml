@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-07-09T18:22:53.940Z</updated>
+    <updated>2020-07-12T18:43:39.224Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -10,6 +10,108 @@
     <logo>https://geckoc.github.io/images/avatar.png</logo>
     <icon>https://geckoc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, RichardTech</rights>
+    <entry>
+        <title type="html"><![CDATA[Java多线程模拟车站售票]]></title>
+        <id>https://geckoc.github.io/post/java-duo-xian-cheng-mo-ni-che-zhan-shou-piao/</id>
+        <link href="https://geckoc.github.io/post/java-duo-xian-cheng-mo-ni-che-zhan-shou-piao/">
+        </link>
+        <updated>2020-07-12T18:11:23.000Z</updated>
+        <summary type="html"><![CDATA[<p>深入理解synchronized，以及多线程使用，这是较为经典的例子</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>深入理解synchronized，以及多线程使用，这是较为经典的例子</p>
+<!-- more -->
+<blockquote>
+<p>一开始我花了比较多时间，去判断当票数为0时，Thread还会继续启动，返回-1，-2显示购票成功<br>
+解决：将synchronized同步代码片放到run方法下，且while(true)，一开始写成while(user.getRemainingTicket())，改过后，线程仍会启动进入run()但会返回无法购票提示，不再显示购票成功</p>
+</blockquote>
+<ul>
+<li>本来写的代码注释较少，为了方便阅读，适当加了注释</li>
+</ul>
+<ol>
+<li>TicketAccount (购票账户)</li>
+<li>TicketBusinessThread（线程）</li>
+<li>TicketBusinessSystem（测试类）</li>
+</ol>
+<h5 id="talk-is-cheapshow-me-the-code"><em>Talk is cheap，show me the code.</em></h5>
+<pre><code>public class TicketAccount {
+	private int remainingTicket;  //票数
+// 我是直接初始化给定票数值测试，你也可以带有参构造，自己想赋值多少都可以
+	public TicketAccount() {
+		this.remainingTicket = 100;
+	}
+	
+	public int getRemainingTicket() {
+		return remainingTicket;
+	}
+
+	public void setRemainingTicket(int after) {
+		this.remainingTicket = after;
+	}
+// 购票方法
+	public void ticketBuy(int remainingTicket) {
+//			购票前
+			int before = this.getRemainingTicket();
+//			购票后
+			int after = before - remainingTicket;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+//			更新票数数据
+			this.setRemainingTicket(after);
+	}
+}
+</code></pre>
+<pre><code>public class TicketBusinessThread implements Runnable{
+	private TicketAccount ticketAccount ;
+	public TicketBusinessThread(TicketAccount ticketAccount) {
+		this.ticketAccount = ticketAccount;
+	}
+	@Override
+	public void run() {
+		int tick = 1;
+        /*
+		 *  这里花费了一些时间，由于while()语法，前面已说过不再赘述
+		 *  注：synchronized同步代码块需在while内
+		 *  否则会一个线程直接买完票，其他线程窗口无用
+		 */
+		while (true) {
+		    synchronized (ticketAccount) {
+		    	if (this.ticketAccount.getRemainingTicket() &gt; 0) {
+		    		ticketAccount.ticketBuy(tick);
+		    		System.out.println(&quot;恭喜使用&quot;+Thread.currentThread()                            .getName()+&quot;购票成功&quot;+&quot;剩余票数为：&quot;
+                    +this.ticketAccount.getRemainingTicket());
+		    	}else {
+		    		System.out.println(&quot;不好意思，票已售完&quot;);
+		    		break;
+		    	}
+			}
+		}
+	}
+}
+</code></pre>
+<pre><code>public class TicketBusinessSystem {
+	public static void main(String[] args) {
+		TicketAccount ticketAccount1 = new TicketAccount();
+        // 创建线程对象，传入可运行类
+		Thread tickBuy_one = new Thread(new TicketBusinessThread(ticketAccount1));
+		Thread tickBuy_two = new Thread(new TicketBusinessThread(ticketAccount1));
+		Thread tickBuy_three = new Thread(new TicketBusinessThread(ticketAccount1));
+		// 设置线程名字
+		tickBuy_one.setName(&quot;窗口1&quot;);
+		tickBuy_two.setName(&quot;窗口2&quot;);
+		tickBuy_three.setName(&quot;窗口3&quot;);
+		//线程启动
+		tickBuy_one.start();
+		tickBuy_two.start();
+		tickBuy_three.start();
+	
+	}
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Gitalk配置教程]]></title>
         <id>https://geckoc.github.io/post/gitalk-pei-zhi-jiao-cheng/</id>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Java多线程模拟车站售票 | RichardTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1594579411714">
+<link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="深入理解synchronized，以及多线程使用，这是较为经典的例子
+
+
+一开始我花了比较多时间，去判断当票数为0时，Thread还会继续启动，返回-1，-2显示购票成功
+解决：将synchronized同步代码片放到run方法下，且whi..." />
+    <meta name="keywords" content="JavaNote" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://geckoc.github.io/">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1594579411714" class="site-logo">
+        <h1 class="site-title">RichardTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com" target="_blank">Github</a> | <a class="rss" href="https://geckoc.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Java多线程模拟车站售票</h2>
+            <div class="post-date">2020-07-13</div>
+            
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/java-duo-xian-cheng-mo-ni-che-zhan-shou-piao.jpg')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <p>深入理解synchronized，以及多线程使用，这是较为经典的例子</p>
+<!-- more -->
+<blockquote>
+<p>一开始我花了比较多时间，去判断当票数为0时，Thread还会继续启动，返回-1，-2显示购票成功<br>
+解决：将synchronized同步代码片放到run方法下，且while(true)，一开始写成while(user.getRemainingTicket())，改过后，线程仍会启动进入run()但会返回无法购票提示，不再显示购票成功</p>
+</blockquote>
+<ul>
+<li>本来写的代码注释较少，为了方便阅读，适当加了注释</li>
+</ul>
+<ol>
+<li>TicketAccount (购票账户)</li>
+<li>TicketBusinessThread（线程）</li>
+<li>TicketBusinessSystem（测试类）</li>
+</ol>
+<h5 id="talk-is-cheapshow-me-the-code"><em>Talk is cheap，show me the code.</em></h5>
+<pre><code>public class TicketAccount {
+	private int remainingTicket;  //票数
+// 我是直接初始化给定票数值测试，你也可以带有参构造，自己想赋值多少都可以
+	public TicketAccount() {
+		this.remainingTicket = 100;
+	}
+	
+	public int getRemainingTicket() {
+		return remainingTicket;
+	}
+
+	public void setRemainingTicket(int after) {
+		this.remainingTicket = after;
+	}
+// 购票方法
+	public void ticketBuy(int remainingTicket) {
+//			购票前
+			int before = this.getRemainingTicket();
+//			购票后
+			int after = before - remainingTicket;
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+//			更新票数数据
+			this.setRemainingTicket(after);
+	}
+}
+</code></pre>
+<pre><code>public class TicketBusinessThread implements Runnable{
+	private TicketAccount ticketAccount ;
+	public TicketBusinessThread(TicketAccount ticketAccount) {
+		this.ticketAccount = ticketAccount;
+	}
+	@Override
+	public void run() {
+		int tick = 1;
+        /*
+		 *  这里花费了一些时间，由于while()语法，前面已说过不再赘述
+		 *  注：synchronized同步代码块需在while内
+		 *  否则会一个线程直接买完票，其他线程窗口无用
+		 */
+		while (true) {
+		    synchronized (ticketAccount) {
+		    	if (this.ticketAccount.getRemainingTicket() &gt; 0) {
+		    		ticketAccount.ticketBuy(tick);
+		    		System.out.println(&quot;恭喜使用&quot;+Thread.currentThread()                            .getName()+&quot;购票成功&quot;+&quot;剩余票数为：&quot;
+                    +this.ticketAccount.getRemainingTicket());
+		    	}else {
+		    		System.out.println(&quot;不好意思，票已售完&quot;);
+		    		break;
+		    	}
+			}
+		}
+	}
+}
+</code></pre>
+<pre><code>public class TicketBusinessSystem {
+	public static void main(String[] args) {
+		TicketAccount ticketAccount1 = new TicketAccount();
+        // 创建线程对象，传入可运行类
+		Thread tickBuy_one = new Thread(new TicketBusinessThread(ticketAccount1));
+		Thread tickBuy_two = new Thread(new TicketBusinessThread(ticketAccount1));
+		Thread tickBuy_three = new Thread(new TicketBusinessThread(ticketAccount1));
+		// 设置线程名字
+		tickBuy_one.setName(&quot;窗口1&quot;);
+		tickBuy_two.setName(&quot;窗口2&quot;);
+		tickBuy_three.setName(&quot;窗口3&quot;);
+		//线程启动
+		tickBuy_one.start();
+		tickBuy_two.start();
+		tickBuy_three.start();
+	
+	}
+}
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
+                    JavaNote
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/gitalk-pei-zhi-jiao-cheng/">
+                  <h3 class="post-title">
+                    Gitalk配置教程
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'efb43fc5663c1b20fb9a',
+        clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
+        repo: 'blogCommon',
+        owner: 'Geckoc',
+        admin: ['Geckoc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
