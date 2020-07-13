@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1594648260119">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1594648674813">
 <link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
 
 
@@ -38,7 +38,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://geckoc.github.io/">
-        <img src="https://geckoc.github.io//images/avatar.png?v=1594648260119" class="site-logo">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1594648674813" class="site-logo">
         <h1 class="site-title">RichardTech</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -242,32 +242,29 @@
 	}
 }
 </code></pre>
-<ul>
-<li>
-<p>TicketAccount (购票账户)[改]</p>
+<ol>
+<li>TicketAccount (购票账户)[改]</li>
+</ol>
 <blockquote>
-<p>第一次写是想用户输入购票数，可多张购买；由于每个身份证只能购票一张，重写编写，在账户类定义方法如下：（以下只有购票方法代码）其他属性根据需求自行定义</p>
+<p>第一次写是想用户输入购票数，可多张购买；由于每个身份证只能购票一张，重写编写，在账户类定义方法如下：以下只有购票方法代码其他属性根据需求自行定义</p>
 </blockquote>
-<pre><code></code></pre>
-</li>
-</ul>
-<p>public void ticketBuy() {<br>
-synchronized (this) {<br>
-if (this.getRemainingTicket() &gt; 0) {<br>
-//				提高线程安全问题出现概率，使线程堵塞<br>
-try {<br>
-Thread.sleep(100);<br>
-} catch (InterruptedException e) {<br>
-e.printStackTrace();<br>
-}<br>
-System.out.println(Thread.currentThread().getName() + &quot;正在卖出第&quot;+getRemainingTicket()+&quot;张票，&quot;+&quot;恭喜购票成功&quot;);<br>
-int after = --remainingTicket;<br>
-setRemainingTicket(after);<br>
-}	<br>
-}<br>
-}<br>
-~~~</p>
-<pre><code>改于2020-7-13 21:48:39
+<pre><code>public void ticketBuy() {
+		synchronized (this) {
+			if (this.getRemainingTicket() &gt; 0) {
+//				提高线程安全问题出现概率，使线程堵塞
+				try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				System.out.println(Thread.currentThread().getName() + &quot;正在卖出第&quot;+getRemainingTicket()+&quot;张票，&quot;+&quot;恭喜购票成功&quot;);
+				int after = --remainingTicket;
+				setRemainingTicket(after);
+			}	
+		}
+	}
+      
+    改于2020-7-13 21:48:39
 </code></pre>
 
             </div>
