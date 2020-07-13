@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-07-12T18:43:39.224Z</updated>
+    <updated>2020-07-13T13:51:08.584Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -25,14 +25,16 @@
 解决：将synchronized同步代码片放到run方法下，且while(true)，一开始写成while(user.getRemainingTicket())，改过后，线程仍会启动进入run()但会返回无法购票提示，不再显示购票成功</p>
 </blockquote>
 <ul>
-<li>本来写的代码注释较少，为了方便阅读，适当加了注释</li>
+<li>本来写的代码注释较少，为了方便阅读，适当加了注释<br>
+<s>1. TicketAccount (购票账户)</s><br>
+- （改进，其实可以在run添加同购票方法，有需求也可在账户类编写）<br>
+- （改进代码均会在下方贴出）</li>
 </ul>
-<ol>
-<li>TicketAccount (购票账户)</li>
+<ol start="2">
 <li>TicketBusinessThread（线程）</li>
 <li>TicketBusinessSystem（测试类）</li>
 </ol>
-<h5 id="talk-is-cheapshow-me-the-code"><em>Talk is cheap，show me the code.</em></h5>
+<h4 id="talk-is-cheapshow-me-the-code"><em>Talk is cheap，show me the code.</em></h4>
 <pre><code>public class TicketAccount {
 	private int remainingTicket;  //票数
 // 我是直接初始化给定票数值测试，你也可以带有参构造，自己想赋值多少都可以
@@ -80,7 +82,7 @@
 		    synchronized (ticketAccount) {
 		    	if (this.ticketAccount.getRemainingTicket() &gt; 0) {
 		    		ticketAccount.ticketBuy(tick);
-		    		System.out.println(&quot;恭喜使用&quot;+Thread.currentThread()                            .getName()+&quot;购票成功&quot;+&quot;剩余票数为：&quot;
+		    		System.out.println(&quot;恭喜使用&quot;+Thread.currentThread().getName()+&quot;购票成功&quot;+&quot;剩余票数为：&quot;
                     +this.ticketAccount.getRemainingTicket());
 		    	}else {
 		    		System.out.println(&quot;不好意思，票已售完&quot;);
@@ -106,9 +108,77 @@
 		tickBuy_one.start();
 		tickBuy_two.start();
 		tickBuy_three.start();
-	
 	}
 }
+</code></pre>
+<blockquote>
+<p>以上为初次代码 2020-7-13 02:11:16</p>
+</blockquote>
+<ol>
+<li>[改进] TicketBusinessThread（线程）<br>
+<s>2. [改进] TicketBusinessSystem（测试类）</s><br>
+-  测试类，与上面如出一辙，删除了有参构造，直接New调用即可</li>
+</ol>
+<pre><code>public class TicketBusinessThread implements Runnable{
+	private int ticks = 100;//定义初始票数，也可构造有参自定义票数
+	@Override
+	public void run() {
+        	while (true) {
+                //调用购票方法，票售完跳出死循环
+			    payTicket();
+			    if (ticks == 0) {
+				    System.out.println(&quot;对不起，票已售完...&quot;);
+				    break;
+			    }
+		    }
+		}
+	}
+	
+//	定义同步买票方法
+	public void payTicket() {
+//		判断票是否存在
+			synchronized (this) {
+				if (ticks &gt; 0) {
+//			提高线程安全问题出现概率，使线程堵塞
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					System.out.println(Thread.currentThread().getName() + &quot;正在卖出第&quot;+ticks+&quot;张票，&quot;+&quot;恭喜购票成功&quot;);
+					ticks--;
+				}
+			}
+	}
+}
+</code></pre>
+<ul>
+<li>
+<p>TicketAccount (购票账户)[改]</p>
+<blockquote>
+<p>第一次写是想用户输入购票数，可多张购买；由于每个身份证只能购票一张，重写编写，在账户类定义方法如下：（以下只有购票方法代码）其他属性根据需求自行定义</p>
+</blockquote>
+<pre><code></code></pre>
+</li>
+</ul>
+<p>public void ticketBuy() {<br>
+synchronized (this) {<br>
+if (this.getRemainingTicket() &gt; 0) {<br>
+//				提高线程安全问题出现概率，使线程堵塞<br>
+try {<br>
+Thread.sleep(100);<br>
+} catch (InterruptedException e) {<br>
+e.printStackTrace();<br>
+}<br>
+System.out.println(Thread.currentThread().getName() + &quot;正在卖出第&quot;+getRemainingTicket()+&quot;张票，&quot;+&quot;恭喜购票成功&quot;);<br>
+int after = --remainingTicket;<br>
+setRemainingTicket(after);<br>
+}	<br>
+}<br>
+}<br>
+~~~</p>
+<pre><code>改于2020-7-13 21:48:39
 </code></pre>
 ]]></content>
     </entry>
