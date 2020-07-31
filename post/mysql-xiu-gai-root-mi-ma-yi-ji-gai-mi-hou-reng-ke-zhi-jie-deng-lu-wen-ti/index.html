@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>THE LIE WE LIVE | RichardTech</title>
+<title>MySQL修改root密码以及改密后仍可直接登录问题 | RichardTech</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,11 +24,14 @@
 
 
 
-    <meta name="description" content="人们最喜欢看的内容，不是现实和真相，而是可以让他们意淫的内容。
+    <meta name="description" content="MySQL修改root密码
 
 
-微博上有不少居心不良的大V，喜欢打着女权的幌子，传播一些很倒风向的言论，比如“你负责赚钱养家，我负责貌美如花”“不舍得给你花钱的男人就是不爱你”“女孩子就应该被宠着”，如果..." />
-    <meta name="keywords" content="Thinking" />
+进入mysql控制台
+mysql&gt; use mysql;
+Database changed
+mysql&gt; update user set password = PASSWORD('你想要修改的密码..." />
+    <meta name="keywords" content="MySQL,JavaNote" />
   </head>
   <body>
     <div id="app" class="main">
@@ -99,29 +102,58 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">THE LIE WE LIVE</h2>
-            <div class="post-date">2020-07-04</div>
-            
-              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/the-lie-we-live.jpg')">
-              </div>
+            <h2 class="post-title">MySQL修改root密码以及改密后仍可直接登录问题</h2>
+            <div class="post-date">2020-07-31</div>
             
             <div class="post-content" v-pre>
-              <p>人们最喜欢看的内容，不是现实和真相，而是可以让他们意淫的内容。</p>
-<!-- more -->
+              <h3 id="mysql修改root密码">MySQL修改root密码</h3>
 <ul>
-<li>微博上有不少居心不良的大V，喜欢打着女权的幌子，传播一些很倒风向的言论，比如“你负责赚钱养家，我负责貌美如花”“不舍得给你花钱的男人就是不爱你”“女孩子就应该被宠着”，如果你接触一下微博，你就会惊讶，这些一听就没道理的话，为什么会这么有市场？为什么很多女生听完以后会理直气壮的把这些话当成口号？答案就是——这些内容会让她们爽，让她们心安理得的接受别人的馈赠，不努力却要求别人努力，一身臭毛病还要让别人宠着。网络小说，给男生看的，大多是讲一个要钱没钱、要能力没能力的屌丝，忽然因为某个意外事件，获得了某种超能力，然后混的风生水起，多少女人前仆后继的陪他上床，最后甚至能统治整个宇宙；给女生看的，大多是讲一个长相普普通通的女生，某一天邂逅了一个白马王子，种种机缘巧合之下，她被白马王子追求，捧在手心，或者被n个富二代追求，最后顺理成章嫁入豪门。这些文章，但凡有脑子的人，都知道不现实，但是为什么网络小说全都这么写？就因为这些内容看完以后能让人爽，能让人通过短暂的幻想逃避现实。最残忍的是，很多人幻想的久了，竟然忘了这些事发生的概率多么低，真的以为自己可以屌丝逆袭/嫁入豪门/咸鱼翻身，然后就真的不努力了，因为幻想毁了自己的一生。而当我一板一眼的把这些残忍真相告诉他们的时候，他们竟然接受不了现实，不仅不给我继续，还扬言要屏蔽我...</li>
+<li>
+<p>进入mysql控制台</p>
+<pre><code class="language-mysql">mysql&gt; use mysql;
+Database changed
+mysql&gt; update user set password = PASSWORD('你想要修改的密码') where user = 'root';
+</code></pre>
+</li>
+<li>
+<p>如果报错，则是新版变动问题</p>
+<pre><code class="language-mysql">无报错的话，直接输入
+mysql&gt; flush privileges;   //刷新表，使密码生效
+-----------------------------------------
+新版---&gt;
+mysql&gt; update user set authentication_string = PASSWORD('你想要修改的密码') 
+     &gt; where user = 'root';
+     &gt; 最后仍然需要刷新表
+</code></pre>
+</li>
+<li>
+<p>为什么MySQL设置密码后，仍可以不输入密码直接登录？</p>
+<p>之前设置了密码，但输入mysql后，可直接进入mysql，而输入mysql -uroot -p，则需要输入密码，这是为什么呢？</p>
+<ul>
+<li>原来是因为数据库里面有空用户</li>
 </ul>
-<hr>
-<ul>
-<li>你并不比自己的父母优秀多少。现在知乎上批判自己父母的声音也很盛，诸多白领们自认为自己的表现远远优于自己的父母。其实，这不过是因为经济结构转型造成的误会。现在在公司的格子间里面哼哧哼哧做PPT的那些人，和当年踩着缝纫机的女工没有本质区别。 现在在各种购物软件上抢红包的那些人，和当年在菜市场上为了一分钱讨价还价的父母也没有区别；现在买个手机非得戴个壳、贴层膜，和当年父母非要给遥控器套个塑料袋也差不多；其实，现在每天刷微博、抖音、知乎的人，跟当年蹲在墙根晒太阳嗑瓜子的，也没什么区别。</li>
+<pre><code class="language-mysql">use mysql;
+select * from user where user='';  // 找出空账户，如果有则删除
+delete from user where user = '';  // 删除空账户
+flush privileges;		// 刷新表，使其生效
+exit;
+</code></pre>
+</li>
+<li>
+<p><strong>注意</strong>：<strong>必要时需要重启MySQL服务器</strong></p>
+</li>
 </ul>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://geckoc.github.io/tag/G5OIOcqCl/" class="tag">
-                    Thinking
+                  <a href="https://geckoc.github.io/tag/vKAwv3RGS/" class="tag">
+                    MySQL
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
+                    JavaNote
                   </a>
                 
               </div>
@@ -129,9 +161,9 @@
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://geckoc.github.io/post/rang-zi-dan-fei/">
+                <a href="https://geckoc.github.io/post/javase-yu-fa-jin-jie-chong-dian-ti-lian/">
                   <h3 class="post-title">
-                    让子弹飞
+                    JavaSE语法进阶重点提炼
                   </h3>
                 </a>
               </div>

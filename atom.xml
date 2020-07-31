@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-07-25T07:38:43.942Z</updated>
+    <updated>2020-07-31T11:40:52.344Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -10,6 +10,51 @@
     <logo>https://geckoc.github.io/images/avatar.png</logo>
     <icon>https://geckoc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, RichardTech</rights>
+    <entry>
+        <title type="html"><![CDATA[MySQL修改root密码以及改密后仍可直接登录问题]]></title>
+        <id>https://geckoc.github.io/post/mysql-xiu-gai-root-mi-ma-yi-ji-gai-mi-hou-reng-ke-zhi-jie-deng-lu-wen-ti/</id>
+        <link href="https://geckoc.github.io/post/mysql-xiu-gai-root-mi-ma-yi-ji-gai-mi-hou-reng-ke-zhi-jie-deng-lu-wen-ti/">
+        </link>
+        <updated>2020-07-31T11:37:17.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="mysql修改root密码">MySQL修改root密码</h3>
+<ul>
+<li>
+<p>进入mysql控制台</p>
+<pre><code class="language-mysql">mysql&gt; use mysql;
+Database changed
+mysql&gt; update user set password = PASSWORD('你想要修改的密码') where user = 'root';
+</code></pre>
+</li>
+<li>
+<p>如果报错，则是新版变动问题</p>
+<pre><code class="language-mysql">无报错的话，直接输入
+mysql&gt; flush privileges;   //刷新表，使密码生效
+-----------------------------------------
+新版---&gt;
+mysql&gt; update user set authentication_string = PASSWORD('你想要修改的密码') 
+     &gt; where user = 'root';
+     &gt; 最后仍然需要刷新表
+</code></pre>
+</li>
+<li>
+<p>为什么MySQL设置密码后，仍可以不输入密码直接登录？</p>
+<p>之前设置了密码，但输入mysql后，可直接进入mysql，而输入mysql -uroot -p，则需要输入密码，这是为什么呢？</p>
+<ul>
+<li>原来是因为数据库里面有空用户</li>
+</ul>
+<pre><code class="language-mysql">use mysql;
+select * from user where user='';  // 找出空账户，如果有则删除
+delete from user where user = '';  // 删除空账户
+flush privileges;		// 刷新表，使其生效
+exit;
+</code></pre>
+</li>
+<li>
+<p><strong>注意</strong>：<strong>必要时需要重启MySQL服务器</strong></p>
+</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[JavaSE语法进阶重点提炼]]></title>
         <id>https://geckoc.github.io/post/javase-yu-fa-jin-jie-chong-dian-ti-lian/</id>
