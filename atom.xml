@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-08-01T11:13:31.424Z</updated>
+    <updated>2020-08-02T07:12:15.801Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -20,14 +20,14 @@
 <ul>
 <li>
 <p>进入mysql控制台</p>
-<pre><code class="language-mysql">mysql&gt; use mysql;
+<pre><code>mysql&gt; use mysql;
 Database changed
 mysql&gt; update user set password = PASSWORD('你想要修改的密码') where user = 'root';
 </code></pre>
 </li>
 <li>
 <p>如果报错，则是新版变动问题</p>
-<pre><code class="language-mysql">无报错的话，直接输入
+<pre><code>无报错的话，直接输入
 mysql&gt; flush privileges;   //刷新表，使密码生效
 -----------------------------------------
 新版---&gt;
@@ -42,7 +42,7 @@ mysql&gt; update user set authentication_string = PASSWORD('你想要修改的�
 <ul>
 <li>原来是因为数据库里面有空用户</li>
 </ul>
-<pre><code class="language-mysql">use mysql;
+<pre><code>use mysql;
 select * from user where user='';  // 找出空账户，如果有则删除
 delete from user where user = '';  // 删除空账户
 flush privileges;		// 刷新表，使其生效
