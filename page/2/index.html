@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>关于 | RichardTech</title>
+<title>RichardTech</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -12,28 +12,14 @@
 <link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
 
 
-  
-    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
-  
-
-  
-
 
 <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
 
 
-    <meta name="description" content="I do not live in the world alone, but in a thousand worlds.
-
-🏠 关于本站
-记录生活随想
-👨‍💻 博主是谁
-博主很懒，抽不出时间介绍自己
-⛹ 兴趣爱好
-理由同上
-📬 联系我..." />
-    <meta name="keywords" content="" />
+    <meta name="description" content="温故而知新">
+    
   </head>
   <body>
     <div id="app" class="main">
@@ -103,35 +89,39 @@
 
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
-          <div class="post-detail">
-            <h2 class="post-title">关于</h2>
-            <div class="post-date">2020-06-28</div>
-            
-            <div class="post-content" v-pre>
-              <h4 id="i-do-not-live-in-the-world-alone-but-in-a-thousand-worlds"><em>I do not live in the world alone, but in a thousand worlds.</em></h4>
-<figure data-type="image" tabindex="1"><img src="https://geckoc.github.io//post-images/1593332316591.jpg" alt="" loading="lazy"></figure>
-<h2 id="关于本站">🏠 关于本站</h2>
-<p><strong><em>记录生活随想</em></strong></p>
-<h2 id="博主是谁">👨‍💻 博主是谁</h2>
-<p>博主很懒，抽不出时间介绍自己</p>
-<h2 id="兴趣爱好">⛹ 兴趣爱好</h2>
-<p>理由同上</p>
-<h2 id="联系我呀">📬 联系我呀</h2>
-<p><strong><em>U'll find me</em></strong></p>
+          
+            <article class="post-item">
+              <div class="left">
+                <a href="https://geckoc.github.io/post/guan-yu-java-yi-chang-shen-ru-li-jie/">
+                  <h2 class="post-title">关于Java异常深入理解 </h2>
+                </a>
+                <div class="post-date">
+                  2020-06-28
+                </div>
+                <div class="post-abstract">
+                  <p>throws | try catch Day_27<br>
+◾不建议在main()方法中直接调用throws，因为一旦出现异常JVM将会直接终止，一般采用try catch<br>
+◾关于throws和try...catch的选择，当需要反馈给调用者异常信息时，则throws<br>
+◾异常在Java程序中是以类和对象存在的<br>
+◾异常的作用：增强程序的j健壮性</p>
 
-            </div>
-            
-            
-
-            
+                </div>
+              </div>
               
-                <div id="gitalk-container" data-aos="fade-in"></div>
+                <a class="right" href="https://geckoc.github.io/post/guan-yu-java-yi-chang-shen-ru-li-jie/">
+                  <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/guan-yu-java-yi-chang-shen-ru-li-jie.jpg')">
+                  </div>
+                </a>
               
+            </article>
+          
 
-              
-            
-
-          </div>
+          <div class="pagination-container">
+  
+    <a href="https://geckoc.github.io/" class="prev"><i class="icon-arrow-ios-back-outline"></i> 上一页</a>
+  
+  
+</div>
 
         </div>
       </div>
@@ -157,29 +147,6 @@ var app = new Vue({
     hljs.initHighlightingOnLoad()
   </script>
 
-
-
-
-  
-    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-    <script>
-
-      var gitalk = new Gitalk({
-        clientID: 'efb43fc5663c1b20fb9a',
-        clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
-        repo: 'blogCommon',
-        owner: 'Geckoc',
-        admin: ['Geckoc'],
-        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
-        distractionFreeMode: false  // Facebook-like distraction free mode
-      })
-
-      gitalk.render('gitalk-container')
-
-    </script>
-  
-
-  
 
 
 
