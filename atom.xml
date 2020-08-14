@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-08-14T17:39:02.797Z</updated>
+    <updated>2020-08-14T17:52:20.068Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -231,46 +231,44 @@ exit	命令，退出MySQL
 <p>查看创建表的语句</p>
 </li>
 </ol>
-<pre><code>    mysql&gt; show create table emp;
-    +-------+-------------------------------
-    | Table | Create Table
-    +-------+-------------------------------
-    | emp   | CREATE TABLE `emp` (
-      `EMPNO` int(4) NOT NULL,
-      `ENAME` varchar(10) DEFAULT NULL,
-      `JOB` varchar(9) DEFAULT NULL,
-      `MGR` int(4) DEFAULT NULL,
-      `HIREDATE` date DEFAULT NULL,
-      `SAL` double(7,2) DEFAULT NULL,
-      `COMM` double(7,2) DEFAULT NULL,
-      `DEPTNO` int(2) DEFAULT NULL,
-      PRIMARY KEY (`EMPNO`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
-    +-------+-------------------------------
-    ~~~
-
-#### 简单的查询（DQL数据查询）
-
-    + 语法格式：select 字段名1, 字段名2, 字段名3,... form 表名;
-    + 任何一条SQL语句以&quot;;&quot;结尾。
-    + SQL与极具不区分大小写
-    + 注意：标准SQL语句中要求字符串使用单引号括起来，虽然MySQL支持双引号，尽量别用。
-    
+<pre><code>   mysql&gt; show create table emp;
+   +-------+-------------------------------
+   | Table | Create Table
+   +-------+-------------------------------
+   | emp   | CREATE TABLE `emp` (
+     `EMPNO` int(4) NOT NULL,
+     `ENAME` varchar(10) DEFAULT NULL,
+     `JOB` varchar(9) DEFAULT NULL,
+     `MGR` int(4) DEFAULT NULL,
+     `HIREDATE` date DEFAULT NULL,
+     `SAL` double(7,2) DEFAULT NULL,
+     `COMM` double(7,2) DEFAULT NULL,
+     `DEPTNO` int(2) DEFAULT NULL,
+     PRIMARY KEY (`EMPNO`)
+   ) ENGINE=InnoDB DEFAULT CHARSET=latin1 |
+   +-------+-------------------------------
 </code></pre>
-<pre><code>查询员工的年薪
-mysql&gt; select ename,empno,sal * 12 from emp; (字段可以参与数学运算)
-mysql&gt; select ename,empno,sal * 12 as yearsal from emp;（给查询结果的列重命名 ‘as’ 关键字）
-mysql&gt; select ename,empno,sal * 12 yearsal from emp;（‘as’ 关键字可以省略）
-mysql&gt; select ename,empno,sal * 12 as '年薪' from emp; （别名中有中文，单引号括起来）
-mysql&gt; select * from emp; （查询全部字段）
-实际开发中不建议使用 * ，效率较低。
-~~~
+<h4 id="简单的查询dql数据查询">简单的查询（DQL数据查询）</h4>
+<ul>
+<li>语法格式：select 字段名1, 字段名2, 字段名3,... form 表名;</li>
+<li>任何一条SQL语句以&quot;;&quot;结尾。</li>
+<li>SQL与极具不区分大小写</li>
+<li>注意：标准SQL语句中要求字符串使用单引号括起来，虽然MySQL支持双引号，尽量别用。</li>
+</ul>
+<pre><code>   查询员工的年薪
+   mysql&gt; select ename,empno,sal * 12 from emp; (字段可以参与数学运算)
+   mysql&gt; select ename,empno,sal * 12 as yearsal from emp;（给查询结果的列重命名 ‘as’ 关键字）
+   mysql&gt; select ename,empno,sal * 12 yearsal from emp;（‘as’ 关键字可以省略）
+   mysql&gt; select ename,empno,sal * 12 as '年薪' from emp; （别名中有中文，单引号括起来）
+   mysql&gt; select * from emp; （查询全部字段）
+   实际开发中不建议使用 * ，效率较低。
 </code></pre>
 <h4 id="条件查询">条件查询</h4>
-<pre><code>+ 语法格式：select 字段，字段... from 表名 where 条件；执行顺序： from --&gt; where --&gt; select
-+ between..and..在使用时必须左小右大
-+ between..and..也可以使用在字符串方面
-</code></pre>
+<ul>
+<li>语法格式：select 字段，字段... from 表名 where 条件；执行顺序： from --&gt; where --&gt; select</li>
+<li>between..and..在使用时必须左小右大</li>
+<li>between..and..也可以使用在字符串方面</li>
+</ul>
 <pre><code>    mysql&gt; select ename,sal from emp where sal = 3000; （查询薪资等于3000的员工）
     mysql&gt; select ename,sal from emp where sal &lt;&gt; 3000; （不等于3000，也可以用 != ）
     mysql&gt; select ename,sal from emp where ename = 'smith'; （查询员工姓名为Smith的工资）
@@ -278,192 +276,211 @@ mysql&gt; select * from emp; （查询全部字段）
     mysql&gt; select ename,sal from emp where sal between 100 and 3100;（between...and...是闭区间）
     between..and..在使用时必须左小右大
     mysql&gt; select ename from emp where ename between 'A' and 'D'; （左闭右开）
-    ~~~
+</code></pre>
+<h4 id="is-null-is-not-null-and-or-innot-in-like"><em><strong>is null (is not null) ,  and , or , in，not in , like</strong></em></h4>
+<ul>
+<li>在数据库当中null不是一个值，代表什么也没有，为空。</li>
+<li>空不是一个值，不能用等号衡量。</li>
+<li>必须使用 is null 或者 is not null</li>
+<li>注意：当运算符的优先级不确定的时候加小括号。</li>
+</ul>
+<pre><code>mysql&gt; select ename,sal,comm from emp where comm is null or comm = 0;(找出无津贴员工)
+    mysql&gt; select ename,sal,comm from emp where comm is not null;（找出有津贴员工）
 
-#### ***is null (is not null) ,  and , or , in，not in , like*** 
+(找出工作岗位是salasman和manager的员工)
+mysql&gt; select ename,job,hiredate from emp where job='salesman' or job ='manager';
+（and和or联合起来使用：找出薪资大于1000的并且部门编号是20或者30部门的员工）
+mysql&gt; select ename,sal,deptno from emp where sal &gt; 1000 and deptno = 20 or deptno =30; //错误
+mysql&gt; select ename,sal,deptno from emp where sal &gt; 1000 and (deptno = 20 or deptno =30); // 正确
+</code></pre>
+<ul>
+<li><strong>in</strong> 等同于 <strong>or</strong>，找出工作岗位是salasman和manager的员工(in后面的值不是区间，是具体的值)</li>
+</ul>
+<pre><code>mysql&gt; select ename,job,hiredate from emp where job='salesman' or job ='manager';
+mysql&gt; select ename,sal,job from emp where job in ('salesman','manager');
+mysql&gt; select ename,sal from emp where sal in (800, 3000); //in后面的值不是区间，是具体的值
+</code></pre>
+<ul>
+<li><strong>not in :</strong> 不在这几个值当中</li>
+</ul>
+<pre><code>mysql&gt; select ename, sal from emp where sal not in(800,5000); (查询不是800，5000的值)
+</code></pre>
+<ul>
+<li>
+<p>模糊查询 <strong>like</strong></p>
+<ul>
+<li>在模糊查询中，必须掌握的两个特殊的符号，一个是 <strong>%</strong> ，一个是 <strong>_</strong></li>
+<li><strong>%</strong> 代表任意多个字符， <strong>_</strong> 代表任意一个字符。</li>
+</ul>
+<pre><code>mysql&gt; select ename from emp where ename like '%A%'; (找出名字中含有A字母的)
+mysql&gt; select ename from emp where ename like '_A%'; (找出第二个字母是A的)
+(找出名字中有下划线的，可以使用反斜杠转义，表示一个普通的下划线)
+mysql&gt; select ename from emp where	 ename like '%\_%';
+(找出最后一个字母是S的名字)
+mysql&gt; select ename from emp where ename like '%S';
+</code></pre>
+</li>
+</ul>
+<h4 id="排序升序-降序order-by">排序（升序、降序）Order by</h4>
+<ul>
+<li>
+<p>---&gt; 默认是升序</p>
+</li>
+<li>
+<p>指定升降序，<strong>asc</strong> 表示升序，<strong>desc</strong> 表示降序</p>
+<pre><code>mysql&gt; select ename , sal from emp order by sal; （默认升序）
 
-+ 在数据库当中null不是一个值，代表什么也没有，为空。
-+ 空不是一个值，不能用等号衡量。
-+ 必须使用 is null 或者 is not null
-+ 注意：当运算符的优先级不确定的时候加小括号。
+mysql&gt; select ename ,sal from emp order by sal desc; (指定降序)
+
+mysql&gt; select ename ,sal from emp order by sal asc; (指定升序)
+
+（按照工资的降序排列，当工资相同的时候再按照名字的升序排列）
+mysql&gt; select ename , sal from emp order by sal desc , ename asc;
+(找出工作岗位是SALESMAN的员工，并且要求按照薪资的降序排列)
+mysql&gt; select ename,sal,job from emp
+    -&gt; where job = 'salesman'
+    -&gt; order by sal desc;
+    
+    执行顺序  from---&gt; where ---&gt; select ---&gt; order by...
+</code></pre>
+<ul>
+<li>注意：越靠前的字段越能起到主导作用，只有当前面的字段无法完成排序的时候，才会启用后面的字段。</li>
+</ul>
+</li>
+</ul>
+<h4 id="分组函数">分组函数</h4>
+<ul>
+<li><em><strong>count（计数），sum（求和）， avg（平均值）， max（最大值）， min（最小值）</strong></em>
+<ul>
+<li>所有的分组函数都是对“某一组”数据进行操作的</li>
+<li>分组函数又称：多行处理函数</li>
+<li>多行处理函数特点：输入多行，最终输出的结果是一行。</li>
+<li>分组函数有一个特点：自动忽略null。</li>
+<li><strong>在数据库中只要有null进行了运算，最后结果一定是null，所有数据库都是这样规定的</strong></li>
+<li>分组函数不可直接使用在where子句当中</li>
+<li>分组函数可以组合使用</li>
+</ul>
+</li>
+</ul>
+<pre><code>mysql&gt; select sum(sal) from emp;  （找出工资总和）
+mysql&gt; select sum(sal) from emp;   （平均工资）
+...
+（找出工资高于平均工资的员工）
+mysql&gt; select ename,sal from emp where sal &gt; avg(sal);
+ERROR 1111 (HY000): Invalid use of group function
+错误：无效的使用的了分组函数
+mysql&gt; select ename, sal  from emp where sal &gt; (select avg(sal) from emp);
+	因：SQL语句当中有一个语法规则，分组函数不可直接使用在where子句当中。why?
+	怎么解释？
+		因为 group by 是在 where 执行之后才会执行的（分组函数用不了，是因为还没有分组）
+		而分组函数必须要 group by 分组才能执行
+		select...	5.选择数据
+		from...		1.先从表取出数据
+		where...	2.条件过滤，哪个数据
+		group by...	3.数据分组
+		having...	4.数据过滤
+		order by... 6.排序输出
+count (*) 和 count(具体字段)有什么区别？
+count(*) : 不是统计某个字段中数据的个数，而是统计总记录条数。（和某个字段无关）
+count(comm) : 表示统计comm字段中不为null的数据总数量。
+
+分组函数可以组合使用
+mysql&gt; select count(*),sum(sal),avg(sal),max(sal),min(sal) from emp;
++----------+----------+-------------+----------+----------+
+| count(*) | sum(sal) | avg(sal)    | max(sal) | min(sal) |
++----------+----------+-------------+----------+----------+
+|       14 | 29025.00 | 2073.214286 |  5000.00 |   800.00 |
++----------+----------+-------------+----------+----------+
+1 row in set (0.00 sec)
+</code></pre>
+<h4 id="单行处理函数">单行处理函数</h4>
+<ul>
+<li>输入一行，输出一行</li>
+<li><strong>ifnull(comm,0)</strong> ---&gt; 如果comm为null，则使其等同于0。</li>
+<li><strong>ifnull(可能为null的数据，被当做什么处理)</strong>  <em>空处理函数</em></li>
+</ul>
+<pre><code>计算每个员工的年薪？
+mysql&gt; select ename, (sal+comm) * 12 yearsal from emp;  // comm为null值时，员工薪资为null，不正确
+使用ifnull函数;
+mysql&gt; select ename, (sal + ifnull(comm,0)) * 12 yearsal from emp;
+</code></pre>
+<h4 id="group-by-having"><em><strong>Group by  || Having</strong></em></h4>
+<ul>
+<li>
+<p>group by ：按照某个字段或者某些字段进行分组；</p>
+<ul>
+<li>注意：分组函数一般都会和 group by 联合使用，这也是为什么被称为分组函数的原因。</li>
+<li>任何一个分组函数(count，sum，avg，max，min)都是在group by 语句执行结束后才执行的。</li>
+<li>当一条SQL语句没有group by的话，整张表的数据会自成一组。</li>
+<li>记住：当一条语句中有 group by 的话，select 后面只能跟分组函数和参与分组的字段。</li>
+<li>找出每个工作岗位的最高薪资；</li>
+</ul>
+<pre><code>mysql&gt; select job,max(sal) from emp group by job;	//找出每个工作岗位的最高薪资；
++-----------+----------+
+| job       | max(sal) |
++-----------+----------+
+| ANALYST   |  3000.00 |
+| CLERK     |  1300.00 |
+| MANAGER   |  2975.00 |
+| PRESIDENT |  5000.00 |
+| SALESMAN  |  1600.00 |
++-----------+----------+
+
+mysql&gt; select job,max(sal) from emp group by job;
+以上在mysql当中，有查询结果，但结果没有意义，在oracle数据库中会报错，语法错误。
+oracle的语法规则比MySQL语法规则严谨。
+记住：当一条语句中有 group by 的话，select 后面只能跟分组函数和参与分组的字段。
+
+找出每个工作岗位的平均薪资。
+mysql&gt; select job, avg(sal) from emp group by job;
+
+多个字段能不能联合起来一块分组？
+案例：找出每个不同部门不同工作岗位的最高薪资；
+mysql&gt; select deptno,job,max(sal) from emp group by deptno,job;
 
 </code></pre>
-<p>mysql&gt; select ename,sal,comm from emp where comm is null or comm = 0;(找出无津贴员工)<br>
-mysql&gt; select ename,sal,comm from emp where comm is not null;（找出有津贴员工）</p>
-<p>(找出工作岗位是salasman和manager的员工)<br>
-mysql&gt; select ename,job,hiredate from emp where job='salesman' or job ='manager';<br>
-（and和or联合起来使用：找出薪资大于1000的并且部门编号是20或者30部门的员工）<br>
-mysql&gt; select ename,sal,deptno from emp where sal &gt; 1000 and deptno = 20 or deptno =30; //错误<br>
-mysql&gt; select ename,sal,deptno from emp where sal &gt; 1000 and (deptno = 20 or deptno =30); // 正确</p>
-<pre><code>
-+ **in** 等同于 **or**，找出工作岗位是salasman和manager的员工(in后面的值不是区间，是具体的值)
-
-</code></pre>
-<p>mysql&gt; select ename,job,hiredate from emp where job='salesman' or job ='manager';<br>
-mysql&gt; select ename,sal,job from emp where job in ('salesman','manager');<br>
-mysql&gt; select ename,sal from emp where sal in (800, 3000); //in后面的值不是区间，是具体的值</p>
-<pre><code>
-+ **not in :** 不在这几个值当中
-
-</code></pre>
-<p>mysql&gt; select ename, sal from emp where sal not in(800,5000); (查询不是800，5000的值)</p>
-<pre><code>
-+ 模糊查询 **like** 
-
-  - 在模糊查询中，必须掌握的两个特殊的符号，一个是 **%** ，一个是 **_** 
-  - **%** 代表任意多个字符， **_** 代表任意一个字符。
-
-</code></pre>
-<p>mysql&gt; select ename from emp where ename like '%A%'; (找出名字中含有A字母的)<br>
-mysql&gt; select ename from emp where ename like '_A%'; (找出第二个字母是A的)<br>
-(找出名字中有下划线的，可以使用反斜杠转义，表示一个普通的下划线)<br>
-mysql&gt; select ename from emp where	 ename like '%_%';<br>
-(找出最后一个字母是S的名字)<br>
-mysql&gt; select ename from emp where ename like '%S';</p>
-<pre><code>
-
-
-#### 排序（升序、降序）Order by
-
-+ ---&gt; 默认是升序
-
-+ 指定升降序，**asc** 表示升序，**desc** 表示降序
-
-</code></pre>
-<p>mysql&gt; select ename , sal from emp order by sal; （默认升序）</p>
-<p>mysql&gt; select ename ,sal from emp order by sal desc; (指定降序)</p>
-<p>mysql&gt; select ename ,sal from emp order by sal asc; (指定升序)</p>
-<p>（按照工资的降序排列，当工资相同的时候再按照名字的升序排列）<br>
-mysql&gt; select ename , sal from emp order by sal desc , ename asc;<br>
-(找出工作岗位是SALESMAN的员工，并且要求按照薪资的降序排列)<br>
-mysql&gt; select ename,sal,job from emp<br>
--&gt; where job = 'salesman'<br>
--&gt; order by sal desc;</p>
-<pre><code>  执行顺序  from---&gt; where ---&gt; select ---&gt; order by...
-</code></pre>
-<pre><code>
-- 注意：越靠前的字段越能起到主导作用，只有当前面的字段无法完成排序的时候，才会启用后面的字段。
-
-#### 分组函数
-
-+ ***count（计数），sum（求和）， avg（平均值）， max（最大值）， min（最小值）***
-+ 所有的分组函数都是对“某一组”数据进行操作的
-+ 分组函数又称：多行处理函数
-+ 多行处理函数特点：输入多行，最终输出的结果是一行。
-+ 分组函数有一个特点：自动忽略null。
-+ **在数据库中只要有null进行了运算，最后结果一定是null，所有数据库都是这样规定的**
-+ 分组函数不可直接使用在where子句当中
-+ 分组函数可以组合使用
-
-</code></pre>
-<p>mysql&gt; select sum(sal) from emp;  （找出工资总和）<br>
-mysql&gt; select sum(sal) from emp;   （平均工资）<br>
-...<br>
-（找出工资高于平均工资的员工）<br>
-mysql&gt; select ename,sal from emp where sal &gt; avg(sal);<br>
-ERROR 1111 (HY000): Invalid use of group function<br>
-错误：无效的使用的了分组函数<br>
-mysql&gt; select ename, sal  from emp where sal &gt; (select avg(sal) from emp);<br>
-因：SQL语句当中有一个语法规则，分组函数不可直接使用在where子句当中。why?<br>
-怎么解释？<br>
-因为 group by 是在 where 执行之后才会执行的（分组函数用不了，是因为还没有分组）<br>
-而分组函数必须要 group by 分组才能执行<br>
-select...	5.选择数据<br>
-from...		1.先从表取出数据<br>
-where...	2.条件过滤，哪个数据<br>
-group by...	3.数据分组<br>
-having...	4.数据过滤<br>
-order by... 6.排序输出<br>
-count (<em>) 和 count(具体字段)有什么区别？<br>
-count(</em>) : 不是统计某个字段中数据的个数，而是统计总记录条数。（和某个字段无关）<br>
-count(comm) : 表示统计comm字段中不为null的数据总数量。</p>
-<p>分组函数可以组合使用<br>
-mysql&gt; select count(<em>),sum(sal),avg(sal),max(sal),min(sal) from emp;<br>
-+----------+----------+-------------+----------+----------+<br>
-| count(</em>) | sum(sal) | avg(sal)    | max(sal) | min(sal) |<br>
-+----------+----------+-------------+----------+----------+<br>
-|       14 | 29025.00 | 2073.214286 |  5000.00 |   800.00 |<br>
-+----------+----------+-------------+----------+----------+<br>
-1 row in set (0.00 sec)</p>
-<pre><code>
-#### 单行处理函数 
-
-+ 输入一行，输出一行
-+ **ifnull(comm,0)** ---&gt; 如果comm为null，则使其等同于0。
-+ **ifnull(可能为null的数据，被当做什么处理)**  *空处理函数* 
-
-</code></pre>
-<p>计算每个员工的年薪？<br>
-mysql&gt; select ename, (sal+comm) * 12 yearsal from emp;  // comm为null值时，员工薪资为null，不正确<br>
-使用ifnull函数;<br>
-mysql&gt; select ename, (sal + ifnull(comm,0)) * 12 yearsal from emp;</p>
-<pre><code>
-#### ***Group by  || Having***
-
-+ group by ：按照某个字段或者某些字段进行分组；
-
-  + 注意：分组函数一般都会和 group by 联合使用，这也是为什么被称为分组函数的原因。
-  + 任何一个分组函数(count，sum，avg，max，min)都是在group by 语句执行结束后才执行的。
-  + 当一条SQL语句没有group by的话，整张表的数据会自成一组。
-  + 记住：当一条语句中有 group by 的话，select 后面只能跟分组函数和参与分组的字段。
-  + 找出每个工作岗位的最高薪资；
-
-</code></pre>
-<p>mysql&gt; select job,max(sal) from emp group by job;	//找出每个工作岗位的最高薪资；<br>
-+-----------+----------+<br>
-| job       | max(sal) |<br>
-+-----------+----------+<br>
-| ANALYST   |  3000.00 |<br>
-| CLERK     |  1300.00 |<br>
-| MANAGER   |  2975.00 |<br>
-| PRESIDENT |  5000.00 |<br>
-| SALESMAN  |  1600.00 |<br>
-+-----------+----------+</p>
-<p>mysql&gt; select job,max(sal) from emp group by job;<br>
-以上在mysql当中，有查询结果，但结果没有意义，在oracle数据库中会报错，语法错误。<br>
-oracle的语法规则比MySQL语法规则严谨。<br>
-记住：当一条语句中有 group by 的话，select 后面只能跟分组函数和参与分组的字段。</p>
-<p>找出每个工作岗位的平均薪资。<br>
-mysql&gt; select job, avg(sal) from emp group by job;</p>
-<p>多个字段能不能联合起来一块分组？<br>
-案例：找出每个不同部门不同工作岗位的最高薪资；<br>
-mysql&gt; select deptno,job,max(sal) from emp group by deptno,job;</p>
-<pre><code>
-+ having：对分组之后的数据进行再次过滤；
-
-  + 找出每个部门的最高薪资，要求显示薪资大于2900的数据。
-    + sql语句一般多层逻辑建议拆分思考编写
-
-</code></pre>
-<pre><code>mysql&gt; select deptno, max(sal) from emp group by deptno;（找出每个部门的最高薪资）
-+--------+----------+
-| deptno | max(sal) |
-+--------+----------+
-|     10 |  5000.00 |
-|     20 |  3000.00 |
-|     30 |  2850.00 |
-+--------+----------+
-（找出每个部门的最高薪资，要求显示薪资大于2900的数据）
-//这种方式效率低,因前面算出的最大值，后面又删掉
-select deptno, max(sal) from emp group by deptno having max(sal) &gt; 2900; 
-+--------+----------+
-| deptno | max(sal) |
-+--------+----------+
-|     10 |  5000.00 |
-|     20 |  3000.00 |
-+--------+----------+
-// 效率较高， where语句，可以从一开始就过滤掉2900以下的
-mysql&gt; select deptno,max(sal) from emp where sal &gt; 2900 group by deptno;
-+--------+----------+
-| deptno | max(sal) |
-+--------+----------+
-|     10 |  5000.00 |
-|     20 |  3000.00 |
-+--------+----------+
-2 rows in set (0.00 sec)
-
-（找出每个部门的平均薪资，要求显示薪资大于2900的数据）
-~~~
+<ul>
+<li>
+<p>having：对分组之后的数据进行再次过滤；</p>
+<ul>
+<li>找出每个部门的最高薪资，要求显示薪资大于2900的数据。
+<ul>
+<li>sql语句一般多层逻辑建议拆分思考编写</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code>    mysql&gt; select deptno, max(sal) from emp group by deptno;（找出每个部门的最高薪资）
+    +--------+----------+
+    | deptno | max(sal) |
+    +--------+----------+
+    |     10 |  5000.00 |
+    |     20 |  3000.00 |
+    |     30 |  2850.00 |
+    +--------+----------+
+    （找出每个部门的最高薪资，要求显示薪资大于2900的数据）
+    //这种方式效率低,因前面算出的最大值，后面又删掉
+    select deptno, max(sal) from emp group by deptno having max(sal) &gt; 2900; 
+    +--------+----------+
+    | deptno | max(sal) |
+    +--------+----------+
+    |     10 |  5000.00 |
+    |     20 |  3000.00 |
+    +--------+----------+
+    // 效率较高， where语句，可以从一开始就过滤掉2900以下的
+    mysql&gt; select deptno,max(sal) from emp where sal &gt; 2900 group by deptno;
+    +--------+----------+
+    | deptno | max(sal) |
+    +--------+----------+
+    |     10 |  5000.00 |
+    |     20 |  3000.00 |
+    +--------+----------+
+    2 rows in set (0.00 sec)
+    
+    （找出每个部门的平均薪资，要求显示薪资大于2900的数据）
 </code></pre>
 <h4 id="去重-distinct"><strong>去重</strong> <em><strong>distinct</strong></em></h4>
 <ul>
