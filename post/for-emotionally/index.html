@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>MySQL修改root密码以及改密后仍可直接登录问题 | RichardTech</title>
+<title>FOR Emotionally | RichardTech</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,14 +24,8 @@
 
 
 
-    <meta name="description" content="MySQL修改root密码
-
-
-进入mysql控制台
-mysql&gt; use mysql;
-Database changed
-mysql&gt; update user set password = PASSWORD('你想要修改的密码..." />
-    <meta name="keywords" content="MySQL,JavaNote" />
+    <meta name="description" content="在情感方面，我可能不那么善于去表达，尽管我的内心憋了一肚子的话，就是把自己闷坏了，想要直接表达出来也是非常的困难，我也不清楚这是什么病症。很抱歉，在面对问题的时候总是喜欢去逃避，甚至都没有你那种想说什么就说什么的勇气，尽管我知道敢于直面惨淡..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -102,74 +96,21 @@ mysql&gt; update user set password = PASSWORD('你想要修改的密码..." />
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">MySQL修改root密码以及改密后仍可直接登录问题</h2>
-            <div class="post-date">2020-07-31</div>
+            <h2 class="post-title">FOR Emotionally</h2>
+            <div class="post-date">2020-08-21</div>
             
-              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/mysql-xiu-gai-root-mi-ma-yi-ji-gai-mi-hou-reng-ke-zhi-jie-deng-lu-wen-ti.jpg')">
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/for-emotionally.jpg')">
               </div>
             
             <div class="post-content" v-pre>
-              <h3 id="mysql修改root密码">MySQL修改root密码</h3>
-<ul>
-<li>
-<p>进入mysql控制台</p>
-<pre><code>mysql&gt; use mysql;
-Database changed
-mysql&gt; update user set password = PASSWORD('你想要修改的密码') where user = 'root';
-</code></pre>
-</li>
-<li>
-<p>如果报错，则是新版变动问题</p>
-<pre><code>无报错的话，直接输入
-mysql&gt; flush privileges;   //刷新表，使密码生效
------------------------------------------
-新版---&gt;
-mysql&gt; update user set authentication_string = PASSWORD('你想要修改的密码') 
-     &gt; where user = 'root';
-     &gt; 最后仍然需要刷新表
-</code></pre>
-</li>
-<li>
-<p>为什么MySQL设置密码后，仍可以不输入密码直接登录？</p>
-<p>之前设置了密码，但输入mysql后，可直接进入mysql，而输入mysql -uroot -p，则需要输入密码，这是为什么呢？</p>
-<ul>
-<li>原来是因为数据库里面有空用户</li>
-</ul>
-<pre><code>use mysql;
-select * from user where user='';  // 找出空账户，如果有则删除
-delete from user where user = '';  // 删除空账户
-flush privileges;		// 刷新表，使其生效
-exit;
-</code></pre>
-</li>
-<li>
-<p><strong>注意</strong>：<strong>必要时需要重启MySQL服务器</strong></p>
-</li>
-</ul>
+              <p>在情感方面，我可能不那么善于去表达，尽管我的内心憋了一肚子的话，就是把自己闷坏了，想要直接表达出来也是非常的困难，我也不清楚这是什么病症。很抱歉，在面对问题的时候总是喜欢去逃避，甚至都没有你那种想说什么就说什么的勇气，尽管我知道敢于直面惨淡的人生敢于面对真正的自己，才是真正的勇敢，有时想好了要和你说些什么话到嘴边就是说不出口，沉默沉默沉默，小事情总是弄成这样，三番五次......最后都是你给我台阶下来，过后心里是有些小确幸，可当再一次问题来临时还是恬不知耻。<br>
+之前我总说，希望有问题可以好好的说出来，而不是以一些伤人的偏激的话去刺激对方，回头细想又觉得既然能说出来必然是内心承受了太多委屈和不满，却又无从发泄，没有回应。是我那么多次让你受了太多不该受的委屈，没有设身处地去思考问题，太多时候都是只要做到事事有回应，就不会让你那么糟心，没有安全感，没有感觉被爱。<br>
+我不怕你闹我，让你瞎想才是我应该去改正的地方，当你需要我的时候，我却没有能力去帮到你，当你想要见见我时我也没有办法第一时间回应给出答案，不管是工作还是自身问题的束缚，这让我感到很惭愧，不知怎么去面对你不知你是否介怀。<br>
+我一天天好似很努力向着想去的目标向前，却又好像在原地踏步，一切都没有改变。遇到我这么一个人，真是麻烦你了，给你带来那么多不开心。<br>
+我也不想遇到什么人，遇到你就够了，很喜欢你，也从没想过和你分开，每一个和你待在一起的日子，可能显得稀松平常，没有惊世骇俗的浪漫，在一张桌子吃饭一起看剧一起下厨房在一起做很多很多事情，这不就是存在的意义，充满了生活的浪漫，和你待在一起就是浪漫。</p>
 
             </div>
             
-              <div class="tag-container">
-                
-                  <a href="https://geckoc.github.io/tag/vKAwv3RGS/" class="tag">
-                    MySQL
-                  </a>
-                
-                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
-                    JavaNote
-                  </a>
-                
-              </div>
-            
-            
-              <div class="next-post">
-                <div class="next">下一篇</div>
-                <a href="https://geckoc.github.io/post/javase-yu-fa-jin-jie-chong-dian-ti-lian/">
-                  <h3 class="post-title">
-                    JavaSE语法进阶重点提炼
-                  </h3>
-                </a>
-              </div>
             
 
             

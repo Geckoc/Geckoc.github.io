@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>MySQL三部曲之驾轻就熟 | RichardTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1597993518109">
+<link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="约束 Constraint
+
+在创建表时，可以给表的字段添加相应的约束，添加约束的目的是为了保证表中数据的合法性、有效性、完整性，以下为常见的约束：
+
+
+非空约束(not null) ：约束的字段不能为null。
+唯一约束(unique) ..." />
+    <meta name="keywords" content="MySQL,JavaNote" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://geckoc.github.io/">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1597993518109" class="site-logo">
+        <h1 class="site-title">RichardTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com" target="_blank">Github</a> | <a class="rss" href="https://geckoc.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">MySQL三部曲之驾轻就熟</h2>
+            <div class="post-date">2020-08-21</div>
+            
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/mysql-san-bu-qu-zqjs.jpg')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h3 id="约束-constraint"><em>约束 Constraint</em></h3>
+<blockquote>
+<p>在创建表时，可以给表的字段添加相应的约束，添加约束的目的是为了保证表中数据的合法性、有效性、完整性，以下为常见的约束：</p>
+</blockquote>
+<ol>
+<li>非空约束(not null) ：约束的字段不能为null。</li>
+<li>唯一约束(unique) ：约束的字段不能重复。</li>
+<li>主键约束(primary key) ：约束的字段不能为null，也不能重复。（简称PK）</li>
+<li>外检约束(foreign key) ：...（简称FK）</li>
+<li>检查约束(check) ：注意Oracle数据库有check约束，MySQL目前不支持该约束，MySQL中没有。</li>
+</ol>
+<h4 id="not-null-非空约束">not null 非空约束</h4>
+<pre><code>drop table if exists t_user;
+create table t_user(
+	id int,
+	username varchar(255) NOT NULL,
+	password varchar(255)
+);
+insert into t_user(id,password) values(1,'psw');
+ERROR 1364 ..........  报错
+
+insert into t_user(id,usename,password) values(1,'ric','psw');
+</code></pre>
+<h4 id="unique-唯一性约束">unique 唯一性约束</h4>
+<ul>
+<li>唯一性约束修饰的字段具有唯一性，不能重复，但可以为null。
+<ul>
+<li>案例：给某一列添加unique</li>
+</ul>
+</li>
+</ul>
+<pre><code>drop table if exists t_user;
+
+mysql&gt; create table t_user(
+    -&gt; id int,
+    -&gt; username varchar(255) unique);   //列级约束
+Query OK, 0 rows affected (0.14 sec)
+
+insert into t_user(id,username) values(1,'rich');
+Query OK, 1 row affected (0.14 sec)
+
+insert into t_user(id,username) values(2,'rich');
+ERROR 1062 (23000): Duplicate entry 'rich' for key 'username'
+
+//字段具有唯一性，不能重复，可以为null
+insert into t_user(id) value(2);
+insert into t_user(id) value(3);
+mysql&gt; select * from t_user;
+    +------+----------+
+    | id   | username |
+    +------+----------+
+    |    1 | rich     |
+    |    2 | NULL     |
+    |    3 | NULL     |
+    +------+----------+
+3 rows in set (0.00 sec)
+</code></pre>
+<ul>
+<li>案例：给两个列或者多个列添加unique</li>
+<li><em>not null</em> 约束只有列级约束，没有表级约束</li>
+</ul>
+<pre><code>create table t_user(
+id int,
+usercode varchar(255),
+username varchar(255),
+    unique(usercode,username) //多个字段联合起来添加一个约束unique (表级约束)
+);
+
+// 联合约束
+mysql&gt; insert into t_user values (1,'111','rich');
+mysql&gt; insert into t_user values (1,'222','rich');
+mysql&gt; insert into t_user values (1,'333','rich');
+
+//两个字段都重复，报错
+mysql&gt; insert into t_user values (1,'111','rich');
+ERROR 1062 (23000): Duplicate entry '111-rich' for key 'usercode'
+
+
+</code></pre>
+<h4 id="primary-key-主键约束">primary key 主键约束</h4>
+<ul>
+<li>约束的字段不能为null，也不能重复。（简称PK）</li>
+<li>主键相关术语： 主键约束、主键字段、主键值</li>
+<li>主键有什么作用？
+<ul>
+<li>表的设计三范式：第一范式就是要求任何一张表都应该有主键</li>
+<li>作用：主键值是这行记录在这张表中的唯一标识。(像人的身份证一样)</li>
+</ul>
+</li>
+</ul>
+<pre><code>drop table if exists t_user;
+create table t_user(
+	id int primary key,   // 列级约束
+    username varchar(255),
+    email varchar(255)
+);
+
+insert into t_user(id,username,email) values(1,'rich','text@gmail.com');
+insert into t_user(id,username,email) values(2,'monica','demo@gmail.com');
+insert into t_user(id,username,email) values(3,'denish','google@gmail.com');
+
+//主键不可重复
+insert into t_user(id,username,email)values(1,'jack','jack@gmail.com');
+ERROR 1062 (23000): Duplicate entry '1' for key 'PRIMARY'
+//主键不可为Null
+insert into t_user(username,email) values ('jack','jack@gmail.com');
+ERROR 1364 (HY000): Field 'id' doesn't have a default value
+</code></pre>
+<h5 id="主键的分类">主键的分类</h5>
+<p><em><strong>一张表的主键约束只能有一个（记住）</strong></em></p>
+<ul>
+<li>
+<p>根据主键字段的字段数量划分</p>
+<ul>
+<li>单一主键(推荐，常用的)</li>
+<li>复合主键(多字段联合起来添加一个主键约束)---&gt;[复合主键不建议使用，因违背三范式]</li>
+</ul>
+</li>
+<li>
+<p>根据主键性质划分</p>
+<ul>
+<li>
+<p>自然主键：主键值最好就是和一个业务没有任何关系的自然数。(推荐)</p>
+</li>
+<li>
+<p>业务主键：主键值和系统业务挂钩</p>
+<blockquote>
+<p>例如拿着银行卡的卡号做主键，拿身份证做主键（不推荐用）</p>
+<p>最好不要使用和业务挂钩的字段作为主键，因为以后的业务一旦发生改变的时候，主键值也需要随着发生改变，但有的时候没有办法改变，因为改变可能会导致主键值重复。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+<li>
+<p>使用表级约束方式定义主键</p>
+</li>
+</ul>
+<pre><code>drop table if exists t_user;
+create table t_user(
+     id int,
+     username varchar(255),
+     primary key(id)
+ 	);
+ 	
+//演示复合主键，无需掌握
+create table t_user(
+	id int ,
+    username varchar(255),
+    password varchar(255),
+    primary key(id,username)
+);
+</code></pre>
+<ul>
+<li>MySQL提供主键值自增（重点）</li>
+</ul>
+<pre><code>drop table if exists t_user;
+
+//auto_increment  主键值自增
+create table t_user(
+	id int primary key auto_increment, //id字段自动维护一个自增的数字，从1开始，以1递增
+    username varchar(255)
+); 
+insert into t_user(username) value('ric');
+insert into t_user(username) value('1ic');
+insert into t_user(username) value('2ic');
+insert into t_user(username) value('3ic');
+select * from t_user;
++----+----------+
+| id | username |
++----+----------+
+|  1 | ric      |
+|  2 | 1ic      |
+|  3 | 2ic      |
+|  4 | 3ic      |
++----+----------+
+4 rows in set (0.00 sec)
+</code></pre>
+<ul>
+<li>Oracle当中也提供了一种自增机制，叫做序列（sequence）对象。</li>
+</ul>
+<h4 id="foreign-key外键约束">foreign key外键约束</h4>
+<ul>
+<li>外键约束的相关术语：外键约束、外键字段、外键值
+<ul>
+<li>业务背景：请设计数据库表，用来维护学生和班级信息？</li>
+</ul>
+</li>
+</ul>
+<pre><code>第一种方案：一张表
+no(pk)		name			classno			classname
+----------------------------------------------------------------------------------------
+1			zs1				1101			高三1班
+2			zs2				1101			高三1班
+3			zs3				1102			高三2班
+4			zs4				1102			高三2班
+5			zs5				1102			高三2班
+----------------------------------------------------------------------------------------
+缺点：数据冗余！
+
+第二种方案：两张表（班级表和学生表）
+t_class:
+cno(pk)		classname
+----------------------------------------
+1101		高三1班
+1102		高三2班
+----------------------------------------
+t_student
+sno(pk)		sname		classno(fk)该字段添加外键约束
+----------------------------------------
+1			zs1				1101
+2			zs2				1101
+3			zs3				1102
+4			zs4				1102
+5			zs5				1102
+------------------------------------------
+classno如果不添加fk外键约束，则可以任意自定义添加，所以需添加 foreign key约束
+
+t_student中的classno引用t_class表中的cno字段，此时t_student叫做子表，t_class叫做父表。
+
+顺序要求：
+    删除数据的时候，先删除子表，在删除父表。
+    添加数据的时候，先添加父表，再添加子表。
+    删除表的时候，先删除子表，再删除父表。
+    创建表的时候，先创建父表，再创建子表。
+
+drop table if exists t_student;
+drop table if exists t_class;
+
+create table t_class(
+	cno int primary key,
+    classname varchar(255)
+);
+create table t_student(
+	sno int primary key auto_increment,
+    sname varchar(255),
+    classno int,
+    foreign key(classno) references t_class(cno)
+);
+
+insert into t_class(cno,classname) values(1101,'xxxx');
+insert into t_class(cno,classname) values(1102,'yyyy');
+
+insert into t_student(sname,classno) values ('zs1',1101);
+insert into t_student(sname,classno) values ('zs2',1101);
+insert into t_student(sname,classno) values ('zs3',1102);
+insert into t_student(sname,classno) values ('zs4',1102);
+insert into t_student(sname,classno) values ('zs5',1102);
+
+select * from t_class;
+select * from t_student;
++------+-----------+
+| cno  | classname |
++------+-----------+
+| 1101 | xxxx      |
+| 1102 | yyyy      |
++------+-----------+
+2 rows in set (0.00 sec)
+
++-----+-------+---------+
+| sno | sname | classno |
++-----+-------+---------+
+|   1 | zs1   |    1101 |
+|   2 | zs2   |    1101 |
+|   3 | zs3   |    1102 |
+|   4 | zs4   |    1102 |
+|   5 | zs5   |    1102 |
++-----+-------+---------+
+5 rows in set (0.00 sec)
+
+//外键约束，插入的数据在引用数据中没有，报错1452
+insert into t_student(sname,classno) values('lisi',103);
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`bjpowernode`.`t_student`, CONSTRAINT `t_student_ibfk_1` FOREIGN KEY (`classno`) REFERENCES `t_class` (`cno`))
+</code></pre>
+<ul>
+<li>外键值可以为NULL</li>
+<li>外键字段引用其他表的某个字段的时候，被引用的字段必须是主键吗？
+<ul>
+<li>注意：被引用的字段不一定是主键，但至少具有<em>unique</em>约束。</li>
+</ul>
+</li>
+</ul>
+<h3 id="存储引擎了解内容"><em>存储引擎(了解内容)</em></h3>
+<h3 id="事务-transaction"><em>事务 Transaction</em></h3>
+<ul>
+<li>
+<p>一个事务是一个完整的业务逻辑单元。不可再分。</p>
+</li>
+<li>
+<p>比如银行账户转账：A账户向B账户转账10000，需执行两条Update语句。</p>
+<pre><code>update t_act set balance = balance - 10000 where actno = 'act-A';
+update t_act set balance = balance + 10000 where actno = 'act-B';
+</code></pre>
+<ul>
+<li>以上两条DML语句必须同时成功或同时失败，不允许出现一条成功，一条失败。</li>
+</ul>
+<p>要想保证以上的DML语句同时成功或失败，则需要使用数据库的“事务机制”。</p>
+<hr>
+</li>
+<li>
+<p>和事务相关的语句只有DML语句 (insert、delete、update)</p>
+<ul>
+<li>因为他们三个语句都是和数据库表当中的“数据”相关的。</li>
+<li>事务的存在是为了保证数据的完整性，安全性。</li>
+</ul>
+</li>
+<li>
+<p>假设事务只需要一条DML语句可以解决，则不需要事务机制。</p>
+<ul>
+<li>但实际情况不是如此，通常一个“事务（业务）”需要多条DML语句共同联合完成。</li>
+</ul>
+</li>
+</ul>
+<h4 id="事务的特性-acid">事务的特性  <em>ACID</em></h4>
+<ul>
+<li>事务的四大特性： <strong>Atomicity、Consistency、Isolation、Durability</strong></li>
+</ul>
+<p>A：原子性：事务是最小的工作单元，不可再分；要么全部完成，要么均不执行。</p>
+<p>C：一致性：事务必须保证多条DML语句同时成功或同时失败。</p>
+<p>I ：隔离性：事务A和事务B之间具有隔离，事务的执行不受其他事务的干扰。</p>
+<p>D：持久性：持久性说的是最终数据必须持久化到硬盘文件中，事务才算成功的结束。</p>
+<h4 id="isolation-隔离性"><strong>Isolation</strong> 隔离性</h4>
+<ul>
+<li>事务隔离性存在隔离级别，理论上隔离级别包括4个
+<ul>
+<li>第一级别：读未提交（<strong>read uncommitted</strong>）
+<ul>
+<li>对方事务还没有提交，我们当前事务可以读取到对方未提交的数据。</li>
+<li>读未提交有存在脏读（<strong>dirty read</strong>）现象：表示读到了脏数据。</li>
+</ul>
+</li>
+<li>第二级别：读已提交（<strong>read committed</strong>）
+<ul>
+<li>对方事务提交之后的数据我方可以读取到</li>
+<li>读已提交存在的问题：不可重复读。(每次读取数据都不一样)</li>
+</ul>
+</li>
+<li>第三级别：可重复读（<strong>repeatable read</strong>）
+<ul>
+<li>对方事务提交之后的数据我方读不到。</li>
+<li>这种隔离级别解决了：不可重复读问题。只要当前事务没结束，读到的数据永远都是一样的。</li>
+<li>此种隔离级别存在的问题是：读取到的数据是幻像，不是真实的。（幻读）</li>
+</ul>
+</li>
+<li>第四级别：序列化读/串行化读（<strong>Serializable</strong>）
+<ul>
+<li>解决了所有问题</li>
+<li>事务A和事务B不能并发，效率低，需要事务排队。</li>
+<li>隔离级别最高，效率最低，数据最安全。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Oracle数据库默认的隔离级别是：读已提交</strong></p>
+<p><strong>MySQL数据库默认的隔离级别是：可重复读</strong></p>
+<h4 id="自动提交">自动提交</h4>
+<ul>
+<li>
+<p>MySQL事务默认情况下是自动提交的</p>
+<ul>
+<li>什么是自动提交？只要执行一句DML语句则提交一次。</li>
+<li>如何关闭自动提交？ ---&gt;  <strong>Start transaction;</strong></li>
+</ul>
+</li>
+</ul>
+<pre><code>  //演示自动提交机制
+  //插入数据后，回滚rollback;
+  //回滚后数据还是一条，回滚rollback无法回去。
+  
+  drop table if exists t_user;
+  create table t_user(
+  	id int primary key auto_increment,
+  	username varchar(255)
+  );
+  
+  mysql&gt;  insert into t_user(username) value ('richard');
+  Query OK, 1 row affected (0.11 sec)
+  
+  mysql&gt; select * from t_user;
+  +----+----------+
+  | id | username |
+  +----+----------+
+  |  1 | richard  |
+  +----+----------+
+  1 row in set (0.00 sec)
+  
+  mysql&gt; rollback;
+  Query OK, 0 rows affected (0.01 sec)
+  
+  mysql&gt; select * from t_user;
+  +----+----------+
+  | id | username |
+  +----+----------+
+  |  1 | richard  |
+  +----+----------+
+  1 row in set (0.00 sec)
+  
+</code></pre>
+<h5 id="关闭自动提交-start-transaction">关闭自动提交 <em>start transaction</em></h5>
+<pre><code>// start transaction 
+// 关闭自动提交后，插入数据再回滚rollback
+// 可以回到之前 start transaction 的点
+
+mysql&gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; insert into t_user(username) value('monica');
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; insert into t_user(username) value('denish');
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; select * from t_user;
++----+----------+
+| id | username |
++----+----------+
+|  1 | richard  |
+|  2 | monica   |
+|  3 | denish   |
++----+----------+
+3 rows in set (0.00 sec)
+
+mysql&gt; rollback;
+Query OK, 0 rows affected (0.11 sec)
+
+mysql&gt; select * from t_user;
++----+----------+
+| id | username |
++----+----------+
+|  1 | richard  |
++----+----------+
+1 row in set (0.00 sec)
+-------------------------------------------------------
+
+// rollback 代表事务结束，需重新开始事务
+// start transaction 关闭自动提交后插入数据
+// 需手动提交，提交后无法再回滚 rollback;
+
+mysql&gt; start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; insert into t_user(username) value ('rose');
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; insert into t_user(username) value ('jordan');
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; insert into t_user(username) value ('kobe');
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; insert into t_user(username) value ('James');
+Query OK, 1 row affected (0.00 sec)
+
+mysql&gt; select * from t_user;
++----+----------+
+| id | username |
++----+----------+
+|  1 | richard  |
+|  4 | rose     |
+|  5 | jordan   |
+|  6 | kobe     |
+|  7 | James    |
++----+----------+
+5 rows in set (0.00 sec)
+
+mysql&gt; commit;
+Query OK, 0 rows affected (0.11 sec)
+
+mysql&gt; rollback;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql&gt; select * from t_user;
++----+----------+
+| id | username |
++----+----------+
+|  1 | richard  |
+|  4 | rose     |
+|  5 | jordan   |
+|  6 | kobe     |
+|  7 | James    |
++----+----------+
+5 rows in set (0.00 sec)
+</code></pre>
+<h4 id="隔离级别设置">隔离级别设置</h4>
+<ul>
+<li>演示：read uncommitted</li>
+</ul>
+<pre><code>//设置全局事务隔离级别为: 读未提交
+set global transaction isolation level read uncommitted;
+
+//查看事务目前全局隔离级别
+select @@global.tx_isolation;
+
+// 两个事务进程同时开启，A事务可读取到B事务未提交的数据
+// 脏读现象 （dirty read） 
+</code></pre>
+<ul>
+<li>演示：read committed</li>
+</ul>
+<pre><code>//设置全局事务隔离级别为: 读已提交
+set global transaction isolation level read committed;
+
+select @@global.tx_isolation;
+
+// 两个事务进程同时开启，A事务可读取到B事务已提交的数据
+// 不可重复读。B事务每提交一次，A事务读取数据都会发生改变
+</code></pre>
+<ul>
+<li>演示：repeatable read</li>
+</ul>
+<pre><code>//设置全局事务隔离级别为: 可重复读
+set global transaction isolation level repeatable read;
+
+select @@global.tx_isolation;
+
+// 可重复读，A事务提交，也不影响B事务读取数据
+// 存在的问题是：读取到的数据是幻像，不是真实的。（幻读）
+</code></pre>
+<ul>
+<li>演示：Serializable</li>
+</ul>
+<pre><code>//设置全局事务隔离级别为: 序列化读
+set global transaction isolation level serializable;
+
+select @@global.tx_isolation;
+
+// A事务与B事务需要排队进行，不能并发
+// A事务提交后，B事务才能进行操作
+</code></pre>
+<h3 id="索引-index"><em>索引 index</em></h3>
+<h5 id="什么是索引有什么作用">什么是索引？有什么作用？</h5>
+<ul>
+<li>索引相当于一本书的目录，通过目录可快速找到对应的资源。</li>
+<li>在数据库中，查询一张表时有两种检索方式：
+<ul>
+<li>第一种：全表扫描</li>
+<li>第二种：根据索引检索（效率很高）</li>
+</ul>
+</li>
+<li>索引为什么可提高检索效率？
+<ul>
+<li>根本原理：缩小了检索范围。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>索引虽然可以提高检索效率，但是不能随意的添加索引，因为索引也是数据库当中的对象，也行需要数据库不断的维护。</p>
+<p>比如：表中的数据经常被修改，这样就不适合添加索引，因为数据一旦修改，索引需要重新排序，进行维护。</p>
+<p>添加索引是给某一字段，或者说某些字段添加索引。</p>
+<p>select ename, sal from emp where ename = 'SMITH';</p>
+<p>当ename字段上没有添加索引时，以上SQL语句会进行全表扫描，扫描ename字段中所有的值。</p>
+<p>当ename字段上添加索引时，以上SQL语句会根据索引扫描，快速定位。</p>
+</blockquote>
+<h5 id="怎么创建索引对象怎么删除索引">怎么创建索引对象？怎么删除索引？</h5>
+<ul>
+<li>
+<p><em>create index 索引名称 on 表名(字段名);</em></p>
+</li>
+<li>
+<p><em>drop index 索引名称 on 表名</em></p>
+</li>
+<li>
+<p>什么时候考虑给字段添加索引?（满足什么条件）</p>
+<ul>
+<li>数据量庞大（根据客户需求，根据线上环境）</li>
+<li>字段很少使用DML操作 （字段修改，索引也需维护）</li>
+<li>该字段经常出现在where子句中（经常查询）</li>
+</ul>
+</li>
+<li>
+<p>注意：主键和具有unique约束的字段会自动添加索引。</p>
+<ul>
+<li>根据主键查询效率较高，尽量根据主键检索。</li>
+</ul>
+</li>
+</ul>
+<h5 id="查看sql语句的执行计划">查看SQL语句的执行计划</h5>
+<pre><code>// type = ALL  表示全表扫描
+// rows = 14   表示扫描了14条记录
+mysql&gt; explain select ename,sal from emp where sal=5000;
++----+-------------+-------+------+---------------+------+---------+------+------+-------------+
+| id | select_type | table | type | possible_keys | key  | key_len | ref  | rows | Extra       |
++----+-------------+-------+------+---------------+------+---------+------+------+-------------+
+|  1 | SIMPLE      | emp   | ALL  | NULL          | NULL | NULL    | NULL |   14 | Using where |
++----+-------------+-------+------+---------------+------+---------+------+------+-------------+
+1 row in set (0.04 sec)
+
+// 给薪资添加索引
+create index emp_sal_index on emp(sal);
+
+
+// 添加索引后， rows = 1 只扫描一条记录
+mysql&gt; explain select ename,sal from emp where sal=5000;
++----+-------------+-------+------+---------------+---------------+---------+-------+------+-------------+
+| id | select_type | table | type | possible_keys | key           | key_len | ref   | rows | Extra       |
++----+-------------+-------+------+---------------+---------------+---------+-------+------+-------------+
+|  1 | SIMPLE      | emp   | ref  | emp_sal_index | emp_sal_index | 9       | const |    1 | Using where |
++----+-------------+-------+------+---------------+---------------+---------+-------+------+-------------+
+1 row in set (0.04 sec)
+</code></pre>
+<h5 id="索引原理">索引原理</h5>
+<ul>
+<li>索引底层数据结构采用的 ：B + Tree</li>
+</ul>
+<p>通过B Tree缩小扫描范围，底层索引进行了排序、分区、索引会携带数据在表中的“物理地址”</p>
+<p>最终通过索引检查到数据之后，获取到关联的物理地址，通过物理地址定位表中的数据，效率是最高的。</p>
+<p><strong>select ename from emp where ename = 'SMITH';</strong></p>
+<p>通过索引转化为</p>
+<p><strong>select ename from emp where 物理地址 = 0x3;</strong></p>
+<h5 id="索引的分类">索引的分类？</h5>
+<ol>
+<li>单一索引：给单个字段添加索引</li>
+<li>复合索引：给多个字段联合起来添加一个索引</li>
+<li>主键索引：主键上会自动添加索引</li>
+<li>唯一索引：有unique约束的字段上会自动添加索引</li>
+<li>......</li>
+</ol>
+<h5 id=""></h5>
+<h5 id="索引什么时候失效">索引什么时候失效？</h5>
+<p><strong>select ename from emp where ename like '%A%';</strong></p>
+<p>模糊查询的时候，第一个通配符使用的是%，这个时候索引是失效的。</p>
+<h3 id="视图-view"><em>视图 view</em></h3>
+<h4 id="什么是视图">什么是视图？</h4>
+<ul>
+<li>站在不同角度去看到数据。（同一张表的数据，通过不同角度去看待）</li>
+</ul>
+<h4 id="怎么创建视图怎么删除视图">怎么创建视图？怎么删除视图？</h4>
+<p><strong>create view myview as select empno, ename from emp;</strong></p>
+<p><strong>drop view myview;</strong></p>
+<p><em>注意：只有DQL语句才能以视图对象的方式创建出来。</em></p>
+<p><strong>对视图进行增删改查，会影响到原表数据</strong>（通过视图会影响原表数据，不是直接操作的原表）</p>
+<p><strong>可以对视图进行CRUD操作</strong></p>
+<pre><code>// 复制创建表
+create table emp_bak as select * from emp;
+
+// 创建视图
+create view myview as select empno,ename,sal from emp_bak;
+
+// 通过视图修改原表数据
+ update myview set ename='hehe',sal='999' where empno = 7369;
+ delete from myview where empno=7369;
+</code></pre>
+<h4 id="视图的作用">视图的作用？</h4>
+<p><strong>视图可以隐藏表的实现细节。保密级别较高的系统，数据库只对外提供相关的视图，java程序员只对视图对象进行CRUD。</strong></p>
+<p><em>视图并不会提高检索效率</em></p>
+<h3 id="dba-命令了解"><em>DBA 命令</em>（了解）</h3>
+<h4 id="数据导出">数据导出</h4>
+<ul>
+<li>在Windows的dos命令窗口中执行: （导出整个库）
+<ul>
+<li>mysqldump bjpowernode&gt;D:\bjpowernode.sql -uroot -prootchan</li>
+</ul>
+</li>
+<li>在Windows的dos命令窗口中执行: （指定导出指定数据库当中的指定表）
+<ul>
+<li>mysqldump bjpowernode emp&gt;D:\bjpowernode.sql -uroot -prootchan</li>
+</ul>
+</li>
+</ul>
+<h4 id="数据导入">数据导入</h4>
+<ul>
+<li>create database bjpowernode;</li>
+<li>use bjpowernode;</li>
+<li>source D:\bjpowernode.sql;</li>
+</ul>
+<h3 id="数据库设计三范式"><em>数据库设计三范式</em></h3>
+<p><strong>设计表的依据，按照三范式设计的表不会出现数据冗余。</strong></p>
+<ul>
+<li>
+<p>第一范式：任何一张表都应该有主键，并且每一个字段原子性不可再分。</p>
+</li>
+<li>
+<p>第二范式：建立在第一范式的基础之上，所有非主键字段都完全依赖主键，不能产生部分依赖（<strong>严格意义上说：尽量不要使用联合主键</strong>）</p>
+<p><strong>多对多？三张表，关系表，两个外键。</strong></p>
+<blockquote>
+<p>学生编号(PK) 	教师编号(PK) 	学生姓名 	教师姓名</p>
+<p>1001 					001 						张三 			王老师</p>
+<p>1002 					002 						李四 			赵老师</p>
+<p>1003 					001 						王五 			王老师</p>
+<p>1001 					002 						张三 			赵老师</p>
+<p>综合分析：</p>
+<p>1、以上虽然确定了主键，但此表会出现大量冗余，主要涉及到的冗余字段为“学生姓名”和 “教师姓名”；</p>
+<p>2、出现冗余的原因在于：学生姓名部分依赖了主键的一个字段学生编号，而没有依赖教师编号， 而教师姓名部分依赖了主键的一个字段教师编号，这就是第二范式部分依赖。</p>
+</blockquote>
+<pre><code>解决方案如下：
+t_student学生表
+sno(pk)			sname
+---------------------------------
+1				张三
+2				李四
+3				王五
+
+t_teacher教师表
+tno(pk) 		tname
+---------------------------------
+1				王老师 
+2				张老师
+3				李老师 
+
+t_student_teacher_relation 学生教师关系表
+id(pk)		sno(fk)		tno(fk)
+-----------------------------------------------
+1			 1			 3
+2			 1			 2
+3			 2			 2
+4			 3			 1	
+5			 3			 1
+6			 2	          3
+</code></pre>
+</li>
+<li>
+<p>第三范式：建立在第二范式基础之上，所有非主键字段直接依赖主键，不能产生传递依赖。</p>
+<p><strong>一对多？两张表，多的表加外键。</strong></p>
+<pre><code>示例一：学生信息表
+学生编号（PK） 学生姓名 	班级编号	   班级名称
+---------------------------------------------------
+1001 			张三 		01 			一年一班
+1002 			李四		02 			一年二班
+1003 			王五 		03 			一年三班
+1004 			赵六 		03 			一年三班
+----------------------------------------------------
+综合分析：
+1、从表中看出，班级名称字段存在冗余，因为班级名称字段没有直接依赖于主键
+2、班级名称字段依赖于班级编号，班级编号依赖亍学生编号，那么这就是传递依赖
+解决方案：
+1、将冗余字段单独拿出来建立表
+2、如下表所示：学生信息表中班级编号设为外键FK
+
+t_class 班级表
+班级编号（PK） 	班级名称
+--------------------------
+01 				一年一班
+02 				一年二班
+03 				一年三班
+--------------------------
+
+t_student 学生表
+学生编号（PK） 学生姓名 	班级编号（FK）
+---------------------------------------
+1001 			张三 		01
+1002 			李四 		02
+1003 			王五 		03
+1004 			赵六 		03
+---------------------------------------
+</code></pre>
+</li>
+</ul>
+<blockquote>
+<p>提醒：在实际的开发中，以满足客户的需求为主，有的时候会拿冗余换执行速度。</p>
+</blockquote>
+<h4 id="一对一表设计">一对一表设计</h4>
+<ul>
+<li>两种方案：主键共享、外键唯一</li>
+</ul>
+<pre><code>一对一设计方案：主键共享
+t_user_login 用户登录表
+id(pk)		username		password
+------------------------------------
+1		 	zs				123123
+2		 	ls				123122
+
+t_user_detail 用户详细信息表
+id(pk+fk)		realname		tel			...
+-------------------------------------------
+1				张三			 15844562141
+2				李四			 17584756721
+--------------------------------------------
+
+
+一对一设计方案：外键唯一
+t_user_login 用户登录表
+id(pk)		username		password
+------------------------------------
+1		 	zs				123123
+2		 	ls				123122
+
+t_user_detail 用户详细信息表
+id(pk+fk)		realname		tel			 	userid(fk+unique)
+----------------------------------------------------------------------
+1				张三			 15844562141		 2
+2				李四			 17584756721		 1
+----------------------------------------------------------------------
+
+
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/vKAwv3RGS/" class="tag">
+                    MySQL
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
+                    JavaNote
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/mysql-san-bu-qu-zhi-jian-ru-jia-jing/">
+                  <h3 class="post-title">
+                    MySQL三部曲之渐入佳境
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'efb43fc5663c1b20fb9a',
+        clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
+        repo: 'blogCommon',
+        owner: 'Geckoc',
+        admin: ['Geckoc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
