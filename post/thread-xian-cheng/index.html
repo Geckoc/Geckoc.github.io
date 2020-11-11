@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Thread 线程 | RichardTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1605086324140">
+<link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="
+创建线程的方式
+
+第一种：编写类，直接继承 java.lang.Thread  重写run()
+第二种：实现Runnable接口重写run()
+
+
+第二种方法用的较多，实现接口后仍可继承其他类，比较灵活
+
+public class Thr..." />
+    <meta name="keywords" content="Thread,JavaNote" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://geckoc.github.io/">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1605086324140" class="site-logo">
+        <h1 class="site-title">RichardTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com" target="_blank">Github</a> | <a class="rss" href="https://geckoc.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Thread 线程</h2>
+            <div class="post-date">2020-11-11</div>
+            
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/thread-xian-cheng.jpg')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <ul>
+<li>创建线程的方式
+<ul>
+<li>第一种：编写类，直接继承 <em>java.lang.Thread</em>  重写<em>run()</em></li>
+<li>第二种：实现<em>Runnable</em>接口重写<em>run()</em></li>
+</ul>
+</li>
+<li>第二种方法用的较多，实现接口后仍可继承其他类，比较灵活</li>
+</ul>
+<pre><code>public class ThreadTest01 {
+   public static void main(String[] args) {
+      MyThread myThread = new MyThread();
+      /*
+       *      run()不会启动线程，未分配新的分支栈，不能并发(单线程)
+       *      start()方法：启动一个分支线程，在JVM中开辟一个新的栈空间
+       *      开辟新空间后，start()方法就结束了，线程即启动成功
+       *      线程会自动调用run()，且run()在分支栈的栈底（压栈）
+       *     run和main是平级的，均在栈的底部
+       */
+//    myThread.run(); 
+      myThread.start();
+      
+      System.out.println(&quot;Thread Running...&quot;);
+      for (int i = 100; i &gt; 0; i--) {
+         System.out.println(&quot;doing: &quot; + i);
+      }
+   }
+}
+
+class MyThread extends Thread{
+   @Override
+   public void run() {
+      for (int i = 0; i &lt; 100; i++) {
+         System.out.println(&quot;ThreadRunning...&quot;+i);
+      }
+   }
+}
+</code></pre>
+<hr>
+<pre><code>/*
+ *     启动线程的第二种方法 
+ */
+public class ThreadTest02 {
+   public static void main(String[] args) {
+      //创建线程把可运行对象放入参数中
+      Thread t = new Thread(new MyRunnable());
+      t.start(); //开辟空间 自动调用run()
+      for (int i = 0; i &lt; 666; i++) {
+         System.out.println(&quot;Main Thread--&gt;&quot; + i);
+      }
+      
+//    可直接实现Runnable接口，匿名内部类
+      Thread t2 = new Thread(new Runnable() {
+         public void run() {
+            System.out.println(&quot;Anonymous---&gt;&quot;);
+         }
+      });
+      t2.start();
+   }
+}
+
+// 不是线程，是可运行的类
+class MyRunnable implements Runnable{
+   @Override
+   public void run() {
+      for (int i = 0; i &lt; 666; i++) {
+         System.out.println(&quot;---Thread---&gt;&quot; + i);
+      }
+   }
+}
+</code></pre>
+<ul>
+<li>获取线程当前对象</li>
+<li>Thread t = Thread.currentThread()</li>
+<li>关于线程的sleep()方法</li>
+<li>static void sleep(long millis)</li>
+<li>静态方法，参数是毫秒</li>
+<li>作用：让当前线程进入休眠，进入“阻塞状态”，放弃占有CPU时间片（执行权），让其他线程使用</li>
+<li>此段代码出现在A线程中，A线程会进入休眠</li>
+<li>此段代码出现在B线程中，B线程会进入休眠</li>
+<li>Thread.sleep() 间隔特定时间，去执行一段特定代码，每隔一段时间执行一次</li>
+</ul>
+<pre><code>public class ThreadTest01 {
+   public static void main(String[] args) {
+      MyThread thread = new MyThread();
+      String name = Thread.currentThread().getName();
+      System.out.println(name);
+      thread.start();
+   }
+}
+
+class MyThread extends Thread {
+   @Override
+   public void run() {
+      for (int i = 0; i &lt; 10; i++) {
+         String name = Thread.currentThread().getName();
+         System.out.println(name +&quot;---&gt;&quot; + i);
+         // 睡眠1秒
+         try {
+            sleep(1000);
+         } catch (InterruptedException e) {
+            e.printStackTrace();
+         }
+      }
+   }
+}
+</code></pre>
+<ul>
+<li>关于终止线程的睡眠，如何唤醒正在睡眠的线程？</li>
+<li>t.interrupt(); ----&gt; 注：非结束线程的执行，是中断线程的睡眠</li>
+<li>关于终止线程的执行</li>
+<li>t.stop();  //强行终止线程，已过时不建议使用</li>
+</ul>
+<pre><code>public class ThreadTest02 {
+	public static void main(String[] args) {
+		Runnable flag = new OverThread();
+		Thread t = new Thread(flag);
+		t.setName(&quot;Branch Thread&quot;);
+		t.start();
+		try {
+			Thread.sleep(1000*3);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+//		这种方式（依靠了java的异常处理机制）
+		t.interrupt(); //中断T线程的睡眠
+//		t.stop();  //强行终止线程，已过时不建议使用
+	}
+}
+
+class OverThread implements Runnable {
+	
+	@Override
+	public void run() {
+	    System.out.println(Thread.currentThread().getName() + &quot;---&gt;&quot; + &quot;begin&quot;);
+//		为什么只能捕捉异常而不能抛出，因子类不能抛出比父类更宽泛的异常
+		try {
+			Thread.sleep(1000 * 60 * 60 * 24 * 365); //睡眠一年
+		} catch (InterruptedException e) {
+				e.printStackTrace();
+		}
+		System.out.println(Thread.currentThread().getName() + &quot;---&gt;&quot; + &quot;end&quot;);
+	}
+}
+</code></pre>
+<hr>
+<pre><code>/*
+ *     合适终止线程的方式。添加Boolean标记
+ */
+public class ThreadTest03 {
+   public static void main(String[] args) {
+      stopThread flag = new stopThread();
+      Thread t = new Thread(flag);
+      t.setName(&quot;BranchThread&quot;);
+      t.start();
+      try {
+         Thread.sleep(1000*3);
+      } catch (InterruptedException e) {
+         e.printStackTrace();
+      }
+//    什么时候想要终止线程，只要把标记改为false即可
+//    以上代码，表示main线程休眠3秒，后flag.run执行，终止线程
+      flag.run = false;
+   }
+}
+
+class stopThread implements Runnable{
+// 添加布尔标记
+   boolean run = true;
+   @Override
+   public void run() {
+      for (int i = 0; i &lt; 100; i++) {
+         if (run) {
+            System.out.println(Thread.currentThread().getName() + &quot;---&gt;&quot; + i);
+            try {
+               Thread.sleep(1000);
+            } catch (InterruptedException e) {
+               e.printStackTrace();
+            }
+         }else {
+//          线程结束前可以执行save，保存数据
+            return;
+         }
+      }
+   }
+}
+</code></pre>
+<hr>
+<pre><code>/*
+ *     线程让位
+ */
+public class ThreadYield {
+   public static void main(String[] args) {
+      
+      Thread t = new yieldThread();
+      t.start();
+      
+      for (int i = 0; i &lt; 2000; i++) {
+         System.out.println(Thread.currentThread().getName() + i);
+      }
+   }
+}
+
+class yieldThread extends Thread{
+   @Override
+   public void run() {
+      for (int i = 0; i &lt; 2000; i++) {
+//       每10个让位一次
+         if (i % 10 == 0) {
+            yield(); //当前线程暂停一下，让其其他线程
+         }
+         System.out.println(&quot;Branch--&quot;+i);
+      }
+   }
+}
+</code></pre>
+<hr>
+<ul>
+<li>面试题</li>
+</ul>
+<pre><code>public class ThreadInterView {
+   public static void main(String[] args) {
+      Thread t = new MyThread1();
+      t.setName(&quot;X&quot;);
+      t.start();
+      try {
+//       问题：这段代码会让线程t进入休眠状态吗？
+         t.sleep(1000*3);
+         /*
+          *     不会！在执行时仍会转换为Thread.sleep(1000*3);
+          *     这段代码的作用是让当前线程进入休眠状态，即是main线程进入休眠
+          *     这段代码出现在main方法中，main线程休眠
+          */
+      } catch (InterruptedException e) {
+         e.printStackTrace();
+      }
+      System.out.println(&quot;Down...&quot;);
+   }
+}
+
+class MyThread1 extends Thread{
+   @Override
+   public void run() {
+      for (int i = 0; i &lt; 20; i++) {
+  		System.out.println(Thread.currentThread().getName()+&quot;---&gt;&quot;+ i);
+      }
+   }
+}
+</code></pre>
+<h4 id="loading"><em><strong>loading...</strong></em></h4>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/wggtNSQwj/" class="tag">
+                    Thread
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
+                    JavaNote
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/34-dao-mysql-jing-dian/">
+                  <h3 class="post-title">
+                    34道MySQL经典
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'efb43fc5663c1b20fb9a',
+        clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
+        repo: 'blogCommon',
+        owner: 'Geckoc',
+        admin: ['Geckoc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
