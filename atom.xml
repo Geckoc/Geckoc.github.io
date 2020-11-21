@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2020-11-11T09:18:51.123Z</updated>
+    <updated>2020-11-21T04:43:41.965Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -10,6 +10,511 @@
     <logo>https://geckoc.github.io/images/avatar.png</logo>
     <icon>https://geckoc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2020, RichardTech</rights>
+    <entry>
+        <title type="html"><![CDATA[字符串&数组练习]]></title>
+        <id>https://geckoc.github.io/post/zi-fu-chuan-andshu-zu-lian-xi/</id>
+        <link href="https://geckoc.github.io/post/zi-fu-chuan-andshu-zu-lian-xi/">
+        </link>
+        <updated>2020-11-21T04:25:49.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="stringarray">String&amp;Array</h2>
+<ul>
+<li>练习</li>
+<li>关于String类的方法和Array的操作</li>
+<li>字符串分割，数组排序，字符串赋值给自定义对象并添加到数组中</li>
+</ul>
+<h5 id="题目">题目：</h5>
+<ol>
+<li>
+<p>从键盘上输入身份证号, 判断出生日期,性别，<br>
+身份证倒数第二位表示性别，双数为女性，单为男</p>
+</li>
+<li>
+<p>有字符串: ”101,lisi,98;</p>
+<p>202,wangwu,76;</p>
+<p>303,chenqi,84;</p>
+<p>404,zhangsan,49;</p>
+<p>505,xiaoming,67”,</p>
+<p>保存的学生的学号,姓名,成绩信息.</p>
+<p>要求把字符串中学生信息取出来,创建Student对象,</p>
+<p>把Student对象保存到数组中;遍历学生对象数组;</p>
+<p>在数组中查找名字为xiaoxiao同学是否存在.对数组中学生对象根据成绩降序排序</p>
+</li>
+</ol>
+<hr>
+<pre><code>import java.util.Scanner;
+
+/**
+ * @ClassName Judge
+ * @Deacription TODO 1. 从键盘上输入身份证号, 判断出生日期,性别
+ *                   2. 身份证倒数第二位表示性别，双数为女性，单为男
+ * @Version 1.0
+ */
+public class Judge {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        boolean verify = true;
+        while (verify){
+            System.out.print(&quot;请输入你的身份证号码:&quot;);
+            String id = sc.next();
+            // 用正则表达验证控制台输入
+            boolean control = id.matches(&quot;\\d{17}(\\d|X|x)&quot;);
+            if (control){
+                // 截取身份证中出生日期
+                String birth = id.substring(6, 14);
+                // 取出倒数第二位的元素，偶数为女性
+                char c = id.charAt(id.length() - 2);
+                if (c % 2 == 0){
+                    System.out.println(&quot;女性\t&quot; + &quot;出生日期：&quot; + birth);
+                    // 判断成功结束
+                    verify = false;
+                }else {
+                    System.out.println(&quot;男性\t&quot; + &quot;出生日期：&quot; + birth);
+                    verify = false;
+                }
+            }else{
+                //不合法继续循环
+                System.out.println(&quot;身份证输入不合法...请重新输入！&quot;);
+            }
+        }
+    }
+}
+</code></pre>
+<h5 id="student类">Student类</h5>
+<pre><code>public class Student implements Comparable&lt;Student&gt;{
+    private String id;
+    private String name;
+    private String score;
+
+    public Student(String id, String name, String score) {
+        this.id = id;
+        this.name = name;
+        this.score = score;
+    }
+    public Student() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Student setId(String id) {
+        this.id = id;
+        return this;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Student setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public String getScore() {
+        return score;
+    }
+
+    public Student setScore(String score) {
+        this.score = score;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Student{&quot; +
+                &quot;id='&quot; + id + '\'' +
+                &quot;, name='&quot; + name + '\'' +
+                &quot;, score='&quot; + score + '\'' +
+                '}';
+    }
+
+    @Override
+    public int compareTo(Student o) {
+        return o.getScore().compareTo(this.getScore());
+    }
+}
+</code></pre>
+<h5 id="测试类">测试类</h5>
+<pre><code>/**
+ * @ClassName StudentTest
+ * @Deacription
+ *  TODO
+ *     有字符串: ”101,lisi,98;
+ *              202,wangwu,76;
+ *              303,chenqi,84;
+ *              404,zhangsan,49;
+ *              505,xiaoming,67”,
+ *      保存的学生的学号,姓名,成绩信息.
+ *      要求把字符串中学生信息取出来,创建Student对象,
+ *      把Student对象保存到数组中;遍历学生对象数组;
+ *      在数组中查找名字为xiaoxiao同学是否存在.对数组中学生对象根据成绩降序排序
+ * @Version 1.0
+ */
+public class StudentTest {
+    public static void main(String[] args) {
+        String src = &quot;101,lisi,98;202,wangwu,76;303,chenqi,84;404,zhangsan,49;505,xiaoming,67&quot;;
+        // 分号替换成逗号
+        String replace = src.replace(&quot;;&quot;, &quot;,&quot;);
+        // 通过逗号分隔字符串
+        String[] split = replace.split(&quot;,&quot;);
+        for (String s : split) {
+            System.out.print(s + &quot; &quot;);
+        }
+        //创建学生数组
+        Student[] stus = new Student[5];
+        // 思路，内循环，分隔字符串后并按照每3个字符分别赋值给不同的对象
+        /*
+        for (int i = 0; i &lt; stus.length ; i++) {
+            // 创建五个学生对象，内循环控制赋值
+            Student student = new Student();
+            for (int j = 0; j &lt; split.length ; j++) {
+                String id = split[j];
+                String name = split[j+1];
+                String score = split[j+2];
+                student = new Student(); //这是重新new对象.
+                stus[i] = student;
+            }
+        }
+        */
+        // 此步骤暂时没有想到解决方法，只能手动通过数组下标赋值.....
+        /*
+        Student stu1 = new Student(split[0],split[1],split[2]);
+        Student stu2 = new Student(split[3],split[4],split[5]);
+        Student stu3 = new Student(split[6],split[7],split[8]);
+        Student stu4 = new Student(split[9],split[10],split[11]);
+        Student stu5 = new Student(split[12],split[13],split[14]);
+        */
+        // ！！！内循环会破坏创建对象结构，
+        // 会有NullPointException或ArrayIndexOutOfBoundsException
+        // split[i]元素下标为持续+1，定义初始值，循环自增
+        int index = 0;
+        for (int i = 0; i &lt; stus.length ; i++) {
+                String id = split[index++];
+                String name = split[index++];
+                String score = split[index++];
+                Student student = new Student(id,name,score);
+                stus[i] = student;
+        }
+        System.out.println();
+        // 遍历学生对象，未排序
+        for (Student student : stus) {
+            System.out.println(student);
+        }
+//        // 学生对象放入数组中
+//        Student[] stus = {stu1,stu2,stu3,stu4,stu5};
+//        对自定义类型进行排序需要实现Comparable并实现CompareTo方法重写规则
+//        否则报错Exception in thread &quot;main&quot; java.lang.ClassCastException
+        Arrays.sort(stus); // sort默认升序，已在Student类重新编写排序规则
+        //判断学生是否存在
+        if (isExist1(stus,&quot;xiaoxiao&quot;)){
+            System.out.println(&quot;学生存在&quot;);
+        }else{
+            System.out.println(&quot;不存在&quot;);
+        }
+        // 按照成绩降序输出
+        System.out.println(&quot;按照学生成绩降序输出&quot;);
+        for (Student student : stus) {
+            System.out.println(student);
+        }
+    }
+
+    public static boolean isExist1(Student[] stus ,String target){
+        for (int i = 0; i &lt; stus.length; i++) {
+            if (target.equals(stus[i].getName())){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[TreeSet]]></title>
+        <id>https://geckoc.github.io/post/treeset/</id>
+        <link href="https://geckoc.github.io/post/treeset/">
+        </link>
+        <updated>2020-11-21T03:13:13.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="treeset">TreeSet</h2>
+<h3 id="概念">概念</h3>
+<blockquote>
+<ul>
+<li>
+<ol>
+<li>treeSet 被称为可排序集合</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>无序不可重复，可以自动排序，没有下标</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>底层是TreeMap数据结构，TreeMap底层是二叉树</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>放到TreeSet集合中的元素，等于放到TreeMap集合中的key部分</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+<pre><code>/**
+ *      注意：TreeSet可以自动排序自定义类型吗？
+ *       不可以，会出现类型转换异常 ClassCaseException
+ *       实现自定义类排序，需实现Comparable接口并且编写排序规则
+ */
+public class TreeSetTest {
+    public static void main(String[] args) {
+        User user1 = new User(87);
+        User user2 = new User(35);
+        User user3 = new User(65);
+        Set&lt;User&gt; set = new TreeSet&lt;&gt;();
+//       User类未实现Comparable接口，并编写排序规则，出现ClassCaseException异常
+        try {
+            set.add(user1);
+            set.add(user2);
+            set.add(user3);
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+        for (User user : set) {
+            System.out.println(user);
+        }
+    }
+}
+// 为了方便，User类就不贴不出来了，封装一个int类型属性即可，较好比较
+</code></pre>
+<ul>
+<li>自定义类型排序要实现<em>Comparable</em>接口,并且实现**compareTo()**方法</li>
+</ul>
+<pre><code>// 实现Comparable接口,并且实现compareTo()方法
+public class SomeOne implements Comparable&lt;SomeOne&gt;{
+    private String name;
+    private int age;
+
+    public SomeOne() {
+    }
+
+    public SomeOne(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public SomeOne setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public SomeOne setAge(int age) {
+        this.age = age;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;SomeOne{&quot; +
+                &quot;name='&quot; + name + '\'' +
+                &quot;, age=&quot; + age +
+                '}';
+    }
+    /*
+     *     重写排序比较逻辑    k.compareTo(t.key)
+     *     拿集合中的key值和另外的key比较，返回值可能是：&lt; 0, &gt;0, =0
+     *  CompareTo返回值很重要
+     *         返回0表示相同，value会覆盖
+     *     返回&gt;0，会在右子树上继续找
+     *         返回&lt;0，会在左子树上继续找
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+
+    @Override
+    public int compareTo(SomeOne o) {
+        /*if (this.age == o.age) {
+         return 0;
+      }else if (this.age &gt; o.age) {
+         return 1;
+      }else if (this.age &lt; o.age) {
+         return -1;
+      } */
+        int num = this.age - o.age;  // 此代码可表示上述意思
+        /*
+        如果年龄相同，则按姓名排序，
+        String类型已实现CompareTo()方法，可直接调用
+         */
+        return num == 0 ? this.name.compareTo(o.name):num;
+    }
+}
+</code></pre>
+<h6 id="测试类">测试类</h6>
+<pre><code>public class TreeSetTest {
+    public static void main(String[] args) {
+//      若年龄相同，则按姓名排序，字母大小
+        SomeOne someOne1 = new SomeOne(&quot;A&quot;,99);
+        SomeOne someOne2 = new SomeOne(&quot;F&quot;,88);
+        SomeOne someOne3 = new SomeOne(&quot;D&quot;,88);
+        SomeOne someOne4 = new SomeOne(&quot;C&quot;,88);
+        SomeOne someOne5 = new SomeOne(&quot;Z&quot;,66);
+        Set&lt;SomeOne&gt; tree = new TreeSet&lt;&gt;();
+        tree.add(someOne1);
+        tree.add(someOne2);
+        tree.add(someOne3);
+        tree.add(someOne4);
+        tree.add(someOne5);
+//        Iterator&lt;SomeOne&gt; iterator = someOnes.iterator();
+        for (SomeOne someOne : tree) {
+            System.out.println(someOne);
+        }
+    }
+}
+</code></pre>
+<ul>
+<li><strong>TreeSet</strong>集合中实现元素可排序的方法有两种</li>
+<li>
+<ol>
+<li>实现<em>java.lang.Comparable</em>接口，并且实现**CompareTo()**方法</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>通过构造方法传递比较器对象，自定义编写实现***java.util.Comparator***接口</li>
+</ol>
+</li>
+<li><strong>Comparable</strong> 和 <strong>Comparator</strong> 如何选择？
+<ul>
+<li>
+<pre><code> 比较规则多个，需要频繁切换，建议使用 **Comparator**
+</code></pre>
+</li>
+<li>
+<pre><code> 比较规则无需改变，建议使用 **Comparable**
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong>Comparator</strong> 符合<strong>OCP</strong>原则  <em>(open close principle)</em></li>
+</ul>
+<h5 id="自定义编写实现comparator接口">自定义编写实现Comparator接口</h5>
+<pre><code>public class ComparatorImpl implements Comparator&lt;Human&gt; {
+    @Override
+    public int compare(Human o1, Human o2) {
+        int num =o1.getAge() - o2.getAge();
+        // 年龄相同时，比较姓名
+        return num == 0 ? o1.getName().compareTo(o2.getName()):num;
+    }
+}
+</code></pre>
+<p>自定义模板类</p>
+<pre><code>public class Human {
+    private String name;
+    private int age;
+
+    public Human() {
+    }
+
+    public Human(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Human setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Human setAge(int age) {
+        this.age = age;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Human{&quot; +
+                &quot;name='&quot; + name + '\'' +
+                &quot;, age=&quot; + age +
+                '}';
+    }
+}
+</code></pre>
+<h6 id="测试类-2">测试类</h6>
+<pre><code>public class TreeSetTest04 {
+    public static void main(String[] args) {
+//       通过构造方法传递比较器
+//        Set&lt;Human&gt; humans = new TreeSet&lt;&gt;(new ComparatorImpl());
+//       也可直接通过匿名内部类实现
+        Set&lt;Human&gt; humans = new TreeSet&lt;&gt;(new Comparator&lt;Human&gt;() {
+            @Override
+            public int compare(Human o1, Human o2) {
+                int num = o1.getAge() - o2.getAge();
+                return num == 0 ? o1.getName().compareTo(o2.getName()):num;
+            }
+        });
+        humans.add(new Human(&quot;Richard&quot;,24));
+        humans.add(new Human(&quot;Jordan&quot;,80));
+        humans.add(new Human(&quot;James&quot;,65));
+        humans.add(new Human(&quot;Kobe&quot;,88));
+        humans.add(new Human(&quot;Crazy&quot;,24));
+        humans.add(new Human(&quot;Alex&quot;,24));
+        humans.add(new Human(&quot;Richard&quot;,99));
+        for (Human human : humans) {
+            System.out.println(human);
+        }
+    }
+}
+</code></pre>
+<h5 id="tips">Tips</h5>
+<pre><code>        /*对于自定义类型，集合工具类无法直接调用排序
+        Collections.sort(bodyList);  错误
+        reason: no instance(s) of type variable(s) T
+        exist so that Body conforms to Comparable&lt;? super T&gt;
+        需实现Comparable接口
+        */
+       Set&lt;Integer&gt; hash = new HashSet&lt;&gt;();
+        hash.add(5);
+        hash.add(4);
+        hash.add(3);
+        hash.add(2);
+        hash.add(1);
+        System.out.println(&quot;\n****hashSet****&quot;);
+        /*
+        Collections.sort(hash);  错误
+        reason: no instance(s) of type variable(s) T
+        exist so that Set&lt;Integer&gt; conforms to List&lt;T
+        Set集合如何排序，Collections.Sort只能传递List类型，可转换再排序
+         */
+        List&lt;Integer&gt; exList = new ArrayList&lt;Integer&gt;(hash);
+        Collections.sort(exList);
+        for (Integer integer : exList) {
+            System.out.print(integer + &quot;**&gt;&quot;);
+        }
+		/*
+		 java.util.Arrays的数组工具类排序也是无法直接排序自定义类型
+		 对自定义类型进行排序需要实现Comparable并实现CompareTo方法重写规则
+	      否则报错Exception in thread &quot;main&quot; java.lang.ClassCastException
+		*/
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Thread 线程]]></title>
         <id>https://geckoc.github.io/post/thread-xian-cheng/</id>
@@ -3793,79 +4298,6 @@ public class FinallyTry {
       
     改于2020-7-13 21:48:39
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Gitalk配置教程]]></title>
-        <id>https://geckoc.github.io/post/gitalk-pei-zhi-jiao-cheng/</id>
-        <link href="https://geckoc.github.io/post/gitalk-pei-zhi-jiao-cheng/">
-        </link>
-        <updated>2020-07-09T17:42:50.000Z</updated>
-        <summary type="html"><![CDATA[<p>gitalk配置分享，使用Gridea初步</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>gitalk配置分享，使用Gridea初步</p>
-<!-- more -->
-<h3 id="获得权限">获得权限</h3>
-<p>在使用该脚本之前首先要在 GitHub 创建一个新的 Oauth Application</p>
-<p><a href="https://github.com/settings/apps">点击此处 Click Here</a></p>
-<p>点击Oauth Apps，然后新建<br>
-<img src="https://geckoc.github.io//post-images/1594317386736.png" alt="" loading="lazy"></p>
-<p>Application name: 随便填写<br>
-Homepage URL: 填写博客所在的仓库名。比如我的博客就填写: https://geckoc.github.io/<br>
-Application description: 可以不用填写<br>
-Authorization callback URL: 如果有把域名通过CNAME解析到仓库上就填写自己的域名。如果没有就填写仓库名即可</p>
-<p>点击Register Application就可以创建<br>
-接着就可以看到该应用的Client ID和Client Secret</p>
-<h3 id="创建仓库">创建仓库</h3>
-<p>完成以上步骤后，<a href="https://github.com/new">点此创建</a>仓库来保存评论<br>
-<img src="https://geckoc.github.io//post-images/1594318018870.png" alt="" loading="lazy"></p>
-<p>比如填写仓库名为Comments，其余都不用填写</p>
-<h3 id="配置">配置</h3>
-<p>博客配置</p>
-<pre><code>&lt;section class=&quot;post-full-comments&quot;&gt;
-    {{!-- gittalk --}}
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css&quot;&gt;
-    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js&quot;&gt;&lt;/script&gt;
-    &lt;div id=&quot;gitalk-container&quot;&gt;&lt;/div&gt;
-    &lt;script&gt;
-        var gitalk = new Gitalk({
-            clientID: '修改：之前创建Oauth Apps保存的Client ID',
-            clientSecret: '修改：之前创建Oauth Apps保存的Client Secret',
-            repo: '修改：之前创建的repo名称，就是前面例子中的Comments',
-            owner: '修改：GitHub的个人名称',
-            admin: ['修改：GitHub的个人名称'], //这里可以填写具有写权限的用户名列表，用来初始化Issues的
-            id: '{{comment_id}}',
-            distractionFreeMode: false // Facebook-like distraction free mode
-        });
-        gitalk.render('gitalk-container');
-    &lt;/script&gt;
-&lt;/section&gt;
-</code></pre>
-<p>使用Gridea的话可以直接在设置中打开评论，填写以下内容</p>
-<pre><code>clientID: '修改：之前创建Oauth Apps保存的Client ID',
-clientSecret: '修改：之前创建Oauth Apps保存的Client Secret',
-repo: '修改：之前创建的repo名称，就是前面例子中的Comments',
-owner: '修改：GitHub的个人名称',
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[THE LIE WE LIVE]]></title>
-        <id>https://geckoc.github.io/post/the-lie-we-live/</id>
-        <link href="https://geckoc.github.io/post/the-lie-we-live/">
-        </link>
-        <updated>2020-07-04T15:27:37.000Z</updated>
-        <summary type="html"><![CDATA[<p>人们最喜欢看的内容，不是现实和真相，而是可以让他们意淫的内容。</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>人们最喜欢看的内容，不是现实和真相，而是可以让他们意淫的内容。</p>
-<!-- more -->
-<ul>
-<li>微博上有不少居心不良的大V，喜欢打着女权的幌子，传播一些很倒风向的言论，比如“你负责赚钱养家，我负责貌美如花”“不舍得给你花钱的男人就是不爱你”“女孩子就应该被宠着”，如果你接触一下微博，你就会惊讶，这些一听就没道理的话，为什么会这么有市场？为什么很多女生听完以后会理直气壮的把这些话当成口号？答案就是——这些内容会让她们爽，让她们心安理得的接受别人的馈赠，不努力却要求别人努力，一身臭毛病还要让别人宠着。网络小说，给男生看的，大多是讲一个要钱没钱、要能力没能力的屌丝，忽然因为某个意外事件，获得了某种超能力，然后混的风生水起，多少女人前仆后继的陪他上床，最后甚至能统治整个宇宙；给女生看的，大多是讲一个长相普普通通的女生，某一天邂逅了一个白马王子，种种机缘巧合之下，她被白马王子追求，捧在手心，或者被n个富二代追求，最后顺理成章嫁入豪门。这些文章，但凡有脑子的人，都知道不现实，但是为什么网络小说全都这么写？就因为这些内容看完以后能让人爽，能让人通过短暂的幻想逃避现实。最残忍的是，很多人幻想的久了，竟然忘了这些事发生的概率多么低，真的以为自己可以屌丝逆袭/嫁入豪门/咸鱼翻身，然后就真的不努力了，因为幻想毁了自己的一生。而当我一板一眼的把这些残忍真相告诉他们的时候，他们竟然接受不了现实，不仅不给我继续，还扬言要屏蔽我...</li>
-</ul>
-<hr>
-<ul>
-<li>你并不比自己的父母优秀多少。现在知乎上批判自己父母的声音也很盛，诸多白领们自认为自己的表现远远优于自己的父母。其实，这不过是因为经济结构转型造成的误会。现在在公司的格子间里面哼哧哼哧做PPT的那些人，和当年踩着缝纫机的女工没有本质区别。 现在在各种购物软件上抢红包的那些人，和当年在菜市场上为了一分钱讨价还价的父母也没有区别；现在买个手机非得戴个壳、贴层膜，和当年父母非要给遥控器套个塑料袋也差不多；其实，现在每天刷微博、抖音、知乎的人，跟当年蹲在墙根晒太阳嗑瓜子的，也没什么区别。</li>
-</ul>
 ]]></content>
     </entry>
 </feed>

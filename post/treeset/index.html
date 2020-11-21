@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>TreeSet | RichardTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1605933797038">
+<link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="TreeSet
+概念
+
+
+
+
+treeSet 被称为可排序集合
+
+
+
+
+无序不可重复，可以自动排序，没有下标
+
+
+
+
+底层是TreeMap数据结构，TreeMap底层是二叉树
+
+
+
+
+放到TreeSet集合中的元素，等于放到TreeMap集..." />
+    <meta name="keywords" content="Set,SortedSet,TreeSet,Collection,JavaNote" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://geckoc.github.io/">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1605933797038" class="site-logo">
+        <h1 class="site-title">RichardTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com" target="_blank">Github</a> | <a class="rss" href="https://geckoc.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">TreeSet</h2>
+            <div class="post-date">2020-11-21</div>
+            
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/treeset.jpg')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h2 id="treeset">TreeSet</h2>
+<h3 id="概念">概念</h3>
+<blockquote>
+<ul>
+<li>
+<ol>
+<li>treeSet 被称为可排序集合</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>无序不可重复，可以自动排序，没有下标</li>
+</ol>
+</li>
+<li>
+<ol start="3">
+<li>底层是TreeMap数据结构，TreeMap底层是二叉树</li>
+</ol>
+</li>
+<li>
+<ol start="4">
+<li>放到TreeSet集合中的元素，等于放到TreeMap集合中的key部分</li>
+</ol>
+</li>
+</ul>
+</blockquote>
+<pre><code>/**
+ *      注意：TreeSet可以自动排序自定义类型吗？
+ *       不可以，会出现类型转换异常 ClassCaseException
+ *       实现自定义类排序，需实现Comparable接口并且编写排序规则
+ */
+public class TreeSetTest {
+    public static void main(String[] args) {
+        User user1 = new User(87);
+        User user2 = new User(35);
+        User user3 = new User(65);
+        Set&lt;User&gt; set = new TreeSet&lt;&gt;();
+//       User类未实现Comparable接口，并编写排序规则，出现ClassCaseException异常
+        try {
+            set.add(user1);
+            set.add(user2);
+            set.add(user3);
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+        for (User user : set) {
+            System.out.println(user);
+        }
+    }
+}
+// 为了方便，User类就不贴不出来了，封装一个int类型属性即可，较好比较
+</code></pre>
+<ul>
+<li>自定义类型排序要实现<em>Comparable</em>接口,并且实现**compareTo()**方法</li>
+</ul>
+<pre><code>// 实现Comparable接口,并且实现compareTo()方法
+public class SomeOne implements Comparable&lt;SomeOne&gt;{
+    private String name;
+    private int age;
+
+    public SomeOne() {
+    }
+
+    public SomeOne(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public SomeOne setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public SomeOne setAge(int age) {
+        this.age = age;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;SomeOne{&quot; +
+                &quot;name='&quot; + name + '\'' +
+                &quot;, age=&quot; + age +
+                '}';
+    }
+    /*
+     *     重写排序比较逻辑    k.compareTo(t.key)
+     *     拿集合中的key值和另外的key比较，返回值可能是：&lt; 0, &gt;0, =0
+     *  CompareTo返回值很重要
+     *         返回0表示相同，value会覆盖
+     *     返回&gt;0，会在右子树上继续找
+     *         返回&lt;0，会在左子树上继续找
+     * @see java.lang.Comparable#compareTo(java.lang.Object)
+     */
+
+    @Override
+    public int compareTo(SomeOne o) {
+        /*if (this.age == o.age) {
+         return 0;
+      }else if (this.age &gt; o.age) {
+         return 1;
+      }else if (this.age &lt; o.age) {
+         return -1;
+      } */
+        int num = this.age - o.age;  // 此代码可表示上述意思
+        /*
+        如果年龄相同，则按姓名排序，
+        String类型已实现CompareTo()方法，可直接调用
+         */
+        return num == 0 ? this.name.compareTo(o.name):num;
+    }
+}
+</code></pre>
+<h6 id="测试类">测试类</h6>
+<pre><code>public class TreeSetTest {
+    public static void main(String[] args) {
+//      若年龄相同，则按姓名排序，字母大小
+        SomeOne someOne1 = new SomeOne(&quot;A&quot;,99);
+        SomeOne someOne2 = new SomeOne(&quot;F&quot;,88);
+        SomeOne someOne3 = new SomeOne(&quot;D&quot;,88);
+        SomeOne someOne4 = new SomeOne(&quot;C&quot;,88);
+        SomeOne someOne5 = new SomeOne(&quot;Z&quot;,66);
+        Set&lt;SomeOne&gt; tree = new TreeSet&lt;&gt;();
+        tree.add(someOne1);
+        tree.add(someOne2);
+        tree.add(someOne3);
+        tree.add(someOne4);
+        tree.add(someOne5);
+//        Iterator&lt;SomeOne&gt; iterator = someOnes.iterator();
+        for (SomeOne someOne : tree) {
+            System.out.println(someOne);
+        }
+    }
+}
+</code></pre>
+<ul>
+<li><strong>TreeSet</strong>集合中实现元素可排序的方法有两种</li>
+<li>
+<ol>
+<li>实现<em>java.lang.Comparable</em>接口，并且实现**CompareTo()**方法</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>通过构造方法传递比较器对象，自定义编写实现***java.util.Comparator***接口</li>
+</ol>
+</li>
+<li><strong>Comparable</strong> 和 <strong>Comparator</strong> 如何选择？
+<ul>
+<li>
+<pre><code> 比较规则多个，需要频繁切换，建议使用 **Comparator**
+</code></pre>
+</li>
+<li>
+<pre><code> 比较规则无需改变，建议使用 **Comparable**
+</code></pre>
+</li>
+</ul>
+</li>
+<li><strong>Comparator</strong> 符合<strong>OCP</strong>原则  <em>(open close principle)</em></li>
+</ul>
+<h5 id="自定义编写实现comparator接口">自定义编写实现Comparator接口</h5>
+<pre><code>public class ComparatorImpl implements Comparator&lt;Human&gt; {
+    @Override
+    public int compare(Human o1, Human o2) {
+        int num =o1.getAge() - o2.getAge();
+        // 年龄相同时，比较姓名
+        return num == 0 ? o1.getName().compareTo(o2.getName()):num;
+    }
+}
+</code></pre>
+<p>自定义模板类</p>
+<pre><code>public class Human {
+    private String name;
+    private int age;
+
+    public Human() {
+    }
+
+    public Human(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Human setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Human setAge(int age) {
+        this.age = age;
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return &quot;Human{&quot; +
+                &quot;name='&quot; + name + '\'' +
+                &quot;, age=&quot; + age +
+                '}';
+    }
+}
+</code></pre>
+<h6 id="测试类-2">测试类</h6>
+<pre><code>public class TreeSetTest04 {
+    public static void main(String[] args) {
+//       通过构造方法传递比较器
+//        Set&lt;Human&gt; humans = new TreeSet&lt;&gt;(new ComparatorImpl());
+//       也可直接通过匿名内部类实现
+        Set&lt;Human&gt; humans = new TreeSet&lt;&gt;(new Comparator&lt;Human&gt;() {
+            @Override
+            public int compare(Human o1, Human o2) {
+                int num = o1.getAge() - o2.getAge();
+                return num == 0 ? o1.getName().compareTo(o2.getName()):num;
+            }
+        });
+        humans.add(new Human(&quot;Richard&quot;,24));
+        humans.add(new Human(&quot;Jordan&quot;,80));
+        humans.add(new Human(&quot;James&quot;,65));
+        humans.add(new Human(&quot;Kobe&quot;,88));
+        humans.add(new Human(&quot;Crazy&quot;,24));
+        humans.add(new Human(&quot;Alex&quot;,24));
+        humans.add(new Human(&quot;Richard&quot;,99));
+        for (Human human : humans) {
+            System.out.println(human);
+        }
+    }
+}
+</code></pre>
+<h5 id="tips">Tips</h5>
+<pre><code>        /*对于自定义类型，集合工具类无法直接调用排序
+        Collections.sort(bodyList);  错误
+        reason: no instance(s) of type variable(s) T
+        exist so that Body conforms to Comparable&lt;? super T&gt;
+        需实现Comparable接口
+        */
+       Set&lt;Integer&gt; hash = new HashSet&lt;&gt;();
+        hash.add(5);
+        hash.add(4);
+        hash.add(3);
+        hash.add(2);
+        hash.add(1);
+        System.out.println(&quot;\n****hashSet****&quot;);
+        /*
+        Collections.sort(hash);  错误
+        reason: no instance(s) of type variable(s) T
+        exist so that Set&lt;Integer&gt; conforms to List&lt;T
+        Set集合如何排序，Collections.Sort只能传递List类型，可转换再排序
+         */
+        List&lt;Integer&gt; exList = new ArrayList&lt;Integer&gt;(hash);
+        Collections.sort(exList);
+        for (Integer integer : exList) {
+            System.out.print(integer + &quot;**&gt;&quot;);
+        }
+		/*
+		 java.util.Arrays的数组工具类排序也是无法直接排序自定义类型
+		 对自定义类型进行排序需要实现Comparable并实现CompareTo方法重写规则
+	      否则报错Exception in thread &quot;main&quot; java.lang.ClassCastException
+		*/
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/x_vimzsS3/" class="tag">
+                    Set
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/Rkk5cDB5pX/" class="tag">
+                    SortedSet
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/41TmMw2KB1/" class="tag">
+                    TreeSet
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/OoGnTxGd5/" class="tag">
+                    Collection
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
+                    JavaNote
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/thread-xian-cheng/">
+                  <h3 class="post-title">
+                    Thread 线程
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'efb43fc5663c1b20fb9a',
+        clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
+        repo: 'blogCommon',
+        owner: 'Geckoc',
+        admin: ['Geckoc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
