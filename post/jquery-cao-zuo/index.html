@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>jQuery对Checkbox的各种操作 | RichardTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1609924999733">
+<link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="jQuery对Checkbox的各种操作
+    //注意： 操作checkbox的checked,disabled属性时jquery1.6以前版本用attr,1.6以上（包含）建议用prop
+    //1、根据id获取checkbox
+..." />
+    <meta name="keywords" content="checkbox,jquery" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://geckoc.github.io/">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1609924999733" class="site-logo">
+        <h1 class="site-title">RichardTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com" target="_blank">Github</a> | <a class="rss" href="https://geckoc.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">jQuery对Checkbox的各种操作</h2>
+            <div class="post-date">2021-01-06</div>
+            
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/jquery-cao-zuo.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h3 id="jquery对checkbox的各种操作">jQuery对Checkbox的各种操作</h3>
+<pre><code>    //注意： 操作checkbox的checked,disabled属性时jquery1.6以前版本用attr,1.6以上（包含）建议用prop
+    //1、根据id获取checkbox
+    $(&quot;#cbCheckbox1&quot;);
+    
+    //2、获取所有的checkbox
+    $(&quot;input[type='checkbox']&quot;);//or
+    $(&quot;input[name='cb']&quot;);
+    
+    //3、获取所有选中的checkbox
+    $(&quot;input:checkbox:checked&quot;);//or
+    $(&quot;input:[type='checkbox']:checked&quot;);//or
+    $(&quot;input[type='checkbox']:checked&quot;);//or
+    $(&quot;input:[name='ck']:checked&quot;);
+    
+    //4、获取checkbox值
+    //用.val()即可，比如：
+    $(&quot;#cbCheckbox1&quot;).val();
+    //5、获取多个选中的checkbox值
+    // 创建数组将值放入数组中 push()方法 
+    var vals = [];
+    $('input:checkbox:checked').each(function (index, item) {
+        vals.push($(this).val());
+    });
+    
+    //6、判断checkbox是否选中（jquery 1.6以前版本 用  $(this).attr(&quot;checked&quot;)）
+    $(&quot;#cbCheckbox1&quot;).click(function () {
+        if ($(this).prop(&quot;checked&quot;)) {
+            alert(&quot;选中&quot;);
+        } else {
+            alert(&quot;没有选中&quot;);
+        }
+    });
+    
+    //7、设置checkbox为选中状态
+    $('input:checkbox').attr(&quot;checked&quot;, 'checked');//or
+    $('input:checkbox').attr(&quot;checked&quot;, true);
+    
+    //8、设置checkbox为不选中状态
+    $('input:checkbox').attr(&quot;checked&quot;, '');//or
+    $('input:checkbox').attr(&quot;checked&quot;, false);
+    
+    //9、设置checkbox为禁用状态(jquery&lt;1.6用attr,jquery&gt;=1.6建议用prop)
+    $(&quot;input[type='checkbox']&quot;).attr(&quot;disabled&quot;, &quot;disabled&quot;);//or
+    $(&quot;input[type='checkbox']&quot;).attr(&quot;disabled&quot;, true);//or
+    $(&quot;input[type='checkbox']&quot;).prop(&quot;disabled&quot;, true);//or
+    $(&quot;input[type='checkbox']&quot;).prop(&quot;disabled&quot;, &quot;disabled&quot;);
+    
+    //10、设置checkbox为启用状态(jquery&lt;1.6用attr,jquery&gt;=1.6建议用prop)
+    $(&quot;input[type='checkbox']&quot;).removeAttr(&quot;disabled&quot;);//or
+    $(&quot;input[type='checkbox']&quot;).attr(&quot;disabled&quot;, false);//or
+    $(&quot;input[type='checkbox']&quot;).prop(&quot;disabled&quot;, &quot;&quot;);//or
+    $(&quot;input[type='checkbox']&quot;).prop(&quot;disabled&quot;, false);
+
+</code></pre>
+<h4 id="示例如下">示例如下</h4>
+<pre><code>&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+&lt;head&gt;
+    &lt;title&gt;&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h3&gt;jQuery操作checkbox
+    &lt;/h3&gt;
+    &lt;input type=&quot;checkbox&quot; id=&quot;cbCheckbox1&quot; value=&quot;1&quot; /&gt;
+    &lt;input type=&quot;checkbox&quot; value=&quot;2&quot; /&gt;
+    &lt;input type=&quot;checkbox&quot; disabled=&quot;disabled&quot; value=&quot;3&quot; /&gt;
+    &lt;input type=&quot;checkbox&quot; value=&quot;4&quot; /&gt;
+    &lt;input type=&quot;checkbox&quot; disabled=&quot;true&quot; value=&quot;5&quot; /&gt;
+    &lt;br /&gt;
+    &lt;input type=&quot;button&quot; id=&quot;btnDisabled&quot; value=&quot;禁用&quot; onclick=&quot;fn_disabled();&quot; /&gt;
+    &lt;input type=&quot;button&quot; id=&quot;Button1&quot; value=&quot;启用&quot; onclick=&quot;fn_enable();&quot; /&gt;&lt;br /&gt;
+    &lt;input type=&quot;button&quot; id=&quot;Button2&quot; value=&quot;获取选中的值&quot; onclick=&quot;getCheckedValues();&quot; /&gt;&lt;br /&gt;
+    &lt;input type=&quot;button&quot; id=&quot;Button3&quot; value=&quot;选中第二个&quot; onclick=&quot;checkedSecond();&quot; /&gt;
+    &lt;input type=&quot;button&quot; id=&quot;Button4&quot; value=&quot;取消选中第二个&quot; onclick=&quot;uncheckedSecond();&quot; /&gt;&lt;br /&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&lt;script src=&quot;js/jquery-1.9.1.min.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+
+    function fn_disabled() {
+        //$(&quot;input[type='checkbox']&quot;).attr(&quot;disabled&quot;, &quot;disabled&quot;);
+        //$(&quot;input[type='checkbox']&quot;).attr(&quot;disabled&quot;, true);
+        $(&quot;input[type='checkbox']&quot;).prop(&quot;disabled&quot;, true);
+        //  $(&quot;input[type='checkbox']&quot;).prop(&quot;disabled&quot;, &quot;disabled&quot;);
+    }
+
+    function fn_enable() {
+        //  $(&quot;input[type='checkbox']&quot;).removeAttr(&quot;disabled&quot;);
+        // $(&quot;input[type='checkbox']&quot;).attr(&quot;disabled&quot;, false);
+        // $(&quot;input[type='checkbox']&quot;).prop(&quot;disabled&quot;,&quot;&quot;);
+        $(&quot;input[type='checkbox']&quot;).prop(&quot;disabled&quot;, false);
+    }
+
+    //获取选中的 checkbox的值
+    function getCheckedValues() {
+        var arr = [];
+        $(&quot;input[type='checkbox']:checked&quot;).each(function (index, item) {//
+            arr.push($(this).val());
+        });
+        alert(arr);
+    }
+
+    function checkedSecond() {
+        // $(&quot;input[type='checkbox']:eq(1)&quot;).prop(&quot;checked&quot;, &quot;checked&quot;);
+        $(&quot;input[type='checkbox']:eq(1)&quot;).prop(&quot;checked&quot;, true);
+    }
+
+    function uncheckedSecond() {
+        //  $(&quot;input[type='checkbox']:eq(1)&quot;).prop(&quot;checked&quot;, &quot;&quot;);
+        $(&quot;input[type='checkbox']:eq(1)&quot;).prop(&quot;checked&quot;, false);
+    }
+
+    $(&quot;#cbCheckbox1&quot;).click(function () {
+        if ($(this).prop(&quot;checked&quot;)) {//jquery 1.6以前版本 用  $(this).attr(&quot;checked&quot;)
+            alert(&quot;选中&quot;);
+        } else {
+            alert(&quot;没有选中&quot;);
+        }
+    });
+
+&lt;/script&gt;
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/MuCCjgvxz/" class="tag">
+                    checkbox
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/jgjJKJcgCy/" class="tag">
+                    jquery
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/ge-chong-ye-mian-shua-xin/">
+                  <h3 class="post-title">
+                    各种页面刷新
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'efb43fc5663c1b20fb9a',
+        clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
+        repo: 'blogCommon',
+        owner: 'Geckoc',
+        admin: ['Geckoc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
