@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Ajax&amp;JQuery发送请求 | RichardTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1609937697755">
+<link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="Ajax原生发送请求
+        window.onload = function () {
+          var btn1 = document.getElementById(&quot;btn1&quot;);
+       ..." />
+    <meta name="keywords" content="ajax,jquery" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://geckoc.github.io/">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1609937697755" class="site-logo">
+        <h1 class="site-title">RichardTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com" target="_blank">Github</a> | <a class="rss" href="https://geckoc.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Ajax&amp;JQuery发送请求</h2>
+            <div class="post-date">2021-01-06</div>
+            
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/ajaxandjquery-fa-song-qing-qiu.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h3 id="ajax原生发送请求">Ajax原生发送请求</h3>
+<pre><code class="language-javascript">        window.onload = function () {
+          var btn1 = document.getElementById(&quot;btn1&quot;);
+          btn1.onclick = function () {
+              
+&lt;!-- more --&gt;
+
+              // 1.创建用于AJAX方式的一个核心对象
+            var xmlHttpRequest = new XMLHttpRequest;
+              // alert(xmlHttpRequest);
+              // 2.为xmlHttpRequest对象绑定一个固定事件
+            /**
+             * 事件触发，在一次请求过程中共有5次会被触发
+             * 功能是为了接受服务器端传回的数据的。
+             */
+            xmlHttpRequest.onreadystatechange = function () {
+              /**
+               * readyState
+               *      为0时，表示创建核心对象，初始化之前
+               *      为1时，表示创建核心对象后，初始化时
+               *      为2时，表示创建核心对象后，发出请求时
+               *      为3时，表示服务器端开始响应浏览器
+               *      为4时，表示服务器端响应结束
+               * @type {number}
+               */
+              var rState = xmlHttpRequest.readyState;
+              if(rState == 4){
+                // alert(&quot;事件绑定成功--&gt;&quot;+rState);
+                //使用核心对象接受服务器传回的唯一数据
+                var responseText = xmlHttpRequest.responseText;
+                // alert(responseText);
+               document.getElementById(&quot;d1&quot;).innerText = responseText;
+
+              }
+            }
+              //3.初始化请求  &quot;get&quot;请求方式，&quot;ajaxResponse?name=&quot;+name 请求名称携带参数，默认是异步ajax请求
+              var name = document.getElementById(&quot;name&quot;).value;
+              xmlHttpRequest.open(&quot;get&quot;,&quot;ajaxResponse?name=&quot;+name);
+               //4发出请求
+              xmlHttpRequest.send();
+          }
+        }
+</code></pre>
+<h3 id="jquery发送ajax请求">jQuery发送Ajax请求</h3>
+<pre><code class="language-javascript">$(function () {
+    $(&quot;#empno&quot;).blur(function () {
+        //获取请求参数
+        var empno = $(&quot;#empno&quot;).val();
+        var ename = $(&quot;#ename&quot;).val();
+        $.ajax({ //在ajax函数中传递一个json数据，json数据中包含所有的参数
+            url:&quot;getEmpById&quot;, //请求名称
+            data:{&quot;empno&quot;:empno,&quot;ename&quot;:ename},//请求参数
+            datatype:&quot;json&quot;,//规定从服务器端传回的数据类型，&quot;json&quot;,&quot;text&quot;
+            async:true,//异步请求true,同步请求false,默认异步
+            type:&quot;post&quot;,//请求方式，post或get,默认是get
+            success:function(data){//函数中需要添加一个参数，这个参数可以自动接收服务器传回的数据
+                alert(data);
+            }
+        });
+    })
+})
+</code></pre>
+<h3 id="post-get">$.post()   $.get()</h3>
+<h4 id="post-和-get-使用同理">post 和 get 使用同理</h4>
+<p>格式：jQuery.post(url, [data], [callback], [type])</p>
+<p><strong>url</strong>:发送请求地址。</p>
+<p><strong>data</strong>:待发送 Key/value 参数。</p>
+<p><strong>callback</strong>:发送成功时回调函数。</p>
+<p><strong>type</strong>:返回内容格式，xml, html, script, json, text, _default。</p>
+<pre><code class="language-javascript">$.post(&quot;/deleteInfo.do&quot;,{&quot;id&quot;:id}
+       function(data){
+    		alert(data);
+	  },&quot;json&quot;);
+</code></pre>
+<p>&quot;xml&quot;: 返回 XML 文档，可用 jQuery 处理。</p>
+<p>&quot;html&quot;: 返回纯文本 HTML 信息；包含的script标签会在插入dom时执行。</p>
+<p>&quot;script&quot;: 返回纯文本 JavaScript 代码。不会自动缓存结果。除非设置了&quot;cache&quot;参数。'''注意：'''在远程请求时(不在同一个域下)，所有POST请求都将转为GET请求。(因为将使用DOM的script标签来加载)</p>
+<p>&quot;json&quot;: 返回 JSON 数据 。</p>
+<p>&quot;jsonp&quot;: <a href="http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/">JSONP</a> 格式。使用 <a href="http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/">JSONP</a> 形式调用函数时，如 &quot;myurl?callback=?&quot; jQuery 将自动替换 ? 为正确的函数名，以执行回调函数。</p>
+<p>&quot;text&quot;: 返回纯文本字符串</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/qiD3wW1dz/" class="tag">
+                    ajax
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/jgjJKJcgCy/" class="tag">
+                    jquery
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/checkbox-pi-liang-shan-chu/">
+                  <h3 class="post-title">
+                    Checkbox批量删除
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'efb43fc5663c1b20fb9a',
+        clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
+        repo: 'blogCommon',
+        owner: 'Geckoc',
+        admin: ['Geckoc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
