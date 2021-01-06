@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>Checkbox批量删除 | RichardTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1609926622744">
+<link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="Checkbox批量删除
+页面主要代码
+根据ID从数据库中删除，jQuery1.6以上
+ &lt;script type=&quot;text/javascript&quot;&gt;
+ jQuery(function ($) {
+ 	//..." />
+    <meta name="keywords" content="checkbox,jquery,JavaNote" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://geckoc.github.io/">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1609926622744" class="site-logo">
+        <h1 class="site-title">RichardTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com" target="_blank">Github</a> | <a class="rss" href="https://geckoc.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">Checkbox批量删除</h2>
+            <div class="post-date">2021-01-06</div>
+            
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/checkbox-pi-liang-shan-chu.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h3 id="checkbox批量删除">Checkbox批量删除</h3>
+<h4 id="页面主要代码">页面主要代码</h4>
+<h6 id="根据id从数据库中删除jquery16以上">根据ID从数据库中删除，jQuery1.6以上</h6>
+<pre><code class="language-javascript"> &lt;script type=&quot;text/javascript&quot;&gt;
+ jQuery(function ($) {
+ 	// 批量删除
+            $(&quot;#delete&quot;).click(function () {
+                // 定义一个js数组保存所有用户选择的编号
+                var arr = [];
+                $(&quot;input[type='checkbox']:checked&quot;).each(function (index, item) {
+                    arr.push($(this).val());
+                });
+                // 为0则没有选中任何checkbox
+                if (arr.length == 0){
+                    alert(&quot;请先选择要删除的商品...&quot;);
+                    return;
+                }
+                // 将数组转换称字符串
+                var result = arr.join(&quot;,&quot;);
+                if (!confirm('请问确定删除'+arr.length+'条记录吗?')) return;
+                // 当确定删除执行ajax异步请求
+                $.get(
+                    &quot;/batchDelete.json&quot;,
+                     {&quot;id&quot;:result},
+                    function (data) {
+                        if (data==true){
+                            alert(&quot;删除成功&quot;);
+                            location.reload(); 
+                        }
+                    },
+                &quot;json&quot;);
+            });
+ }
+ &lt;/script&gt;
+&lt;div&gt;
+	&lt;input id=&quot;delete&quot; type=&quot;button&quot; value=&quot;批量删除&quot;/&gt;
+&lt;/div&gt;
+&lt;c:forEach items=&quot;${requestScope.product}&quot; var=&quot;p&quot; varStatus=&quot;step&quot;&gt;
+        &lt;tr&gt;
+            &lt;td style=&quot;height: 22px&quot; align=&quot;center&quot;&gt;
+                &lt;input type=&quot;checkbox&quot; value=&quot;${p.id}&quot; name=&quot;id&quot;&gt;
+            &lt;/td&gt;
+            &lt;td style=&quot;height: 22px&quot; align=&quot;center&quot;&gt;${step.count}&lt;/td&gt;
+            &lt;td style=&quot;height: 22px&quot; align=&quot;left&quot;&gt;${p.name}&lt;/td&gt;
+            &lt;td style=&quot;height: 22px&quot; align=&quot;center&quot;&gt;${p.price}&lt;/td&gt;
+            &lt;td style=&quot;height: 22px&quot; align=&quot;center&quot;&gt;${p.typename}&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/c:forEach&gt;
+</code></pre>
+<h4 id="servlet主要代码">servlet主要代码</h4>
+<p>使用jackson2.11</p>
+<pre><code class="language-java">        response.setContentType(&quot;application/json;charset=UTF-8&quot;);
+        PrintWriter out = response.getWriter();
+        String id = request.getParameter(&quot;id&quot;);
+        System.out.println(id);
+        System.out.println(&quot;---------------&quot;);
+       
+        ObjectMapper mapper = new ObjectMapper();
+        ProductService service = new ProductServiceImpl();
+        /* 
+        	由于数据库id类型是int 实体类数据类型为Integer
+        	将字符串以,分割,循环传参
+        	 若id为String类型，则无需分割循环
+        */
+        String[] split = id.split(&quot;,&quot;);
+        boolean success = false;
+        for (String s : split) {
+            success = service.batchDelete(Integer.valueOf(s));
+        }
+         // 将响应结果转换为JSON格式字符串返回
+        String jsonValue = mapper.writeValueAsString(success);
+        System.out.println(&quot;批量删除成功 BatchDelete.....&quot;);
+        out.write(jsonValue);
+</code></pre>
+<h4 id="单元测试">单元测试</h4>
+<pre><code class="language-java">@Test
+    public void doGet() {
+        String str = &quot;1,2,3&quot;;
+        String[] split = str.split(&quot;,&quot;);
+        for (String s : split) {
+            System.out.println(s);
+            Integer value = Integer.valueOf(s);
+            System.out.println(&quot;trans&quot; + value);
+        }
+    }
+</code></pre>
+<h4 id="dao持久层主要代码">Dao持久层主要代码</h4>
+<pre><code class="language-java">	
+    public boolean batchDelete(Integer id) {
+        String sql = &quot;delete from product where id in (?)&quot;;
+      // 若形参为String 则可直接写入
+      //  String sql = &quot;delete from product where id in (+&quot;id&quot;+)&quot;;
+      
+        try {
+            int delete = runner.update(conn, sql, id);
+       //      int delete = runner.update(conn, sql); ID为String时 
+            // 删除成功则大于0，直接返回
+            return delete &gt; 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/MuCCjgvxz/" class="tag">
+                    checkbox
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/jgjJKJcgCy/" class="tag">
+                    jquery
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
+                    JavaNote
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/jquery-cao-zuo/">
+                  <h3 class="post-title">
+                    jQuery对Checkbox的各种操作
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'efb43fc5663c1b20fb9a',
+        clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
+        repo: 'blogCommon',
+        owner: 'Geckoc',
+        admin: ['Geckoc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>

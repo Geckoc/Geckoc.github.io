@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2021-01-06T09:23:34.568Z</updated>
+    <updated>2021-01-06T09:50:38.964Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -10,6 +10,118 @@
     <logo>https://geckoc.github.io/images/avatar.png</logo>
     <icon>https://geckoc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, RichardTech</rights>
+    <entry>
+        <title type="html"><![CDATA[Checkbox批量删除]]></title>
+        <id>https://geckoc.github.io/post/checkbox-pi-liang-shan-chu/</id>
+        <link href="https://geckoc.github.io/post/checkbox-pi-liang-shan-chu/">
+        </link>
+        <updated>2021-01-06T09:46:38.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="checkbox批量删除">Checkbox批量删除</h3>
+<h4 id="页面主要代码">页面主要代码</h4>
+<h6 id="根据id从数据库中删除jquery16以上">根据ID从数据库中删除，jQuery1.6以上</h6>
+<pre><code class="language-javascript"> &lt;script type=&quot;text/javascript&quot;&gt;
+ jQuery(function ($) {
+ 	// 批量删除
+            $(&quot;#delete&quot;).click(function () {
+                // 定义一个js数组保存所有用户选择的编号
+                var arr = [];
+                $(&quot;input[type='checkbox']:checked&quot;).each(function (index, item) {
+                    arr.push($(this).val());
+                });
+                // 为0则没有选中任何checkbox
+                if (arr.length == 0){
+                    alert(&quot;请先选择要删除的商品...&quot;);
+                    return;
+                }
+                // 将数组转换称字符串
+                var result = arr.join(&quot;,&quot;);
+                if (!confirm('请问确定删除'+arr.length+'条记录吗?')) return;
+                // 当确定删除执行ajax异步请求
+                $.get(
+                    &quot;/batchDelete.json&quot;,
+                     {&quot;id&quot;:result},
+                    function (data) {
+                        if (data==true){
+                            alert(&quot;删除成功&quot;);
+                            location.reload(); 
+                        }
+                    },
+                &quot;json&quot;);
+            });
+ }
+ &lt;/script&gt;
+&lt;div&gt;
+	&lt;input id=&quot;delete&quot; type=&quot;button&quot; value=&quot;批量删除&quot;/&gt;
+&lt;/div&gt;
+&lt;c:forEach items=&quot;${requestScope.product}&quot; var=&quot;p&quot; varStatus=&quot;step&quot;&gt;
+        &lt;tr&gt;
+            &lt;td style=&quot;height: 22px&quot; align=&quot;center&quot;&gt;
+                &lt;input type=&quot;checkbox&quot; value=&quot;${p.id}&quot; name=&quot;id&quot;&gt;
+            &lt;/td&gt;
+            &lt;td style=&quot;height: 22px&quot; align=&quot;center&quot;&gt;${step.count}&lt;/td&gt;
+            &lt;td style=&quot;height: 22px&quot; align=&quot;left&quot;&gt;${p.name}&lt;/td&gt;
+            &lt;td style=&quot;height: 22px&quot; align=&quot;center&quot;&gt;${p.price}&lt;/td&gt;
+            &lt;td style=&quot;height: 22px&quot; align=&quot;center&quot;&gt;${p.typename}&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/c:forEach&gt;
+</code></pre>
+<h4 id="servlet主要代码">servlet主要代码</h4>
+<p>使用jackson2.11</p>
+<pre><code class="language-java">        response.setContentType(&quot;application/json;charset=UTF-8&quot;);
+        PrintWriter out = response.getWriter();
+        String id = request.getParameter(&quot;id&quot;);
+        System.out.println(id);
+        System.out.println(&quot;---------------&quot;);
+       
+        ObjectMapper mapper = new ObjectMapper();
+        ProductService service = new ProductServiceImpl();
+        /* 
+        	由于数据库id类型是int 实体类数据类型为Integer
+        	将字符串以,分割,循环传参
+        	 若id为String类型，则无需分割循环
+        */
+        String[] split = id.split(&quot;,&quot;);
+        boolean success = false;
+        for (String s : split) {
+            success = service.batchDelete(Integer.valueOf(s));
+        }
+         // 将响应结果转换为JSON格式字符串返回
+        String jsonValue = mapper.writeValueAsString(success);
+        System.out.println(&quot;批量删除成功 BatchDelete.....&quot;);
+        out.write(jsonValue);
+</code></pre>
+<h4 id="单元测试">单元测试</h4>
+<pre><code class="language-java">@Test
+    public void doGet() {
+        String str = &quot;1,2,3&quot;;
+        String[] split = str.split(&quot;,&quot;);
+        for (String s : split) {
+            System.out.println(s);
+            Integer value = Integer.valueOf(s);
+            System.out.println(&quot;trans&quot; + value);
+        }
+    }
+</code></pre>
+<h4 id="dao持久层主要代码">Dao持久层主要代码</h4>
+<pre><code class="language-java">	
+    public boolean batchDelete(Integer id) {
+        String sql = &quot;delete from product where id in (?)&quot;;
+      // 若形参为String 则可直接写入
+      //  String sql = &quot;delete from product where id in (+&quot;id&quot;+)&quot;;
+      
+        try {
+            int delete = runner.update(conn, sql, id);
+       //      int delete = runner.update(conn, sql); ID为String时 
+            // 删除成功则大于0，直接返回
+            return delete &gt; 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[jQuery对Checkbox的各种操作]]></title>
         <id>https://geckoc.github.io/post/jquery-cao-zuo/</id>
@@ -3684,51 +3796,6 @@ mysql&gt; select deptno,job,max(sal) from emp group by deptno,job;
 <pre><code>mysql&gt; select distinct deptno,job from emp;      (联合去重多个字段)
 mysql&gt; select count(distinct job),job from emp; （统计所有岗位数量，去重）
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[MySQL修改root密码以及改密后仍可直接登录问题]]></title>
-        <id>https://geckoc.github.io/post/mysql-xiu-gai-root-mi-ma-yi-ji-gai-mi-hou-reng-ke-zhi-jie-deng-lu-wen-ti/</id>
-        <link href="https://geckoc.github.io/post/mysql-xiu-gai-root-mi-ma-yi-ji-gai-mi-hou-reng-ke-zhi-jie-deng-lu-wen-ti/">
-        </link>
-        <updated>2020-07-31T11:37:17.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="mysql修改root密码">MySQL修改root密码</h3>
-<ul>
-<li>
-<p>进入mysql控制台</p>
-<pre><code>mysql&gt; use mysql;
-Database changed
-mysql&gt; update user set password = PASSWORD('你想要修改的密码') where user = 'root';
-</code></pre>
-</li>
-<li>
-<p>如果报错，则是新版变动问题</p>
-<pre><code>无报错的话，直接输入
-mysql&gt; flush privileges;   //刷新表，使密码生效
------------------------------------------
-新版---&gt;
-mysql&gt; update user set authentication_string = PASSWORD('你想要修改的密码') 
-     &gt; where user = 'root';
-     &gt; 最后仍然需要刷新表
-</code></pre>
-</li>
-<li>
-<p>为什么MySQL设置密码后，仍可以不输入密码直接登录？</p>
-<p>之前设置了密码，但输入mysql后，可直接进入mysql，而输入mysql -uroot -p，则需要输入密码，这是为什么呢？</p>
-<ul>
-<li>原来是因为数据库里面有空用户</li>
-</ul>
-<pre><code>use mysql;
-select * from user where user='';  // 找出空账户，如果有则删除
-delete from user where user = '';  // 删除空账户
-flush privileges;		// 刷新表，使其生效
-exit;
-</code></pre>
-</li>
-<li>
-<p><strong>注意</strong>：<strong>必要时需要重启MySQL服务器</strong></p>
-</li>
-</ul>
 ]]></content>
     </entry>
 </feed>
