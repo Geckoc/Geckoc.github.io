@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2021-01-06T13:36:26.012Z</updated>
+    <updated>2021-01-06T13:40:15.605Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -10,6 +10,369 @@
     <logo>https://geckoc.github.io/images/avatar.png</logo>
     <icon>https://geckoc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, RichardTech</rights>
+    <entry>
+        <title type="html"><![CDATA[JQuerySummary]]></title>
+        <id>https://geckoc.github.io/post/jquerysummary/</id>
+        <link href="https://geckoc.github.io/post/jquerysummary/">
+        </link>
+        <updated>2021-01-06T13:38:22.000Z</updated>
+        <summary type="html"><![CDATA[<h3 id="文本操作">文本操作</h3>
+<pre><code class="language-javascript">html()//取得第一个匹配元素的html内容，包含标签内容
+html(val)//设置所有匹配元素的html内容，识别标签，能够表现出标签的效果
+</code></pre>
+]]></summary>
+        <content type="html"><![CDATA[<h3 id="文本操作">文本操作</h3>
+<pre><code class="language-javascript">html()//取得第一个匹配元素的html内容，包含标签内容
+html(val)//设置所有匹配元素的html内容，识别标签，能够表现出标签的效果
+
+&lt;!-- more --&gt;
+
+text()// 取得所有匹配元素的内容，只有文本内容，没有标签
+text(val)//设置所有匹配元素的内容，不识别标签，将标签作为文本插入进去
+示例:
+$('.c1').text('&lt;h3&gt;你好,理查德&lt;/h3&gt;');
+$('.c1').html('&lt;h3&gt;你好,理查德&lt;/h3&gt;');
+</code></pre>
+<h3 id="属性操作">属性操作</h3>
+<pre><code class="language-javascript">attr(attrName)// 返回第一个匹配元素的属性值
+attr(attrName, attrValue)// 为所有匹配元素设置一个属性值
+attr({k1: v1, k2:v2})// 为所有匹配元素设置多个属性值
+removeAttr(attrName)// 从每一个匹配的元素中删除一个属性
+
+示例:
+	设置单个属性
+		$('.c1').attr('xx','oo');
+	设置多个属性
+		$('.c1').attr({'age':'18','sex':'alex'});
+	查看属性
+		$('.c1').attr('属性名');
+    	$('.c1').attr('xx');
+    删除属性
+    	$('.c1').removeAttr('xx');
+
+prop -- 针对的是checked\selected\disabled..
+
+查看标签是否有checked属性,也就是是否被选中
+	    attr $(':checked').attr('checked'); //checked -- undefined
+	    prop $(':checked').prop('checked'); //true  -- false
+		
+		通过设置属性的方式来设置是否选中:
+			$(':radio').eq(2).prop('checked',true);  true和false不能加引号
+			$(':radio').eq(2).prop('checked',false);
+
+简单总结:
+	1.对于标签上有的能看到的属性和自定义属性都用attr
+	2.对于返回布尔值的比如checkbox、radio和option的是否被选中或者设置其被选中与取消选中都用prop。
+	具有 true 和 false 两个属性的属性，如 checked, selected 或者 disabled 使用prop()，其他的使用 attr()
+</code></pre>
+<h3 id="文档处理">文档处理</h3>
+<pre><code class="language-javascript">添加到指定元素内部的后面
+	$(A).append(B)// 把B追加到A
+	$(A).appendTo(B)// 把A追加到B
+	#添加字符串照样能识别标签
+	$('#d1').append('&lt;a href=&quot;http://www.jd.com&quot;&gt;京东&lt;/a&gt;');
+添加到指定元素内部的前面
+	$(A).prepend(B)// 把B前置到A
+	$(A).prependTo(B)// 把A前置到B
+	示例
+		$('a').prependTo($('div'));
+
+添加到指定元素外部的后面
+	$(A).after(B)// 把B放到A的后面
+	$(A).insertAfter(B)// 把A放到B的后面
+
+添加到指定元素外部的前面
+	$(A).before(B)// 把B放到A的前面
+	$(A).insertBefore(B)// 把A放到B的前面
+	
+移除和清空元素
+	remove()// 从DOM中删除所有匹配的元素。
+	empty()// 删除匹配的元素集合中所有的子节点，包括文本被全部删除，但是匹配的元素还
+	$('div').remove();
+	$('div').empty();
+
+替换
+	replaceWith()
+	replaceAll()
+	示例:
+		var a = document.createElement('a')
+		a.href = 'http://www.baidu.com';
+		a.innerText = 'xxx';
+		
+		$('span').replaceWith(a);
+		$(a).replaceAll('span');
+		
+clone()克隆
+	&lt;button class=&quot;btn&quot;&gt;屠龙宝刀,点击就送!&lt;/button&gt;	
+
+    $('.btn').click(function () {
+        // var a = $(this).clone(); //克隆标签
+        var a = $(this).clone(true);  //连带事件一起克隆
+        $(this).after(a);
+
+    })
+</code></pre>
+<h3 id="常用事件">常用事件</h3>
+<pre><code class="language-javascript">&lt;div class=&quot;c1&quot;&gt;&lt;/div&gt;
+
+click(function(){...})
+	$('#d1').on('click',function () {
+        $(this).css({'background-color':'green'})
+    })
+hover(function(){...})
+	//鼠标悬浮 触发事件
+    $('.c1').hover(
+        //鼠标放上去
+        function () {
+            $(this).css({'background-color':'blue'});
+        },
+        function(){
+            $(this).css({'background-color':'black'});
+        }
+    );
+
+
+blur(function(){...})
+	//失去光标(焦点)时触发事件 使div变色
+    $('[type=&quot;text&quot;]').blur(function () {
+        $('.c1').css({'background-color':'pink'})
+    })
+focus(function(){...})  //获取光标时触发事件 使div变色
+	$('[type=&quot;text&quot;]').focus(function () {
+        $('.c1').css({'background-color':'black'})
+    })
+                 
+change(function(){...}) //内容发生变化，input，select等
+	//与内容发改变时触发的事件
+    $('select').change(function () {
+        $('.c1').toggleClass('cc')
+    })
+
+
+keyup(function(){...})	//键盘抬起触发事件
+    $(window).keyup(function (e) {
+        console.log(e.keyCode);
+    })
+
+
+keydown(function(){...})	//键盘按键按下事件  参数e/event
+	$(window).keydown(function (e) {
+        console.log(e.keyCode) //每个键都有一个keycode键 ，通过不同的值触发不同的事件
+        if(e.keyCode===37){
+            $('.c1').css({'background-color':'green'})
+        }else if(e.keyCode===39){
+            $('.c1').css({'background-color':'balck'})
+        }
+        else{
+            $('.c1').css({'background-color':'yellow'})
+        }
+    })
+
+
+mouseenter(function(){...})	// 鼠标悬浮  等同于hover事件
+mouseout(function(){...})
+	$('.c1').mouseenter(function () {
+        $(this).css({'background-color':'blue'});
+    });
+    $('.c1').mouseout(function () {
+        $(this).css({'background-color':'yellow'});
+    });
+
+
+//鼠标悬浮 只触发一次
+    $('.c2').mouseenter(function () {
+        console.log('你变了');
+    });
+//鼠标悬浮  连续触发
+    $('.c2').mouseover(function () {
+        console.log('你变了');
+    })
+# mouseover 和 mouseenter的区别是：
+# mouseover事件是如果该标签有子标签，
+# 那么移动到该标签或者移动到子标签时会连续触发，
+# mmouseenter事件不管有没有子标签都只触发一次，表示鼠标进入这个对象
+</code></pre>
+<h3 id="阻止后续冒泡事件发生">阻止后续（冒泡）事件发生</h3>
+<pre><code class="language-javascript">//冒泡的意思就是因为html可以嵌套，如果你给儿子标签绑定了点事件或者没有绑定点击事件，
+//父级标签绑定了点击事件，那么你一点击子标签，不管子标签有没有绑定事件，
+//都会触发父级标签的点击事件，如果有，会先触发子标签的点击事件，
+//然后触发父级标签的点击事件，不管子标签有没有点击事件，都会一级一级的还往上找点击事件
+
+$('#d1').click(function () {
+        alert('父级标签')
+    })
+    $('#d2').click(function (e) {	//这个参数e(只是个形参，写evt或者event名字的也很多)表示当前事件本身，这个事件也是一个对象
+        alert('子级标签')
+        // return false;	//这个也可以阻止
+        e.stopPropagation();//用事件对象的这个方法就能阻止冒泡 （Propagation：传递的意思）
+    })
+</code></pre>
+<h3 id="页面载入">页面载入</h3>
+<blockquote>
+<p>​	  将js代码写到head标签和写道body标签下面的作用是不同的，写在head标签里面的话，</p>
+<p>如果你写了操作某个标签的内容的话，那个标签还没加载出来，先加载了你的js代码，就找不到这个标签，所以不会生效，所以写在body标签最下面是一种解决办法。</p>
+<p>还有一种办法就是window.onload=function(){js的代码}，等页面上所有的元素都加载完，在执行这里面的js代码，还记得吗？但是这个window.onload有个缺点；</p>
+<p>这个缺点就是这个操作时给window.onload赋值，如果你自己写了两个js文件，每个js文件中都有一个window.onload的话，那么后引入的文件会把前面引入的文件的window.onload里面的js代码全部覆盖掉，那么第一个文件的js代码就失去了效果；</p>
+<p>还有一个问题就是，window.onload会等到页面上的文档、图片、视频等所有资源都加载完才执行里面的js代码，导致有些效果的加载比较慢；</p>
+<p>所以我们使用下面的写法，不存在覆盖问题，而且只要文档加载完就触发，不需要等着一些图片啊视频啊什么的，加载js效果的速度快。</p>
+</blockquote>
+<pre><code class="language-javascript">1.jQuery文件要在使用jQuery的代码之前引入
+2.js代码最好都放在body标签下面或者里面的最下面
+
+3.window.onload:
+	window.onload = function () {
+            $('.c1').click(function () {
+                $(this).css({'background-color': 'green'});
+            })
+        }
+
+4.页面载入:
+$(function () {
+            $('.c1').click(function () {
+                $(this).css({'background-color': 'green'});
+            })
+        })
+$(document).ready(function{});
+
+
+与window.onload的区别:
+　　　1.window.onload()函数有覆盖现象，必须等待着图片资源加载完成之后才能调用
+　　　2.jQuery的这个入口函数没有函数覆盖现象，文档加载完成之后就可以调用（建议使用此函数）
+   
+        // 等待整个页面中的内容全部加载完成之后,触发window.onload对应的函数里面的内容
+        // window.onload 有覆盖现象,会被后面的window.onload给重新赋值
+        // window.onload = function () {
+        //     $('.c1').click(function () {
+        //         $(this).css({'background-color':'green'});
+        //     })
+        // }
+
+</code></pre>
+<h3 id="each循环">each循环</h3>
+<pre><code class="language-javascript">循环标签对象数组
+$('li').each(function(k,v){
+    console.log(k,v);
+});
+
+循环普通数组
+var d1 = ['aa','bb','cc'];
+$.each(d1,function(k,v){
+    console.log(k,v);
+})
+
+跳出循环  return false; 类似于break
+$('li').each(function(k,v){
+    console.log(k,v.innerText);
+    if (k === 1){
+        return false;
+    }
+
+});
+
+跳出本次循环  return; 类似于continue
+$('li').each(function(k,v){
+    
+    if (k === 1){
+        return;
+    }
+    console.log(k,v.innerText);
+});
+
+</code></pre>
+<h3 id="点击事件和滚动事件的示例代码">点击事件和滚动事件的示例代码</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;Title&lt;/title&gt;
+    &lt;style&gt;
+        .c1{
+            background-color: red;
+            height: 100px;
+            width: 100px;
+        }
+        .c2{
+            background-color: green;
+            height: 1000px;
+            width: 100px;
+        }
+        .c3{
+            background-color: blue;
+            height: 1000px;
+            width: 100px;
+        }
+        .s1{
+            position: fixed;
+            left:20px;
+            bottom: 20px;
+            height: 40px;
+            width: 80px;
+            background-color: purple;
+            line-height: 40px;
+            text-align: center;
+
+        }
+        .s1 a{
+            color: white;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .hide{
+            display: none;
+        }
+&lt;!-- more --&gt;
+
+
+
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;!--&lt;a name=&quot;top&quot;&gt;这里是顶部&lt;/a&gt;--&gt;
+&lt;!--&lt;a&gt;这里是顶部&lt;/a&gt;--&gt;
+&lt;span&gt;顶部位置&lt;/span&gt;
+&lt;div class=&quot;c1&quot;&gt;&lt;/div&gt;
+
+&lt;button class=&quot;change-postion&quot;&gt;走你&lt;/button&gt;
+
+&lt;div class=&quot;c2&quot;&gt;&lt;/div&gt;
+&lt;div class=&quot;c3&quot;&gt;&lt;/div&gt;
+
+&lt;span class=&quot;s1 hide&quot;&gt;
+    &lt;!--&lt;a href=&quot;#top&quot;&gt;返回顶部&lt;/a&gt;--&gt;
+    &lt;span&gt;返回顶部&lt;/span&gt;
+
+&lt;/span&gt;
+
+
+&lt;script src=&quot;jquery.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+	//点击事件来改变标签位置
+    $('.change-postion').click(function () {
+        $('.c1').offset({top:200,left:200});
+    });
+    
+	//滚动事件,监听滚动距离来显示或者隐藏标签
+    $(window).scroll(function () {
+        console.log($(window).scrollTop());
+        if ($(window).scrollTop() &gt;=200){
+            $('.s1').removeClass('hide');
+        }else {
+            $('.s1').addClass('hide');
+        }
+    });
+    
+	// 回到顶部,scrollTop设置值
+    $('.s1').click(function () {
+        $(window).scrollTop(0);
+    })
+
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Ajax&JQuery发送请求]]></title>
         <id>https://geckoc.github.io/post/ajaxandjquery-fa-song-qing-qiu/</id>
@@ -2658,812 +3021,6 @@ id(pk+fk)		realname		tel			 	userid(fk+unique)
 
 
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[MySQL三部曲之渐入佳境]]></title>
-        <id>https://geckoc.github.io/post/mysql-san-bu-qu-zhi-jian-ru-jia-jing/</id>
-        <link href="https://geckoc.github.io/post/mysql-san-bu-qu-zhi-jian-ru-jia-jing/">
-        </link>
-        <updated>2020-08-16T03:03:09.000Z</updated>
-        <content type="html"><![CDATA[<h3 id="连接查询"><em>连接查询</em></h3>
-<ul>
-<li>
-<p>什么是连接查询</p>
-<ul>
-<li>在实际开发中，大部分的情况都不是从单表中查询数据，一般是多张表联合查询取出最终结果。</li>
-<li>实际开发中，一般一个业务会对应多张表，如学生和班级，起码两张表。</li>
-</ul>
-<pre><code>stuno    stuname		classno			classname
-------------------------------------------------------------
-1		 张三				1				深圳中学高三1班
-2		 李四				1				深圳中学高三1班
-</code></pre>
-<ul>
-<li>学生和班级信息存储到一张表中，数据会存在大量的重复，导致数据冗余。</li>
-</ul>
-</li>
-</ul>
-<h4 id="连接查询的分类">连接查询的分类？</h4>
-<ul>
-<li>根据语法出现的年代划分，包括
-<ul>
-<li>SQL92 （一些老的DBA可能还在用这种语法。DBA ：Database Administrator 数据库管理员）</li>
-<li>SQL99 （比较新的语法）</li>
-</ul>
-</li>
-<li>根据表的连接方式划分，包括
-<ul>
-<li>内连接
-<ul>
-<li>等值连接</li>
-<li>非等值连接</li>
-<li>自连接</li>
-</ul>
-</li>
-<li>外连接
-<ul>
-<li>左外连接（左连接）</li>
-<li>右外连接（右连接）</li>
-</ul>
-</li>
-<li>全连接（很少用，略！）</li>
-</ul>
-</li>
-</ul>
-<h5 id="笛卡尔积现象">笛卡尔积现象</h5>
-<ul>
-<li>
-<p>在表的连接查询方面有一种现象被称为：笛卡尔积现象（笛卡尔乘积现象）</p>
-</li>
-<li>
-<p>笛卡尔积现象：当两张表进行连接查询时候，没有任何条件限制，最终的查询结果条数是两张表记录条数的乘积。</p>
-<ul>
-<li>案例：找出每一个员工的部门名称，要求显示员工名和部门名。</li>
-</ul>
-<pre><code>mysql&gt; select ename,dname from emp,dept;
-+--------+------------+
-| ename  | dname      |
-+--------+------------+
-| SMITH  | ACCOUNTING |
-| SMITH  | RESEARCH   |
-| SMITH  | SALES      |
-| SMITH  | OPERATIONS |
-| ALLEN  | ACCOUNTING |
-| ALLEN  | RESEARCH   |
-| ALLEN  | SALES      |
-| ALLEN  | OPERATIONS |
-......
-56 rows in set (0.00 sec)
-</code></pre>
-</li>
-</ul>
-<ul>
-<li>
-<p>关于表的别名</p>
-<ul>
-<li>表别名的好处？
-<ol>
-<li>执行效率高</li>
-<li>可读性好</li>
-</ol>
-</li>
-</ul>
-<pre><code>mysql&gt; select e.ename, d.dname from emp e, dept d;
-</code></pre>
-</li>
-</ul>
-<h5 id="如何避免笛卡尔积现象">如何避免笛卡尔积现象？</h5>
-<ul>
-<li>
-<p>加条件过滤；</p>
-<ul>
-<li>避免了笛卡尔积现象，会减少记录的匹配次数吗？</li>
-<li>不会！次数还是56次，只不过显示的是有效记录。</li>
-</ul>
-</li>
-<li>
-<p>案例：找出每一个员工的部门名称，要求显示员工名和部门名。</p>
-<pre><code>mysql&gt; select e.ename, d.dname from emp e , dept d
-    -&gt; where e.deptno = d.deptno;	// SQL92，老语法，以后不用
-        +--------+------------+
-        | ename  | dname      |
-        +--------+------------+
-        | CLARK  | ACCOUNTING |
-        | KING   | ACCOUNTING |
-        | MILLER | ACCOUNTING |
-        | SMITH  | RESEARCH   |
-        | JONES  | RESEARCH   |
-        | SCOTT  | RESEARCH   |
-        | ADAMS  | RESEARCH   |
-        | FORD   | RESEARCH   |
-        | ALLEN  | SALES      |
-        | WARD   | SALES      |
-        | MARTIN | SALES      |
-        | BLAKE  | SALES      |
-        | TURNER | SALES      |
-        | JAMES  | SALES      |
-        +--------+------------+
-        14 rows in set (0.09 sec)
-</code></pre>
-</li>
-</ul>
-<h5 id="内连接之等值连接">内连接之等值连接</h5>
-<ul>
-<li>
-<p>最大的特点是：条件是等量关系。</p>
-<ul>
-<li>案例：找出每一个员工的部门名称，要求显示员工名和部门名。</li>
-</ul>
-<pre><code>mysql&gt; select e.ename, d.dname from emp e , dept d
-    -&gt; where e.deptno = d.deptno;	// SQL 92，老语法，以后不用
-(SQL 99)  常用的
-mysql&gt; select e.ename, d.dname from emp e
-    -&gt; join dept d
-    -&gt; on d.deptno = e.deptno;
-//内连接中的 inner 可以省略，带着 inner 目的是可读性好一些
-mysql&gt; select e.ename, d.dname from emp e
-    -&gt; inner join dept d
-    -&gt; on d.deptno = e.deptno;
-    语法格式：
-    ... A join B on 连接条件 where...  //还可加 where 过滤
-    
-</code></pre>
-<ul>
-<li>SQL99的语法更加清晰一些，表的连接条件和where条件分离了</li>
-</ul>
-</li>
-</ul>
-<h5 id="内连接之非等值连接">内连接之非等值连接</h5>
-<ul>
-<li>
-<p>最大的特点是：连接条件中的关系是非等量关系。</p>
-<ul>
-<li>案例：找出每个员工的工资等级，要求显示员工名、工资、工资等级。</li>
-</ul>
-<pre><code>// inner 可以省略
-mysql&gt; select e.ename, e.sal , s.grade from emp e
-    -&gt; join salgrade s on e.sal between s.losal and s.hisal;
-+--------+---------+-------+
-| ename  | sal     | grade |
-+--------+---------+-------+
-| SMITH  |  800.00 |     1 |
-| ALLEN  | 1600.00 |     3 |
-| WARD   | 1250.00 |     2 |
-| JONES  | 2975.00 |     4 |
-| MARTIN | 1250.00 |     2 |
-| BLAKE  | 2850.00 |     4 |
-| CLARK  | 2450.00 |     4 |
-| SCOTT  | 3000.00 |     4 |
-| KING   | 5000.00 |     5 |
-| TURNER | 1500.00 |     3 |
-| ADAMS  | 1100.00 |     1 |
-| JAMES  |  950.00 |     1 |
-| FORD   | 3000.00 |     4 |
-| MILLER | 1300.00 |     2 |
-+--------+---------+-------+
-14 rows in set (0.00 sec)
-</code></pre>
-</li>
-</ul>
-<h5 id="自连接">自连接</h5>
-<ul>
-<li>
-<p>最大的特点是：一张表看做两张表，自己连接自己。</p>
-<ul>
-<li>案例：找出每个员工的上级领导，要求显示员工名和对应的领导名字。</li>
-</ul>
-<pre><code>mysql&gt; select a.ename as '员工', b.ename as '领导' 
-    -&gt; from emp a
-    -&gt; join emp b
-    -&gt; on a.mgr = b.empno;
-    (员工的领导编号 = 领导的员工编号)
-+--------+-------+
-| 员工   | 领导  |
-+--------+-------+
-| SMITH  | FORD  |
-| ALLEN  | BLAKE |
-| WARD   | BLAKE |
-| JONES  | KING  |
-| MARTIN | BLAKE |
-| BLAKE  | KING  |
-| CLARK  | KING  |
-| SCOTT  | JONES |
-| TURNER | BLAKE |
-| ADAMS  | SCOTT |
-| JAMES  | BLAKE |
-| FORD   | JONES |
-| MILLER | CLARK |
-+--------+-------+
-13 rows in set (0.06 sec)
-</code></pre>
-</li>
-</ul>
-<h5 id="外连接">外连接</h5>
-<ul>
-<li>
-<p>什么是外连接？和内连接有什么区别？</p>
-<ul>
-<li>
-<p>内连接：假设A和B表进行连接，使用内连接的话，凡是A表和B表能够匹配上的记录查询出来，这就是内连接。</p>
-</li>
-<li>
-<p>A表和B表没有主副之分，两张表是平等的。</p>
-</li>
-</ul>
-<hr>
-<ul>
-<li>外连接：假设A和B表进行连接，使用外连接的话，AB两张表中有一张表是主表，一张是副表，主要查询主表 中的数据，连带着查询副表，当副表中的数据没有和主表的数据匹配上，副表自动模拟出null与之匹配。</li>
-</ul>
-</li>
-</ul>
-<h5 id="外连接的分类">外连接的分类</h5>
-<ul>
-<li>
-<p>左外连接：（左连接）：表示左边的这张表是主表</p>
-</li>
-<li>
-<p>右外连接：（右连接）：表示右边的这张表是主表</p>
-</li>
-<li>
-<p>左连接有右连接的写法，右连接也会有对应的左连接的写法。</p>
-</li>
-<li>
-<p>全连接，省</p>
-<pre><code>内连接：
-mysql&gt; select a.ename as '员工', b.ename as '领导' 
-    -&gt; from emp a
-    -&gt; join emp b
-    -&gt; on a.mgr = b.empno;
-    (员工的领导编号 = 领导的员工编号)
-外连接: （左边表是主表，此时king也显示出来，模拟出null） left / right 
-outer 可以省略
-mysql&gt;select a.ename as '员工', b.ename as '领导' 
-    -&gt; from emp a
-    -&gt; left outer join emp b
-    -&gt; on a.mgr = b.empno;
-    +--------+-------+
-    | ename  | ename |
-    +--------+-------+
-    | SMITH  | FORD  |
-    | ALLEN  | BLAKE |
-    | WARD   | BLAKE |
-    | JONES  | KING  |
-    | MARTIN | BLAKE |
-    | BLAKE  | KING  |
-    | CLARK  | KING  |
-    | SCOTT  | JONES |
-    | KING   | NULL  |
-    | TURNER | BLAKE |
-    | ADAMS  | SCOTT |
-    | JAMES  | BLAKE |
-    | FORD   | JONES |
-    | MILLER | CLARK |
-    +--------+-------+
-14 rows in set (0.00 sec)	
-</code></pre>
-</li>
-<li>
-<p>案例：找出没有员工的部门</p>
-<pre><code>mysql&gt; select d.* from emp e
-    -&gt; right outer join
-    -&gt; dept d
-    -&gt; on e.deptno = d.deptno
-    -&gt; where e.deptno is null;
-+--------+------------+--------+
-| DEPTNO | DNAME      | LOC    |
-+--------+------------+--------+
-|     40 | OPERATIONS | BOSTON |
-+--------+------------+--------+
-1 row in set (0.04 sec)
-</code></pre>
-</li>
-</ul>
-<h4 id="三张表连接">三张表连接</h4>
-<ul>
-<li>
-<p>案例：找出每一个员工的部门名称以及工资等级。</p>
-<pre><code>表示A表和B表现进行表连接，连接之后A表继续和C表进行连接。
-mysql&gt; select e.ename, d.dname, e.sal, s.grade
-    -&gt; from emp e
-    -&gt; join dept d
-    -&gt; on d.deptno = e.deptno
-    -&gt; join salgrade s
-    -&gt; on e.sal between s.losal and s.hisal;
-+--------+------------+---------+-------+
-| ename  | dname      | sal     | grade |
-+--------+------------+---------+-------+
-| SMITH  | RESEARCH   |  800.00 |     1 |
-| ALLEN  | SALES      | 1600.00 |     3 |
-| WARD   | SALES      | 1250.00 |     2 |
-| JONES  | RESEARCH   | 2975.00 |     4 |
-| MARTIN | SALES      | 1250.00 |     2 |
-| BLAKE  | SALES      | 2850.00 |     4 |
-| CLARK  | ACCOUNTING | 2450.00 |     4 |
-| SCOTT  | RESEARCH   | 3000.00 |     4 |
-| KING   | ACCOUNTING | 5000.00 |     5 |
-| TURNER | SALES      | 1500.00 |     3 |
-| ADAMS  | RESEARCH   | 1100.00 |     1 |
-| JAMES  | SALES      |  950.00 |     1 |
-| FORD   | RESEARCH   | 3000.00 |     4 |
-| MILLER | ACCOUNTING | 1300.00 |     2 |
-+--------+------------+---------+-------+
-14 rows in set (0.00 sec)
-
-</code></pre>
-</li>
-<li>
-<p>案例：找出每一个员工的部门名称以及工资等级、以及上级领导。</p>
-<pre><code>select e.ename '员工' , d.dname '部门名称',e.sal '工资',s.grade '工资等级', g.ename '领导'
-from emp e
-join dept d
-on e.deptno = d.deptno
-join salgrade s
-on e.sal between losal and hisal
-left join emp g			
-on e.mgr = g.empno;  
-// 员工的领导编号=领导的员工编号(左外连接，自连接)
-</code></pre>
-</li>
-</ul>
-<h3 id="子查询"><em>子查询</em></h3>
-<ul>
-<li>
-<p>什么是子查询？子查询都可以出现在哪里？</p>
-<ul>
-<li>select语句当中嵌套select语句，被嵌套的select语句是子查询。</li>
-<li>子查询出现在哪里？</li>
-</ul>
-<pre><code>select ...(select)  from ... (select)  where... (select)
-</code></pre>
-</li>
-</ul>
-<h4 id="where-子句中使用子查询">where 子句中使用子查询</h4>
-<pre><code>找出高于平均工资的员工信息
-mysql&gt; select * from emp where sal &gt; (select avg(sal) from emp);
-</code></pre>
-<h4 id="from后面嵌套查询">from后面嵌套查询</h4>
-<ul>
-<li>from后面跟的是表，嵌套查询的结果被当成一个表</li>
-</ul>
-<pre><code>找出每个部门平均薪水的薪资等级
-第一步找出部门平均工作
-mysql&gt; select deptno,avg(sal) from emp group by deptno;	//每个部门平均薪水
-+--------+-------------+
-| deptno | avg(sal)    |
-+--------+-------------+
-|     10 | 2916.666667 |
-|     20 | 2175.000000 |
-|     30 | 1566.666667 |
-+--------+-------------+
-3 rows in set (0.00 sec)
-将以上查询结果当做一个临时表t，让t表和salgrade s 表做连接，条件是：on t.avgsal between s.losal and s.hisal;
--------------------------------------------------------------------
-select t.*, s.grade
-from (select deptno, avg(sal) as avgsal from emp group by deptno) t
-join salgrade s
-on t.avgsal between s.losal and s.hisal;
---------------------------------------------------------------------
-+--------+-------------+-------+
-| deptno | avgsal      | grade |
-+--------+-------------+-------+
-|     10 | 2916.666667 |     4 |
-|     20 | 2175.000000 |     4 |
-|     30 | 1566.666667 |     3 |
-+--------+-------------+-------+
-3 rows in set (0.00 sec)
-</code></pre>
-<pre><code>找出每个部门平均的薪水等级。
-第一步: 找出每个员工的薪水等级。
-mysql&gt; select e.deptno, e.ename, e.sal, s.grade
-    -&gt; from emp e
-    -&gt; join salgrade s
-    -&gt; on e.sal between s.losal and hisal;
-    +--------+--------+---------+-------+
-    | deptno | ename  | sal     | grade |
-    +--------+--------+---------+-------+
-    |     20 | SMITH  |  800.00 |     1 |
-    |     30 | ALLEN  | 1600.00 |     3 |
-    |     30 | WARD   | 1250.00 |     2 |
-    |     20 | JONES  | 2975.00 |     4 |
-    |     30 | MARTIN | 1250.00 |     2 |
-    |     30 | BLAKE  | 2850.00 |     4 |
-    |     10 | CLARK  | 2450.00 |     4 |
-    |     20 | SCOTT  | 3000.00 |     4 |
-    |     10 | KING   | 5000.00 |     5 |
-    |     30 | TURNER | 1500.00 |     3 |
-    |     20 | ADAMS  | 1100.00 |     1 |
-    |     30 | JAMES  |  950.00 |     1 |
-    |     20 | FORD   | 3000.00 |     4 |
-    |     10 | MILLER | 1300.00 |     2 |
-    +--------+--------+---------+-------+
-    14 rows in set (0.06 sec)
-第二步：基于以上结果，继续按照deptno分组，求grade平均值
-mysql&gt; select e.deptno , avg(s.grade)
-    -&gt; from emp e
-    -&gt; join salgrade s
-    -&gt; on e.sal between s.losal and hisal
-    -&gt; group by e.deptno;
-    +--------+--------------+
-    | deptno | avg(s.grade) |
-    +--------+--------------+
-    |     10 |       3.6667 |
-    |     20 |       2.8000 |
-    |     30 |       2.5000 |
-    +--------+--------------+
-    3 rows in set (0.00 sec)
-
-</code></pre>
-<h4 id="在select后面嵌套子查询">在select后面嵌套子查询</h4>
-<ul>
-<li>
-<p>案例：找出每个员工所在的部门名称，要求显示员工名和部门名。</p>
-<pre><code>mysql&gt; select e.ename,d.dname from
-    -&gt; emp e
-    -&gt; join dept d
-    -&gt; on e.deptno = d.deptno;
---------------------------------------------------------------------------
-mysql&gt; select e.ename,
-    -&gt; (select d.dname from dept d where e.deptno = d.deptno) as dname
-    -&gt; from emp e;
-</code></pre>
-</li>
-</ul>
-<h3 id="union"><em>union</em></h3>
-<ul>
-<li>
-<p><em><strong>union</strong></em> 可以将查询结果集相加</p>
-</li>
-<li>
-<p>特点：第一个查询的列的数量和第二个查询的列数量要一致</p>
-</li>
-<li>
-<p>可将两张不想干的表中的数据拼接在一起显示</p>
-</li>
-<li>
-<p>案例：找出工作岗位是SALESMAN和MANAGER的员工</p>
-<pre><code>第一种：
-mysql&gt; select ename,job from emp where job ='salesman' or job = 'manager';
-第二种：
-mysql&gt; select ename,job from emp where job in('manager','salesman');
-第三种：
-mysql&gt; select ename,job from emp where job = 'manager'
-    -&gt; union
-    -&gt; select ename,job from emp where job = 'salesman';
-+--------+----------+
-
-可将两张不想干的表中的数据拼接在一起显示
-mysql&gt; select ename from emp
-    -&gt; union
-    -&gt; select dname from dept;
-+------------+
-| ename      |
-+------------+
-| SMITH      |
-| ALLEN      |
-| WARD       |
-| JONES      |
-| MARTIN     |
-| BLAKE      |
-| CLARK      |
-| SCOTT      |
-| KING       |
-| TURNER     |
-| ADAMS      |
-| JAMES      |
-| FORD       |
-| MILLER     |
-| ACCOUNTING |
-| RESEARCH   |
-| SALES      |
-| OPERATIONS |
-+------------+
---------------------------------------------------------------
-
-第一个查询的列的数量和第二个查询的列数量要一致，否则报错
-mysql&gt; select ename , sal from emp
-    -&gt; union
-    -&gt; select dname from dept;
-ERROR 1222 (21000): The used SELECT statements have a different number of columns
-
-</code></pre>
-</li>
-</ul>
-<h3 id="limit-重点"><em>limit</em> <em>（重点）</em></h3>
-<ul>
-<li>
-<p><em>limit</em>是MySQL特有的，其他数据库没有，不通用（Oracle中有一个相同的机制，叫做 rownum）</p>
-</li>
-<li>
-<p><em>limit</em>取结果集中的部分数据，这是它的作用。</p>
-</li>
-<li>
-<p>语法机制：<em>limit starIndex, length</em></p>
-<ul>
-<li>starIndex ： 表示起始位置</li>
-<li>length ：表示取几个</li>
-</ul>
-</li>
-<li>
-<p>案例：取出工资前五名的员工（思路：降序取前五个）</p>
-<pre><code>mysql&gt; select ename,sal from emp order by sal desc;
-// 取前五个
-mysql&gt; select ename,sal from emp order by sal desc limit 0,5;
-// 直接写一个数字，前面默认的是0
-mysql&gt; select ename,sal from emp order by sal desc limit 5;
-</code></pre>
-</li>
-<li>
-<p><em>limit</em> 是SQL语句最后执行的一个环节</p>
-<pre><code>执行顺序
-select...		5
-from...   		1
-where...		2
-group by...		3
-having...		4
-order by...		6
-limit...;		7
-</code></pre>
-</li>
-<li>
-<p>案例：找出工资排名在第4到第9名的员工</p>
-<pre><code>mysql&gt; select ename,sal from emp order by sal desc limit 3,6;
-    +--------+---------+
-    | ename  | sal     |
-    +--------+---------+
-    | JONES  | 2975.00 |
-    | BLAKE  | 2850.00 |
-    | CLARK  | 2450.00 |
-    | ALLEN  | 1600.00 |
-    | TURNER | 1500.00 |
-    | MILLER | 1300.00 |
-    +--------+---------+
-    6 rows in set (0.00 sec)
-</code></pre>
-</li>
-</ul>
-<h4 id="通用的标准分页sql">通用的标准分页SQL</h4>
-<ul>
-<li>
-<p>每页显示pageSize条记录</p>
-</li>
-<li>
-<p>第pageNo页：( pageNo - 1 ) * pageSize</p>
-<blockquote>
-<p>每页显示3条记录</p>
-<p>第一页：0，3</p>
-<p>第二页：3，3</p>
-<p>第三页：6，3</p>
-<p>第四页：9，3</p>
-<p>第五页：12，3</p>
-</blockquote>
-</li>
-</ul>
-<h3 id="dml数据操作语言"><em>DML数据操作语言</em></h3>
-<blockquote>
-<p>DML（数据操作语言）：insert ， delete ， update 对表当中的数据进行增删改</p>
-</blockquote>
-<h4 id="create-创建表">create 创建表</h4>
-<ul>
-<li>
-<p>建表语句的语法格式：</p>
-<blockquote>
-<p>create table 表名 (</p>
-<p>​	字段名1 数据类型,</p>
-<p>​	字段名2 数据类型,</p>
-<p>​	字段名3 数据类型,</p>
-<p>​	...</p>
-<p>);</p>
-</blockquote>
-</li>
-<li>
-<p>关于MySQL当中字段的数据类型？常见的有</p>
-</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th></th>
-<th style="text-align:left">MySQL当中字段的数据类型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>int</td>
-<td style="text-align:left">整数型（java中的int）</td>
-</tr>
-<tr>
-<td>bigint</td>
-<td style="text-align:left">长整型（java中的long）</td>
-</tr>
-<tr>
-<td>float</td>
-<td style="text-align:left">浮点型（java中的float double）</td>
-</tr>
-<tr>
-<td>char</td>
-<td style="text-align:left">定长字符串（String）</td>
-</tr>
-<tr>
-<td>varchar</td>
-<td style="text-align:left">可变长字符串（StringBuffer/StringBuilder）</td>
-</tr>
-<tr>
-<td>date</td>
-<td style="text-align:left">日期类型（对应java中的java.sql.Date类型）</td>
-</tr>
-<tr>
-<td>BLOB</td>
-<td style="text-align:left">二进制大对象（存储图片、视频等流媒体信息）Binary Large OBject ---&gt; java中的Object</td>
-</tr>
-<tr>
-<td>CLOB</td>
-<td style="text-align:left">字符大对象（存储较大的文本，可存储4G的字符串）Character Large OBject ---&gt; java中的Object</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>
-<p>varchar和char如何选择使用？</p>
-<ul>
-<li>字段中的数据不发生改变时，是定长的；例如：性别、生日等等用char</li>
-<li>字段中的数据长度不确定时，例如：简介、姓名等等都是用varchar</li>
-</ul>
-<pre><code>建表：学生表---&gt; 学号 姓名 性别 班级编号 生日
-create table t_student(
-	num bigint,
-	name varchar(255),
-	sex char(1),
-	classnum varchar(255),
-	birth char(10)
-);
-</code></pre>
-</li>
-</ul>
-<h4 id="insert-插入数据">insert 插入数据</h4>
-<ul>
-<li>
-<p>insert 语句插入数据</p>
-<ul>
-<li>语法格式
-<ul>
-<li>insert into 表名(字段名1，字段名2，字段名3，... ) values (值1，值2，值3，...)</li>
-<li>要求：字段的数量和值的数量相同，并且数据类型要对应相同。</li>
-</ul>
-</li>
-</ul>
-<pre><code>insert into t_student (num,name,sex,classnum,birth) values (1,'Richard','M','1105','1999-10-02');
-insert into t_student (num,name,sex,classnum,birth) values (2,'Gilfoyle','M','1105','2000-08-24');
-//字段名可以调换，但后面value值要对应上
-insert into t_student (name,sex,classnum) values ('Monica','F','1101');
-
-//其他字段值若没有，会默认为Null，插入数据后，只能使用update进行更新
-insert into t_student(name) value ('Richard'); 
-
-//字段可以省略不写，但是后面的value对数量和顺序都需要相对应(谨慎)
-insert into t_student values(1,'Jack','M','1102','1997-03-22');
-
-//一次插入多行数据
-insert into t_student (num,name,sex,classnum,birth) 
-values (3,'Kobe','M','1108','1996-10-01'),(6,'Jordan','M','1001','1980-06-08');
-
-</code></pre>
-</li>
-<li>
-<p>表的复制</p>
-<ul>
-<li>语法： create table 表名 as select语句</li>
-<li>将查询结果当做表创建出来</li>
-</ul>
-</li>
-<li>
-<p>将查询结果插入到一张表中</p>
-<ul>
-<li>语法：insert into 表名 select * from dept;</li>
-</ul>
-<pre><code>insert into dept1 select * from dept;
-select * from dept1;
-+--------+------------+----------+
-| DEPTNO | DNAME      | LOC      |
-+--------+------------+----------+
-|     10 | ACCOUNTING | NEW YORK |
-|     20 | RESEARCH   | DALLAS   |
-|     30 | SALES      | CHICAGO  |
-|     40 | OPERATIONS | BOSTON   |
-|     10 | ACCOUNTING | NEW YORK |
-|     20 | RESEARCH   | DALLAS   |
-|     30 | SALES      | CHICAGO  |
-|     40 | OPERATIONS | BOSTON   |
-+--------+------------+----------+
-</code></pre>
-</li>
-</ul>
-<h4 id="update-修改数据">update 修改数据</h4>
-<ul>
-<li>
-<p>语法格式：update 表名 set 字段名1=值1,字段名2=值2... where 条件；</p>
-</li>
-<li>
-<p><em>注意：</em> 没有条件整张表数据全部更新；</p>
-<ul>
-<li>将部门10的LOC修改为SHANGHAI，将部门名称修改为RENSHUBU。</li>
-</ul>
-</li>
-</ul>
-<pre><code>    mysql&gt; update dept1 set loc='SHANGHAI',dname='RENSHIBU'
-        -&gt; where deptno = 10;
-    Query OK, 2 rows affected (0.17 sec)
-    Rows matched: 2  Changed: 2  Warnings: 0
-    
-    mysql&gt; select * from dept1;
-    +--------+------------+----------+
-    | DEPTNO | DNAME      | LOC      |
-    +--------+------------+----------+
-    |     10 | RENSHIBU   | SHANGHAI |
-    |     20 | RESEARCH   | DALLAS   |
-    |     30 | SALES      | CHICAGO  |
-    |     40 | OPERATIONS | BOSTON   |
-    |     10 | RENSHIBU   | SHANGHAI |
-    |     20 | RESEARCH   | DALLAS   |
-    |     30 | SALES      | CHICAGO  |
-    |     40 | OPERATIONS | BOSTON   |
-    +--------+------------+----------+
-    8 rows in set (0.00 sec)
-    
-    更新所有数据 (不加过滤条件)
-    update dept1 set loc='x',dname='y';
-        mysql&gt; select * from dept1;
-        +--------+-------+------+
-        | DEPTNO | DNAME | LOC  |
-        +--------+-------+------+
-        |     10 | y     | x    |
-        |     20 | y     | x    |
-        |     30 | y     | x    |
-        |     40 | y     | x    |
-        |     10 | y     | x    |
-        |     20 | y     | x    |
-        |     30 | y     | x    |
-        |     40 | y     | x    |
-        +--------+-------+------+
-        8 rows in set (0.00 sec)
-    
-</code></pre>
-<h4 id="delete-删除数据">delete 删除数据</h4>
-<ul>
-<li>
-<p>语法格式：delete from 表名 where 条件;</p>
-</li>
-<li>
-<p>*注意：*没有条件全部删除</p>
-<ul>
-<li>删除10部门所有数据？</li>
-</ul>
-</li>
-</ul>
-<pre><code>    delete from dept1 where deptno = 10;
-    
-    //删除所有记录
-    delete from dept1 ;
-    
-    //怎么删除大表中的数据？（重点）
-    truncate table emp1;    //表被截断，不可回滚。永久丢失
-    
-    //删除表
-    drop table 表名; //通用
-    drop table if exists 表名; //Oracle不支持这种写法
-</code></pre>
-<ul>
-<li>
-<p><em>对于表结构的修改，使用工具完成即可，因为实际开发中表一旦涉及好之后，对表结构的修改是很少的</em></p>
-</li>
-<li>
-<p>增删改查有一个术语：<em><strong>CRUD</strong></em></p>
-<ul>
-<li><em>Create</em>（增）<em>Retrieve</em>（检索）<em>Update</em>（修改）<em>Delete</em>（删除）</li>
-</ul>
-</li>
-</ul>
-<hr>
 ]]></content>
     </entry>
 </feed>
