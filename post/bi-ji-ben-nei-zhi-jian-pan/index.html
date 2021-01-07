@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>Mysql无法启动Plugin FEDERATED is disabled | RichardTech</title>
+<title>禁用或启动笔记本内置键盘 | RichardTech</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,15 +24,13 @@
 
 
 
-    <meta name="description" content="Mysql无法启动Plugin FEDERATED is disabled完美解决
+    <meta name="description" content="1. 禁用内置键盘&amp;触摸板
 
+启动管理员命令行(Win+x)，选择windowsPowershe(管理员)  (命令提示符)
 
-WampServer , MySQL 5.5.8
-电脑意外关机后，服务启动失败，自动关闭
-查看了mysql.log 错误日志
-
-201211  0:52..." />
-    <meta name="keywords" content="MySQL,Debug,JavaNote" />
+在打开的窗口中：输入cmd，并敲击回车
+然后输入 sc config i8042prt start= d..." />
+    <meta name="keywords" content="" />
   </head>
   <body>
     <div id="app" class="main">
@@ -103,75 +101,32 @@ WampServer , MySQL 5.5.8
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">Mysql无法启动Plugin FEDERATED is disabled</h2>
+            <h2 class="post-title">禁用或启动笔记本内置键盘</h2>
             <div class="post-date">2021-01-07</div>
             
-              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/mysql-plugin-federated-is-disabled.png')">
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/bi-ji-ben-nei-zhi-jian-pan.jpg')">
               </div>
             
             <div class="post-content" v-pre>
-              <h2 id="mysql无法启动plugin-federated-is-disabled完美解决">Mysql无法启动Plugin FEDERATED is disabled完美解决</h2>
+              <h4 id="1-禁用内置键盘触摸板">1. 禁用内置键盘&amp;触摸板</h4>
 <!-- more -->
-<blockquote>
-<p>WampServer , MySQL 5.5.8</p>
-<p>电脑意外关机后，服务启动失败，自动关闭</p>
-<p>查看了mysql.log 错误日志</p>
-</blockquote>
-<pre><code class="language-clojure">201211  0:52:24 [Note] Plugin 'FEDERATED' is disabled.
-InnoDB: The InnoDB memory heap is disabled
-InnoDB: Mutexes and rw_locks use Windows interlocked functions
-InnoDB: Compressed tables use zlib 1.2.3
-201211  0:52:24  InnoDB: Error: unable to create temporary file; errno: 2
-201211  0:52:24 [ERROR] Plugin 'InnoDB' init function returned error.
-201211  0:52:24 [ERROR] Plugin 'InnoDB' registration as a STORAGE ENGINE failed.
-201211  0:52:24 [ERROR] Unknown/unsupported storage engine: InnoDB
-201211  0:52:24 [ERROR] Aborting
-
-201211  0:52:24 [Note] wampmysqld: Shutdown complete
-</code></pre>
-<p>以上</p>
-<p>网上找到方法,在My.ini文件中的[mysqld]中增加一行</p>
-<p>我的是[wampmysqld]</p>
-<p>tmpdir=d:/wamp/tmp</p>
-<p>[mysqld]  增加一行，注意是 mysqld</p>
-<p>federated</p>
-<p>重启服务成功</p>
-<pre><code class="language-clojure">201214  8:36:43  InnoDB: Initializing buffer pool, size = 128.0M
-201214  8:36:43  InnoDB: Completed initialization of buffer pool
-201214  8:36:43  InnoDB: highest supported file format is Barracuda.
-201214  8:36:48  InnoDB: 1.1.4 started; log sequence number 1785000
-201214  8:36:51 [Note] Event Scheduler: Loaded 0 events
-201214  8:36:51 [Note] wampmysqld: ready for connections.
-Version: '5.5.8-log'  socket: ''  port: 3306  MySQL Community Server (GPL)
-</code></pre>
-<p>顺便记下</p>
-<p>skip-external-locking</p>
-<p>skip-name-resolve</p>
+<p>启动管理员命令行(Win+x)，选择windowsPowershe(管理员)  (命令提示符)</p>
+<figure data-type="image" tabindex="1"><img src="https://geckoc.github.io//post-images/1609982577853.png" alt="" loading="lazy"></figure>
+<p>在打开的窗口中：输入cmd，并敲击回车</p>
+<p>然后输入 sc config i8042prt start= disabled</p>
+<p>提示成功后重启电脑即可，开启则是把disabled换成auto</p>
+<p>sc config i8042prt start= disabled (关)</p>
+<p>sc config i8042prt start= auto(开)</p>
+<figure data-type="image" tabindex="2"><img src="https://geckoc.github.io//post-images/1609982602898.png" alt="" loading="lazy"></figure>
 
             </div>
-            
-              <div class="tag-container">
-                
-                  <a href="https://geckoc.github.io/tag/vKAwv3RGS/" class="tag">
-                    MySQL
-                  </a>
-                
-                  <a href="https://geckoc.github.io/tag/dX4IqNQnK/" class="tag">
-                    Debug
-                  </a>
-                
-                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
-                    JavaNote
-                  </a>
-                
-              </div>
             
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://geckoc.github.io/post/jquerysummary/">
+                <a href="https://geckoc.github.io/post/mysql-plugin-federated-is-disabled/">
                   <h3 class="post-title">
-                    JQuerySummary
+                    Mysql无法启动Plugin FEDERATED is disabled
                   </h3>
                 </a>
               </div>
