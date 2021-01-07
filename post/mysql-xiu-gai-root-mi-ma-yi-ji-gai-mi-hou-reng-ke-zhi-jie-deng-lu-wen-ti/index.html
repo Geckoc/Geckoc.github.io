@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1609981704954">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1609982457816">
 <link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
 
 
@@ -40,7 +40,7 @@ mysql&gt; update user set password = PASSWORD('你想要修改的密码..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://geckoc.github.io/">
-        <img src="https://geckoc.github.io//images/avatar.png?v=1609981704954" class="site-logo">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1609982457816" class="site-logo">
         <h1 class="site-title">RichardTech</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -146,6 +146,19 @@ exit;
 <p><strong>注意</strong>：<strong>必要时需要重启MySQL服务器</strong></p>
 </li>
 </ul>
+<h3 id="关于忘记密码">关于忘记密码</h3>
+<ol>
+<li>以window为例，进入到mysql安装目录，打开my.ini文件</li>
+<li>找到[mysqld]配置行，<strong>(注意：不是[mysql])</strong>，在其下一行输入：
+<ul>
+<li>skip-grant-tables</li>
+<li>或者 --skip-grant-tables</li>
+<li>两者区别是有时两个横线会导致服务器无法重启需要测试应当添加否</li>
+</ul>
+</li>
+<li>cmd命令：services.msi，找到mysql服务并重启</li>
+<li>修改密码即可</li>
+</ol>
 
             </div>
             

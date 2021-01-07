@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>THE LIE WE LIVE | RichardTech</title>
+<title>Mysql无法启动Plugin FEDERATED is disabled | RichardTech</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,11 +24,15 @@
 
 
 
-    <meta name="description" content="人们最喜欢看的内容，不是现实和真相，而是可以让他们意淫的内容。
+    <meta name="description" content="Mysql无法启动Plugin FEDERATED is disabled完美解决
 
 
-微博上有不少居心不良的大V，喜欢打着女权的幌子，传播一些很倒风向的言论，比如“你负责赚钱养家，我负责貌美如花”“不舍得给你花钱的男人就是不爱你”“女孩子就应该被宠着”，如果..." />
-    <meta name="keywords" content="Thinking" />
+WampServer , MySQL 5.5.8
+电脑意外关机后，服务启动失败，自动关闭
+查看了mysql.log 错误日志
+
+201211  0:52..." />
+    <meta name="keywords" content="MySQL,Debug,JavaNote" />
   </head>
   <body>
     <div id="app" class="main">
@@ -99,29 +103,65 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">THE LIE WE LIVE</h2>
-            <div class="post-date">2020-07-04</div>
+            <h2 class="post-title">Mysql无法启动Plugin FEDERATED is disabled</h2>
+            <div class="post-date">2021-01-07</div>
             
-              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/the-lie-we-live.jpg')">
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/mysql-plugin-federated-is-disabled.png')">
               </div>
             
             <div class="post-content" v-pre>
-              <p>人们最喜欢看的内容，不是现实和真相，而是可以让他们意淫的内容。</p>
+              <h2 id="mysql无法启动plugin-federated-is-disabled完美解决">Mysql无法启动Plugin FEDERATED is disabled完美解决</h2>
 <!-- more -->
-<ul>
-<li>微博上有不少居心不良的大V，喜欢打着女权的幌子，传播一些很倒风向的言论，比如“你负责赚钱养家，我负责貌美如花”“不舍得给你花钱的男人就是不爱你”“女孩子就应该被宠着”，如果你接触一下微博，你就会惊讶，这些一听就没道理的话，为什么会这么有市场？为什么很多女生听完以后会理直气壮的把这些话当成口号？答案就是——这些内容会让她们爽，让她们心安理得的接受别人的馈赠，不努力却要求别人努力，一身臭毛病还要让别人宠着。网络小说，给男生看的，大多是讲一个要钱没钱、要能力没能力的屌丝，忽然因为某个意外事件，获得了某种超能力，然后混的风生水起，多少女人前仆后继的陪他上床，最后甚至能统治整个宇宙；给女生看的，大多是讲一个长相普普通通的女生，某一天邂逅了一个白马王子，种种机缘巧合之下，她被白马王子追求，捧在手心，或者被n个富二代追求，最后顺理成章嫁入豪门。这些文章，但凡有脑子的人，都知道不现实，但是为什么网络小说全都这么写？就因为这些内容看完以后能让人爽，能让人通过短暂的幻想逃避现实。最残忍的是，很多人幻想的久了，竟然忘了这些事发生的概率多么低，真的以为自己可以屌丝逆袭/嫁入豪门/咸鱼翻身，然后就真的不努力了，因为幻想毁了自己的一生。而当我一板一眼的把这些残忍真相告诉他们的时候，他们竟然接受不了现实，不仅不给我继续，还扬言要屏蔽我...</li>
-</ul>
-<hr>
-<ul>
-<li>你并不比自己的父母优秀多少。现在知乎上批判自己父母的声音也很盛，诸多白领们自认为自己的表现远远优于自己的父母。其实，这不过是因为经济结构转型造成的误会。现在在公司的格子间里面哼哧哼哧做PPT的那些人，和当年踩着缝纫机的女工没有本质区别。 现在在各种购物软件上抢红包的那些人，和当年在菜市场上为了一分钱讨价还价的父母也没有区别；现在买个手机非得戴个壳、贴层膜，和当年父母非要给遥控器套个塑料袋也差不多；其实，现在每天刷微博、抖音、知乎的人，跟当年蹲在墙根晒太阳嗑瓜子的，也没什么区别。</li>
-</ul>
+<blockquote>
+<p>WampServer , MySQL 5.5.8</p>
+<p>电脑意外关机后，服务启动失败，自动关闭</p>
+<p>查看了mysql.log 错误日志</p>
+</blockquote>
+<pre><code class="language-clojure">201211  0:52:24 [Note] Plugin 'FEDERATED' is disabled.
+InnoDB: The InnoDB memory heap is disabled
+InnoDB: Mutexes and rw_locks use Windows interlocked functions
+InnoDB: Compressed tables use zlib 1.2.3
+201211  0:52:24  InnoDB: Error: unable to create temporary file; errno: 2
+201211  0:52:24 [ERROR] Plugin 'InnoDB' init function returned error.
+201211  0:52:24 [ERROR] Plugin 'InnoDB' registration as a STORAGE ENGINE failed.
+201211  0:52:24 [ERROR] Unknown/unsupported storage engine: InnoDB
+201211  0:52:24 [ERROR] Aborting
+
+201211  0:52:24 [Note] wampmysqld: Shutdown complete
+</code></pre>
+<p>以上</p>
+<p>网上找到方法,在My.ini文件中的[mysqld]中增加一行</p>
+<p>我的是[wampmysqld]</p>
+<p>tmpdir=d:/wamp/tmp</p>
+<p>[mysqld]  增加一行，注意是 mysqld</p>
+<p>federated</p>
+<p>重启服务成功</p>
+<pre><code class="language-clojure">201214  8:36:43  InnoDB: Initializing buffer pool, size = 128.0M
+201214  8:36:43  InnoDB: Completed initialization of buffer pool
+201214  8:36:43  InnoDB: highest supported file format is Barracuda.
+201214  8:36:48  InnoDB: 1.1.4 started; log sequence number 1785000
+201214  8:36:51 [Note] Event Scheduler: Loaded 0 events
+201214  8:36:51 [Note] wampmysqld: ready for connections.
+Version: '5.5.8-log'  socket: ''  port: 3306  MySQL Community Server (GPL)
+</code></pre>
+<p>顺便记下</p>
+<p>skip-external-locking</p>
+<p>skip-name-resolve</p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://geckoc.github.io/tag/G5OIOcqCl/" class="tag">
-                    Thinking
+                  <a href="https://geckoc.github.io/tag/vKAwv3RGS/" class="tag">
+                    MySQL
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/dX4IqNQnK/" class="tag">
+                    Debug
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
+                    JavaNote
                   </a>
                 
               </div>
@@ -129,9 +169,9 @@
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://geckoc.github.io/post/rang-zi-dan-fei/">
+                <a href="https://geckoc.github.io/post/jquerysummary/">
                   <h3 class="post-title">
-                    让子弹飞
+                    JQuerySummary
                   </h3>
                 </a>
               </div>
