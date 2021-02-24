@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1614160465662">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1614160877089">
 <link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
 
 
@@ -40,7 +40,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://geckoc.github.io/">
-        <img src="https://geckoc.github.io//images/avatar.png?v=1614160465662" class="site-logo">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1614160877089" class="site-logo">
         <h1 class="site-title">RichardTech</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -118,10 +118,9 @@
 <li>要注意的是本地分支名和远程分支名不一样的情况</li>
 </ul>
 <p><strong>语法如下</strong></p>
-<pre><code>    git push @remoteName  @localBranch:@remoteBranch
-
-  // eg.remoteName:origin  localBranch:localTest  remoteBranch:remoteTest
-  git push origin localTest:remoteTest
+<pre><code>git push @remoteName  @localBranch:@remoteBranch
+// eg.remoteName:origin  localBranch:localTest  remoteBranch:remoteTest
+git push origin localTest:remoteTest
 </code></pre>
 <ul>
 <li>本地分支名与远程分支名一致的情况，可简写，例如：本地远程分支都是master</li>
@@ -131,7 +130,7 @@
 <p>确认分支名没有写错，继续往下</p>
 <h2 id="没有提交代码-commit">没有提交代码  commit</h2>
 <p>可以git status 查看代码提交状态 ,忘记提交则提交再push即可</p>
-<pre><code class="language-git">  git add test
+<pre><code>  git add test
   git commit -m &quot;This is a new commit&quot;
   git push origin master
 </code></pre>
@@ -140,12 +139,12 @@
 <p>由于使用Git和TortoiseGit同时操作一个工作区，推送同一个远程仓库，导致冲突<br>
 可以看到错误hint(提示)  <strong>hint: 'git pull ...') before pushing again.</strong><br>
 处理方式一：  先拉取再执行推送</p>
-<pre><code class="language-git">  git pull –-rebase origin maste
+<pre><code>  git pull –-rebase origin maste
   git push origin master
 </code></pre>
 <p>不推荐使用暴力强制提交，至于 <em>--rebase</em> 有什么作用，是什么意思，不清不楚用起来也忐忑不安；<br>
-参考廖雪峰老师的文章<br>
-https://www.liaoxuefeng.com/wiki/896043488029600/1216289527823648</p>
+参考廖雪峰老师的文章 ：rebase &quot;变基&quot;<br>
+[1]: https://www.liaoxuefeng.com/wiki/896043488029600/1216289527823648       &quot;rebase &quot;变基&quot;&quot;</p>
 <ul>
 <li>
 <p>rebase操作可以把本地未push的分叉提交历史整理成直线；</p>
