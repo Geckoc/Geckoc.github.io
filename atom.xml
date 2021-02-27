@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2021-02-27T12:58:29.304Z</updated>
+    <updated>2021-02-27T13:00:45.749Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -16,15 +16,13 @@
         <link href="https://geckoc.github.io/post/redis-cun-qu-hash-dui-xiang/">
         </link>
         <updated>2021-02-27T12:32:46.000Z</updated>
-        <summary type="html"><![CDATA[<h3 id=""></h3>
-<p>在开发总，使用Redis缓存缓解MySQL数据库的压力，在存取Hash时遇到的问题</p>
+        <summary type="html"><![CDATA[<p>在开发中，使用Redis缓存缓解MySQL数据库的压力，在存取Hash时遇到的问题</p>
 <ul>
 <li>StringRedisSerializer()不支持多种类型的存储</li>
 <li>必须设置序列化方式，否则无法匹配序列化后的key</li>
 </ul>
 ]]></summary>
-        <content type="html"><![CDATA[<h3 id=""></h3>
-<p>在开发总，使用Redis缓存缓解MySQL数据库的压力，在存取Hash时遇到的问题</p>
+        <content type="html"><![CDATA[<p>在开发中，使用Redis缓存缓解MySQL数据库的压力，在存取Hash时遇到的问题</p>
 <ul>
 <li>StringRedisSerializer()不支持多种类型的存储</li>
 <li>必须设置序列化方式，否则无法匹配序列化后的key</li>
