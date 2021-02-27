@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1614430837055">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1614431642581">
 <link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
 
 
@@ -28,9 +28,8 @@
 html()//取得第一个匹配元素的html内容，包含标签内容
 html(val)//设置所有匹配元素的html内容，识别标签，能够表现出标签的效果
 
-&lt;!-- more --&gt;
-
-text()// 取得所有匹配元素的..." />
+text()// 取得所有匹配元素的内容，只有文本内容，没有标签
+text(v..." />
     <meta name="keywords" content="jquery" />
   </head>
   <body>
@@ -40,7 +39,7 @@ text()// 取得所有匹配元素的..." />
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://geckoc.github.io/">
-        <img src="https://geckoc.github.io//images/avatar.png?v=1614430837055" class="site-logo">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1614431642581" class="site-logo">
         <h1 class="site-title">RichardTech</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -110,15 +109,13 @@ text()// 取得所有匹配元素的..." />
             
             <div class="post-content" v-pre>
               <h3 id="文本操作">文本操作</h3>
-<pre><code class="language-javascript">html()//取得第一个匹配元素的html内容，包含标签内容
-html(val)//设置所有匹配元素的html内容，识别标签，能够表现出标签的效果
-
-&lt;!-- more --&gt;
-
-text()// 取得所有匹配元素的内容，只有文本内容，没有标签
-text(val)//设置所有匹配元素的内容，不识别标签，将标签作为文本插入进去
-示例:
-$('.c1').text('&lt;h3&gt;你好,理查德&lt;/h3&gt;');
+<p>html()//取得第一个匹配元素的html内容，包含标签内容<br>
+html(val)//设置所有匹配元素的html内容，识别标签，能够表现出标签的效果</p>
+<!-- more -->
+<p>text()// 取得所有匹配元素的内容，只有文本内容，没有标签<br>
+text(val)//设置所有匹配元素的内容，不识别标签，将标签作为文本插入进去<br>
+示例:</p>
+<pre><code class="language-javascript">$('.c1').text('&lt;h3&gt;你好,理查德&lt;/h3&gt;');
 $('.c1').html('&lt;h3&gt;你好,理查德&lt;/h3&gt;');
 </code></pre>
 <h3 id="属性操作">属性操作</h3>
