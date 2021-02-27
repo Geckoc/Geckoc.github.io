@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>JavaWeb:The superclass &#34;javax.servlet.http.HttpServlet&#34; was not found on the Java Build Path | RichardTech</title>
+<title>Redis存取Hash对象 | RichardTech</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,10 +24,15 @@
 
 
 
-    <meta name="description" content="JSP页面顶端出现“红色”的报错信息:
-The superclass &quot;javax.servlet.http.HttpServlet&quot; was not found on the Java Build Path。
-原来Ja..." />
-    <meta name="keywords" content="Debug" />
+    <meta name="description" content="
+在开发总，使用Redis缓存缓解MySQL数据库的压力，在存取Hash时遇到的问题
+
+StringRedisSerializer()不支持多种类型的存储
+必须设置序列化方式，否则无法匹配序列化后的key
+
+
+    public Map&..." />
+    <meta name="keywords" content="redis" />
   </head>
   <body>
     <div id="app" class="main">
@@ -98,30 +103,59 @@ The superclass &quot;javax.servlet.http.HttpServlet&quot; was not found on the J
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">JavaWeb:The superclass &#34;javax.servlet.http.HttpServlet&#34; was not found on the Java Build Path</h2>
-            <div class="post-date">2020-06-28</div>
+            <h2 class="post-title">Redis存取Hash对象</h2>
+            <div class="post-date">2021-02-27</div>
             
-              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/javaweb.jpg')">
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/redis-cun-qu-hash-dui-xiang.jpg')">
               </div>
             
             <div class="post-content" v-pre>
-              <h2 id="jsp页面顶端出现红色的报错信息"><em><strong>JSP页面顶端出现“红色”的报错信息:</strong></em></h2>
-<p><em><strong>The superclass &quot;javax.servlet.http.HttpServlet&quot; was not found on the Java Build Path。</strong></em><br>
-<em>原来Javaweb工程类中没有添加Tomcat运行时相关类导致。<br>
-下面是具体的解决方法：</em></p>
-<ol>
-<li><em>右击web工程-》属性或Build Path-》Java Build Path-&gt;Libraries-&gt; Add Libray...-&gt;Server Runtime -》Tomcat Server</em></li>
-<li><em>切换到Java Build Path界面中的Orader and Export，选择Tomcat。</em></li>
-</ol>
-<h3 id="注意"><strong>注意</strong></h3>
-<p>按以上方法操作时，若打开<em>Server Runtime</em>后一片空白，需要设置<em>Apache</em>服务器。设置方法为：<em>window-&gt;Preferences-&gt;Server-&gt;Runtime Environment -&gt; add --&gt;</em> 选择<em>Apache</em>的版本后点<em>Next</em>，再填入你<em>apache</em>服务器软件的安装（解压后）地址。</p>
+              <h3 id=""></h3>
+<p>在开发总，使用Redis缓存缓解MySQL数据库的压力，在存取Hash时遇到的问题</p>
+<ul>
+<li>StringRedisSerializer()不支持多种类型的存储</li>
+<li>必须设置序列化方式，否则无法匹配序列化后的key</li>
+</ul>
+<!-- more -->
+<pre><code class="language-java">    public Map&lt;Object, Object&gt; queryStudentById(Integer id) {
+        // 设置 redisTemplate 对象 key 的序列化方式
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        HashOperations&lt;Object, Object, Object&gt; forHash = redisTemplate.opsForHash();
+        // 先从Redis缓存中查找获取，没有则从MySQL数据中查找并获取
+        // entries() 从redis中获取map数据 键值对
+        Map&lt;Object, Object&gt; student = redisTemplate.boundHashOps(String.valueOf(id)).entries();
+        assert student != null;
+        //  如果为空(第一次查询) 则去数据库查询并存放到Redis缓存中
+        if (student.size() == 0 ){
+            student = studentMapper.selectByKey(id);
+            forHash.put(String.valueOf(id),&quot;id&quot;,student.get(&quot;id&quot;));
+            forHash.put(String.valueOf(id),&quot;name&quot;,student.get(&quot;name&quot;));
+            forHash.put(String.valueOf(id),&quot;age&quot;,student.get(&quot;age&quot;));
+            // 设置有效时间
+            redisTemplate.expire(String.valueOf(id),2, TimeUnit.MINUTES);
+        }
+        return student;
+    }
+
+</code></pre>
+<p>设置 redisTemplate 对象 key 的序列化方式,Put时key已经序列化，必须设置<br>
+否则每次boundHashOps(String.valueOf(id))返回的都是新的Hash</p>
+<ul>
+<li>StringRedisSerializer
+<ul>
+<li>只能存储类型为String的value，当存储其他类型的数据时，则无法将value保存到Redis，必须转为String</li>
+</ul>
+</li>
+</ul>
+<p>网上查询参考：<br>
+使用JackSon2JsonRedisSerializer，才能支持存储多种数据类型，避免存储了一些数据之后再进行转换以及历史数据进行处理的麻烦。</p>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://geckoc.github.io/tag/dX4IqNQnK/" class="tag">
-                    Debug
+                  <a href="https://geckoc.github.io/tag/p17kXWG5V/" class="tag">
+                    redis
                   </a>
                 
               </div>
@@ -129,9 +163,9 @@ The superclass &quot;javax.servlet.http.HttpServlet&quot; was not found on the J
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://geckoc.github.io/post/guan-yu-java-yi-chang-shen-ru-li-jie/">
+                <a href="https://geckoc.github.io/post/giterror-failed-to-push-some-refs-to/">
                   <h3 class="post-title">
-                    关于Java异常深入理解 
+                    Git：error: failed to push some refs to
                   </h3>
                 </a>
               </div>
