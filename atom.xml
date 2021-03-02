@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2021-02-27T13:14:06.736Z</updated>
+    <updated>2021-03-02T11:59:48.685Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -10,6 +10,140 @@
     <logo>https://geckoc.github.io/images/avatar.png</logo>
     <icon>https://geckoc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, RichardTech</rights>
+    <entry>
+        <title type="html"><![CDATA[SpringBoot-SSM-Redis-Dubbo集成]]></title>
+        <id>https://geckoc.github.io/post/springboot-ssm-redis-dubbo-ji-cheng/</id>
+        <link href="https://geckoc.github.io/post/springboot-ssm-redis-dubbo-ji-cheng/">
+        </link>
+        <updated>2021-03-02T11:50:43.000Z</updated>
+        <summary type="html"><![CDATA[<h5 id="主要记录一些主要步骤">主要记录一些主要步骤：</h5>
+<ul>
+<li>在配置中，需要开启的服务有mysql、redis、zookeeper</li>
+<li>在Linux开启，也可在windows本地开启，需要注意的是相应地址填写正确即可</li>
+</ul>
+]]></summary>
+        <content type="html"><![CDATA[<h5 id="主要记录一些主要步骤">主要记录一些主要步骤：</h5>
+<ul>
+<li>在配置中，需要开启的服务有mysql、redis、zookeeper</li>
+<li>在Linux开启，也可在windows本地开启，需要注意的是相应地址填写正确即可</li>
+</ul>
+<!-- more -->
+<p>总结：</p>
+<ol>
+<li>
+<p>接口工程 [MavenJava]</p>
+<ul>
+<li>存放接口以及实体类</li>
+</ul>
+</li>
+<li>
+<p>服务提供者工程 [SpringBootWeb]</p>
+<ul>
+<li>
+<p>接口实现类：[需加上@Component]</p>
+<ul>
+<li>@Service注解使用阿里协议下的，指定暴露服务接口的interfaceClass或interfaceName</li>
+</ul>
+</li>
+<li>
+<p>依赖：</p>
+<ul>
+<li>MySQL、MyBatis、Redis、Dubbo、Zookeeper<br>
+-【接口工程】Mybatis逆向工程创建完成后导入，否则生成失败</li>
+</ul>
+</li>
+<li>
+<p>插件配置:</p>
+<ul>
+<li>mybatis逆向工程插件<br>
+<strong>mybatis要求mapper和mapper.xml放在一个文件,springboot要求资源文件放在resources下,所以还要在pom.xml文件下手动指定编译资源文件</strong></li>
+</ul>
+</li>
+<li>
+<p>application.properties配置</p>
+<ul>
+<li>内嵌Tomcat端口号 上下文根</li>
+<li>MySQL数据源连接信息</li>
+<li>Dubbo配置：
+<ul>
+<li>spring.application.name[唯一标识 服务名称]</li>
+<li>spring.dubbo.serve=true[指定工程为服务提供者]</li>
+<li>spring.dubbo.registry=zookeeper://localhost:2181[注册中心地址]</li>
+</ul>
+</li>
+<li>配置Redis端口号</li>
+<li>配置Redis指定地址</li>
+</ul>
+</li>
+<li>
+<p>在主程序类添加@MapperScan()  (包扫描注解)</p>
+</li>
+<li>
+<p>在主程序类添加@EnableDubboConfiguration (dubbo注解支持)</p>
+</li>
+</ul>
+</li>
+<li>
+<p>消费者工程  [SpringBootWeb]</p>
+<ul>
+<li>
+<p>依赖</p>
+<ul>
+<li>dubbo、zookeeper、接口工程</li>
+</ul>
+</li>
+<li>
+<p>application.properties配置</p>
+<ul>
+<li>
+<p>dubbo</p>
+<ul>
+<li>spring.application.name[唯一标识 服务名称]</li>
+<li>spring.dubbo.registry=zookeeper://localhost:2181[注册中心地址]</li>
+</ul>
+</li>
+<li>
+<p>配置Redis端口号</p>
+</li>
+<li>
+<p>配置Redis指定地址</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Controller下注入使用阿里协议的@reference注解</p>
+<ul>
+<li>与服务提供者中的interfaceClass/interfaceName保持一致</li>
+</ul>
+</li>
+<li>
+<p>在主程序类添加@EnableDubboConfiguration (dubbo注解支持)</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<ul>
+<li>
+<p>如果要使用访问JSP  需要添加解析JSP依赖，且配置视图解析器</p>
+<ul>
+<li>解析JSP的依赖 SpringBoot内嵌Tomcat对jsp的解析依赖</li>
+</ul>
+<pre><code class="language-xml"> &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.tomcat.embed&lt;/groupId&gt;
+            &lt;artifactId&gt;tomcat-embed-jasper&lt;/artifactId&gt;
+ &lt;/dependency&gt;  
+</code></pre>
+<ul>
+<li>视图解析器</li>
+</ul>
+<pre><code class="language-xml">spring.mvc.view.prefix=/
+spring.mvc.view.suffix=.jsp
+</code></pre>
+</li>
+</ul>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Redis存取Hash对象]]></title>
         <id>https://geckoc.github.io/post/redis-cun-qu-hash-dui-xiang/</id>
@@ -900,235 +1034,6 @@ $('li').each(function(k,v){
 		window.location.reload();//刷新当前页面
 </code></pre>
 <!-- more -->
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[字符串&数组练习]]></title>
-        <id>https://geckoc.github.io/post/zi-fu-chuan-andshu-zu-lian-xi/</id>
-        <link href="https://geckoc.github.io/post/zi-fu-chuan-andshu-zu-lian-xi/">
-        </link>
-        <updated>2020-11-21T04:25:49.000Z</updated>
-        <summary type="html"><![CDATA[<h2 id="stringarray">String&amp;Array</h2>
-<ul>
-<li>练习</li>
-<li>关于String类的方法和Array的操作</li>
-<li>字符串分割，数组排序，字符串赋值给自定义对象并添加到数组中</li>
-</ul>
-]]></summary>
-        <content type="html"><![CDATA[<h2 id="stringarray">String&amp;Array</h2>
-<ul>
-<li>练习</li>
-<li>关于String类的方法和Array的操作</li>
-<li>字符串分割，数组排序，字符串赋值给自定义对象并添加到数组中</li>
-</ul>
-<!-- more -->
-<h5 id="题目">题目：</h5>
-<ol>
-<li>
-<p>从键盘上输入身份证号, 判断出生日期,性别，<br>
-身份证倒数第二位表示性别，双数为女性，单为男</p>
-</li>
-<li>
-<p>有字符串: ”101,lisi,98;</p>
-<p>202,wangwu,76;</p>
-<p>303,chenqi,84;</p>
-<p>404,zhangsan,49;</p>
-<p>505,xiaoming,67”,</p>
-<p>保存的学生的学号,姓名,成绩信息.</p>
-<p>要求把字符串中学生信息取出来,创建Student对象,</p>
-<p>把Student对象保存到数组中;遍历学生对象数组;</p>
-<p>在数组中查找名字为xiaoxiao同学是否存在.对数组中学生对象根据成绩降序排序</p>
-</li>
-</ol>
-<hr>
-<pre><code>import java.util.Scanner;
-
-/**
- * @ClassName Judge
- * @Deacription TODO 1. 从键盘上输入身份证号, 判断出生日期,性别
- *                   2. 身份证倒数第二位表示性别，双数为女性，单为男
- * @Version 1.0
- */
-public class Judge {
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        boolean verify = true;
-        while (verify){
-            System.out.print(&quot;请输入你的身份证号码:&quot;);
-            String id = sc.next();
-            // 用正则表达验证控制台输入
-            boolean control = id.matches(&quot;\\d{17}(\\d|X|x)&quot;);
-            if (control){
-                // 截取身份证中出生日期
-                String birth = id.substring(6, 14);
-                // 取出倒数第二位的元素，偶数为女性
-                char c = id.charAt(id.length() - 2);
-                if (c % 2 == 0){
-                    System.out.println(&quot;女性\t&quot; + &quot;出生日期：&quot; + birth);
-                    // 判断成功结束
-                    verify = false;
-                }else {
-                    System.out.println(&quot;男性\t&quot; + &quot;出生日期：&quot; + birth);
-                    verify = false;
-                }
-            }else{
-                //不合法继续循环
-                System.out.println(&quot;身份证输入不合法...请重新输入！&quot;);
-            }
-        }
-    }
-}
-</code></pre>
-<h5 id="student类">Student类</h5>
-<pre><code>public class Student implements Comparable&lt;Student&gt;{
-    private String id;
-    private String name;
-    private String score;
-
-    public Student(String id, String name, String score) {
-        this.id = id;
-        this.name = name;
-        this.score = score;
-    }
-    public Student() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public Student setId(String id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Student setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    public String getScore() {
-        return score;
-    }
-
-    public Student setScore(String score) {
-        this.score = score;
-        return this;
-    }
-
-    @Override
-    public String toString() {
-        return &quot;Student{&quot; +
-                &quot;id='&quot; + id + '\'' +
-                &quot;, name='&quot; + name + '\'' +
-                &quot;, score='&quot; + score + '\'' +
-                '}';
-    }
-
-    @Override
-    public int compareTo(Student o) {
-        return o.getScore().compareTo(this.getScore());
-    }
-}
-</code></pre>
-<h5 id="测试类">测试类</h5>
-<pre><code>/**
- * @ClassName StudentTest
- * @Deacription
- *  TODO
- *     有字符串: ”101,lisi,98;
- *              202,wangwu,76;
- *              303,chenqi,84;
- *              404,zhangsan,49;
- *              505,xiaoming,67”,
- *      保存的学生的学号,姓名,成绩信息.
- *      要求把字符串中学生信息取出来,创建Student对象,
- *      把Student对象保存到数组中;遍历学生对象数组;
- *      在数组中查找名字为xiaoxiao同学是否存在.对数组中学生对象根据成绩降序排序
- * @Version 1.0
- */
-public class StudentTest {
-    public static void main(String[] args) {
-        String src = &quot;101,lisi,98;202,wangwu,76;303,chenqi,84;404,zhangsan,49;505,xiaoming,67&quot;;
-        // 分号替换成逗号
-        String replace = src.replace(&quot;;&quot;, &quot;,&quot;);
-        // 通过逗号分隔字符串
-        String[] split = replace.split(&quot;,&quot;);
-        for (String s : split) {
-            System.out.print(s + &quot; &quot;);
-        }
-        //创建学生数组
-        Student[] stus = new Student[5];
-        // 思路，内循环，分隔字符串后并按照每3个字符分别赋值给不同的对象
-        /*
-        for (int i = 0; i &lt; stus.length ; i++) {
-            // 创建五个学生对象，内循环控制赋值
-            Student student = new Student();
-            for (int j = 0; j &lt; split.length ; j++) {
-                String id = split[j];
-                String name = split[j+1];
-                String score = split[j+2];
-                student = new Student(); //这是重新new对象.
-                stus[i] = student;
-            }
-        }
-        */
-        // 此步骤暂时没有想到解决方法，只能手动通过数组下标赋值.....
-        /*
-        Student stu1 = new Student(split[0],split[1],split[2]);
-        Student stu2 = new Student(split[3],split[4],split[5]);
-        Student stu3 = new Student(split[6],split[7],split[8]);
-        Student stu4 = new Student(split[9],split[10],split[11]);
-        Student stu5 = new Student(split[12],split[13],split[14]);
-        */
-        // ！！！内循环会破坏创建对象结构，
-        // 会有NullPointException或ArrayIndexOutOfBoundsException
-        // split[i]元素下标为持续+1，定义初始值，循环自增
-        int index = 0;
-        for (int i = 0; i &lt; stus.length ; i++) {
-                String id = split[index++];
-                String name = split[index++];
-                String score = split[index++];
-                Student student = new Student(id,name,score);
-                stus[i] = student;
-        }
-        System.out.println();
-        // 遍历学生对象，未排序
-        for (Student student : stus) {
-            System.out.println(student);
-        }
-//        // 学生对象放入数组中
-//        Student[] stus = {stu1,stu2,stu3,stu4,stu5};
-//        对自定义类型进行排序需要实现Comparable并实现CompareTo方法重写规则
-//        否则报错Exception in thread &quot;main&quot; java.lang.ClassCastException
-        Arrays.sort(stus); // sort默认升序，已在Student类重新编写排序规则
-        //判断学生是否存在
-        if (isExist1(stus,&quot;xiaoxiao&quot;)){
-            System.out.println(&quot;学生存在&quot;);
-        }else{
-            System.out.println(&quot;不存在&quot;);
-        }
-        // 按照成绩降序输出
-        System.out.println(&quot;按照学生成绩降序输出&quot;);
-        for (Student student : stus) {
-            System.out.println(student);
-        }
-    }
-
-    public static boolean isExist1(Student[] stus ,String target){
-        for (int i = 0; i &lt; stus.length; i++) {
-            if (target.equals(stus[i].getName())){
-                return true;
-            }
-        }
-        return false;
-    }
-}
-</code></pre>
 ]]></content>
     </entry>
 </feed>

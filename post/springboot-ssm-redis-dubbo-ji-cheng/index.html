@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>各种页面刷新 | RichardTech</title>
+<title>SpringBoot-SSM-Redis-Dubbo集成 | RichardTech</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,11 +24,19 @@
 
 
 
-    <meta name="description" content="		top.location.reload();//刷新顶级页面
-		parent.location.reload();//刷新父级页面
-		window.parent.location.reload();//刷新父级页面
-		window..." />
-    <meta name="keywords" content="JS,jquery" />
+    <meta name="description" content="主要记录一些主要步骤：
+
+在配置中，需要开启的服务有mysql、redis、zookeeper
+在Linux开启，也可在windows本地开启，需要注意的是相应地址填写正确即可
+
+
+总结：
+
+
+接口工程 [MavenJava]
+
+存放接口以..." />
+    <meta name="keywords" content="springboot,JavaNote" />
   </head>
   <body>
     <div id="app" class="main">
@@ -99,30 +107,144 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">各种页面刷新</h2>
-            <div class="post-date">2021-01-06</div>
+            <h2 class="post-title">SpringBoot-SSM-Redis-Dubbo集成</h2>
+            <div class="post-date">2021-03-02</div>
             
-              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/ge-chong-ye-mian-shua-xin.png')">
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/springboot-ssm-redis-dubbo-ji-cheng.jpg')">
               </div>
             
             <div class="post-content" v-pre>
-              <pre><code>		top.location.reload();//刷新顶级页面
-		parent.location.reload();//刷新父级页面
-		window.parent.location.reload();//刷新父级页面
-		window.location.reload();//刷新当前页面
-</code></pre>
+              <h5 id="主要记录一些主要步骤">主要记录一些主要步骤：</h5>
+<ul>
+<li>在配置中，需要开启的服务有mysql、redis、zookeeper</li>
+<li>在Linux开启，也可在windows本地开启，需要注意的是相应地址填写正确即可</li>
+</ul>
 <!-- more -->
+<p>总结：</p>
+<ol>
+<li>
+<p>接口工程 [MavenJava]</p>
+<ul>
+<li>存放接口以及实体类</li>
+</ul>
+</li>
+<li>
+<p>服务提供者工程 [SpringBootWeb]</p>
+<ul>
+<li>
+<p>接口实现类：[需加上@Component]</p>
+<ul>
+<li>@Service注解使用阿里协议下的，指定暴露服务接口的interfaceClass或interfaceName</li>
+</ul>
+</li>
+<li>
+<p>依赖：</p>
+<ul>
+<li>MySQL、MyBatis、Redis、Dubbo、Zookeeper<br>
+-【接口工程】Mybatis逆向工程创建完成后导入，否则生成失败</li>
+</ul>
+</li>
+<li>
+<p>插件配置:</p>
+<ul>
+<li>mybatis逆向工程插件<br>
+<strong>mybatis要求mapper和mapper.xml放在一个文件,springboot要求资源文件放在resources下,所以还要在pom.xml文件下手动指定编译资源文件</strong></li>
+</ul>
+</li>
+<li>
+<p>application.properties配置</p>
+<ul>
+<li>内嵌Tomcat端口号 上下文根</li>
+<li>MySQL数据源连接信息</li>
+<li>Dubbo配置：
+<ul>
+<li>spring.application.name[唯一标识 服务名称]</li>
+<li>spring.dubbo.serve=true[指定工程为服务提供者]</li>
+<li>spring.dubbo.registry=zookeeper://localhost:2181[注册中心地址]</li>
+</ul>
+</li>
+<li>配置Redis端口号</li>
+<li>配置Redis指定地址</li>
+</ul>
+</li>
+<li>
+<p>在主程序类添加@MapperScan()  (包扫描注解)</p>
+</li>
+<li>
+<p>在主程序类添加@EnableDubboConfiguration (dubbo注解支持)</p>
+</li>
+</ul>
+</li>
+<li>
+<p>消费者工程  [SpringBootWeb]</p>
+<ul>
+<li>
+<p>依赖</p>
+<ul>
+<li>dubbo、zookeeper、接口工程</li>
+</ul>
+</li>
+<li>
+<p>application.properties配置</p>
+<ul>
+<li>
+<p>dubbo</p>
+<ul>
+<li>spring.application.name[唯一标识 服务名称]</li>
+<li>spring.dubbo.registry=zookeeper://localhost:2181[注册中心地址]</li>
+</ul>
+</li>
+<li>
+<p>配置Redis端口号</p>
+</li>
+<li>
+<p>配置Redis指定地址</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Controller下注入使用阿里协议的@reference注解</p>
+<ul>
+<li>与服务提供者中的interfaceClass/interfaceName保持一致</li>
+</ul>
+</li>
+<li>
+<p>在主程序类添加@EnableDubboConfiguration (dubbo注解支持)</p>
+</li>
+</ul>
+</li>
+</ol>
+<hr>
+<ul>
+<li>
+<p>如果要使用访问JSP  需要添加解析JSP依赖，且配置视图解析器</p>
+<ul>
+<li>解析JSP的依赖 SpringBoot内嵌Tomcat对jsp的解析依赖</li>
+</ul>
+<pre><code class="language-xml"> &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.tomcat.embed&lt;/groupId&gt;
+            &lt;artifactId&gt;tomcat-embed-jasper&lt;/artifactId&gt;
+ &lt;/dependency&gt;  
+</code></pre>
+<ul>
+<li>视图解析器</li>
+</ul>
+<pre><code class="language-xml">spring.mvc.view.prefix=/
+spring.mvc.view.suffix=.jsp
+</code></pre>
+</li>
+</ul>
 
             </div>
             
               <div class="tag-container">
                 
-                  <a href="https://geckoc.github.io/tag/qw0Qz6LOQ/" class="tag">
-                    JS
+                  <a href="https://geckoc.github.io/tag/7H6AhZZE2/" class="tag">
+                    springboot
                   </a>
                 
-                  <a href="https://geckoc.github.io/tag/jgjJKJcgCy/" class="tag">
-                    jquery
+                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
+                    JavaNote
                   </a>
                 
               </div>
@@ -130,9 +252,9 @@
             
               <div class="next-post">
                 <div class="next">下一篇</div>
-                <a href="https://geckoc.github.io/post/zi-fu-chuan-andshu-zu-lian-xi/">
+                <a href="https://geckoc.github.io/post/redis-cun-qu-hash-dui-xiang/">
                   <h3 class="post-title">
-                    字符串&amp;数组练习
+                    Redis存取Hash对象
                   </h3>
                 </a>
               </div>
