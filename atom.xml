@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2021-03-02T11:59:48.685Z</updated>
+    <updated>2021-03-02T12:09:47.655Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -124,6 +124,9 @@
 </ol>
 <hr>
 <ul>
+<li>
+<p>model类需要实现序列化接口</p>
+</li>
 <li>
 <p>如果要使用访问JSP  需要添加解析JSP依赖，且配置视图解析器</p>
 <ul>
