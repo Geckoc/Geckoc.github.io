@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1614686975291">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1614739087138">
 <link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
 
 
@@ -27,7 +27,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://geckoc.github.io/">
-        <img src="https://geckoc.github.io//images/avatar.png?v=1614686975291" class="site-logo">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1614739087138" class="site-logo">
         <h1 class="site-title">RichardTech</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -103,6 +103,23 @@
 <ul>
 <li>StringRedisSerializer()不支持多种类型的存储</li>
 <li>必须设置序列化方式，否则无法匹配序列化后的key</li>
+<li>存取对象的两种方法 实体类需实现序列化接口
+<ul>
+<li>根据ID查询对象</li>
+<li>
+<ol>
+<li>使用boundHashOps(String.valueOf(id)).entries();</li>
+</ol>
+</li>
+<li>
+<ol start="2">
+<li>使用redisTemplate.opsForHash().entries(String.valueOf(id));</li>
+</ol>
+</li>
+<li>entries() 从redis中获取map数据 键值对</li>
+</ul>
+</li>
+<li>其他方案待更新</li>
 </ul>
 
                 </div>
