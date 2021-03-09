@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2021-03-03T02:45:38.042Z</updated>
+    <updated>2021-03-09T11:19:15.195Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -10,6 +10,113 @@
     <logo>https://geckoc.github.io/images/avatar.png</logo>
     <icon>https://geckoc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, RichardTech</rights>
+    <entry>
+        <title type="html"><![CDATA[@PathVariable和@RequestParam]]></title>
+        <id>https://geckoc.github.io/post/pathvariable-he-requestparam/</id>
+        <link href="https://geckoc.github.io/post/pathvariable-he-requestparam/">
+        </link>
+        <updated>2021-03-09T10:16:20.000Z</updated>
+        <summary type="html"><![CDATA[<ul>
+<li>在Spring中的两个注解 <strong>@PathVariable</strong>  ---- <strong>@RequestParam</strong>
+<ul>
+<li>我们可以从请求中获取查询参数，表单参数甚至文件</li>
+<li><strong>@RequestParam</strong>和**@PathVariable**都能够完成类似的功能——因为本质上，它们都是用户的输入，只不过输入的部分不同，一个在URL路径部分，另一个在参数部分。<br>
+事实上，这两种URL设计都是可以的：</li>
+</ul>
+</li>
+</ul>
+]]></summary>
+        <content type="html"><![CDATA[<ul>
+<li>在Spring中的两个注解 <strong>@PathVariable</strong>  ---- <strong>@RequestParam</strong>
+<ul>
+<li>我们可以从请求中获取查询参数，表单参数甚至文件</li>
+<li><strong>@RequestParam</strong>和**@PathVariable**都能够完成类似的功能——因为本质上，它们都是用户的输入，只不过输入的部分不同，一个在URL路径部分，另一个在参数部分。<br>
+事实上，这两种URL设计都是可以的：</li>
+</ul>
+</li>
+</ul>
+<!-- more -->
+<ul>
+<li>
+<p>通过**@PathVariable**，例如/blogs/1</p>
+</li>
+<li>
+<p>通过**@RequestParam**，例如blogs?blogId=1</p>
+</li>
+<li>
+<p>根据不同应用场景来选择使用：</p>
+<ul>
+<li>当<em>URL</em>指向的是某一具体业务资源（或资源列表），使用**@PathVariable**</li>
+<li>当<em>URL</em>需要对资源或者资源列表进行过滤，筛选时，使用**@RequestParam**</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="参数的属性值">参数的属性值</h3>
+<ol>
+<li><strong>name</strong> (指定请求参数名称)<br>
++ 在变量名称和参数名称都相同的情况则不需制定。但有时我们希望这些不同。或者，如果我们不使用Spring Boot，我们可能需要进行特殊的编译时配置，否则参数名称实际上不会在编译后的字节码中</li>
+</ol>
+<pre><code class="language-java">    @GetMapping(&quot;/user/play&quot;)
+    @ResponseBody
+    public String toLoanInfo(@RequestParam(name = &quot;id&quot;) String userId, @RequestParam name){
+
+        return &quot;play: &quot; + userId + name;
+    }
+</code></pre>
+<ol start="2">
+<li><strong>value</strong>
+<ul>
+<li>@RequestParam（value =“id”）等同于 @RequestParam（“id”）</li>
+</ul>
+</li>
+<li><strong>required</strong>
+<ul>
+<li>一旦我们在方法中定义了@RequestParam变量，如果访问的uri中不带有相应的参数，就会抛出异常——这是显然的，Spring尝试帮我们进行绑定，然而没有成功。但有的时候，参数确实不一定永远都存在，这时我们可以通过定义required属性，我们可以将@RequestParam的required设置为false ，默认为true（必选）：</li>
+</ul>
+</li>
+</ol>
+<pre><code class="language-java">    @GetMapping(&quot;/user/play&quot;)
+    @ResponseBody
+    public String toLoanInfo(@RequestParam(required = false) String id){
+
+        return &quot;play: &quot; + id;
+    }
+</code></pre>
+<ol start="4">
+<li><strong>defaultValue</strong>
+<ul>
+<li>在参数不存在的情况下，可能希望变量有一个默认值</li>
+</ul>
+</li>
+</ol>
+<p><code>@RequestParam(value = &quot;id&quot;, required = false, defaultValue = &quot;0&quot;)</code></p>
+<p>注意：在使@PathVariable成为可选时我们应该小心，以避免路径冲突。</p>
+<p>在<strong>SpringBoot</strong>的<em>Thymeleaf</em>表达式中，使用@PathVariable需要符合其URL风格</p>
+<pre><code class="language-html">  &lt;!-- Restful Style 需要 + 号拼接，路径后的斜杠不能忽略 --&gt;
+  &lt;a th:href=&quot;@{'/user/play/'+拼接的参数}&quot;&gt;跳转&lt;/a&gt;
+  &lt;!-- Normal Style --&gt;
+  &lt;a th:href=&quot;@{/user/play(id=&quot;id&quot;,name=&quot;name&quot;)}&quot;&gt;跳转&lt;/a&gt;
+</code></pre>
+<p>而**@PathVariable**中使用required=false 还需要注意的是：当参数不存在时，需要配置多个uri映射，避免404</p>
+<pre><code class="language-java">@GetMapping({&quot;/user/play/{productType}&quot;,&quot;/user/play/&quot;})
+public String toLoanInfo(@PathVariable(required = false) Integer productType){
+        return &quot;play&quot;;
+}
+</code></pre>
+<hr>
+<h4 id="拓展">拓展</h4>
+<h5 id="uri编码">URI编码</h5>
+<blockquote>
+<p>RFC3986文档规定，Url中只允许包含英文字母（a-zA-Z）、数字（0-9）、-_.~4个特殊字符以及所有保留字符。US-ASCII字符集中没有对应的可打印字符：Url中只允许使用可打印字符。US-ASCII码中的10-7F字节全都表示控制字符，这些字符都不能直接出现在Url中。同时，对于80-FF字节（ISO-8859-1），由于已经超出了US-ACII定义的字节范围，因此也不可以放在Url中。</p>
+</blockquote>
+<blockquote>
+<p>保留字符：Url可以划分成若干个组件，协议、主机、路径等。有一些字符（😕?#[]@）是用作分隔不同组件的。例如：冒号用于分隔协议和主机，/用于分隔主机和路径，?用于分隔路径和查询参数，等等。还有一些字符（!$&amp;’()*+,;=）用于在每个组件中起到分隔作用的，如=用于表示查询参数中的键值对，&amp;符号用于分隔查询多个键值对。当组件中的普通数据包含这些特殊字符时，需要对其进行编码。RFC3986中指定了以下字符为保留字符：! * ’ ( ) ; : @ &amp; = + $ , / ? # [ ]</p>
+</blockquote>
+<p>感兴趣可以做个测试：<strong>@PathVariable</strong>和**@RequestParam<strong>两种注解的编码问题<br>
+<strong>@PathVariable</strong> 从路径中获取是不用编码解码的，而</strong>@RequestParam**会进行编码解码。这种特性很少有人注意到</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[SpringBoot-SSM-Redis-Dubbo集成]]></title>
         <id>https://geckoc.github.io/post/springboot-ssm-redis-dubbo-ji-cheng/</id>
@@ -1090,26 +1197,6 @@ $('li').each(function(k,v){
 
 &lt;/script&gt;
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[各种页面刷新]]></title>
-        <id>https://geckoc.github.io/post/ge-chong-ye-mian-shua-xin/</id>
-        <link href="https://geckoc.github.io/post/ge-chong-ye-mian-shua-xin/">
-        </link>
-        <updated>2021-01-06T09:16:39.000Z</updated>
-        <summary type="html"><![CDATA[<pre><code>		top.location.reload();//刷新顶级页面
-		parent.location.reload();//刷新父级页面
-		window.parent.location.reload();//刷新父级页面
-		window.location.reload();//刷新当前页面
-</code></pre>
-]]></summary>
-        <content type="html"><![CDATA[<pre><code>		top.location.reload();//刷新顶级页面
-		parent.location.reload();//刷新父级页面
-		window.parent.location.reload();//刷新父级页面
-		window.location.reload();//刷新当前页面
-</code></pre>
-<!-- more -->
 ]]></content>
     </entry>
 </feed>
