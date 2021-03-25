@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>FastDFS On Java | RichardTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1616646473661">
+<link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="在Java工程中操作FastDFS实现上传下载替换删除...
+
+FastDFS依赖
+从 官方源码上下载FastDFS源代码到本地
+再通过命令 mvn clean install 编译打包导入 Maven 本地仓库使用即可。
+
+创建工程
+
+
+..." />
+    <meta name="keywords" content="fastDFS,JavaNote" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://geckoc.github.io/">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1616646473661" class="site-logo">
+        <h1 class="site-title">RichardTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com" target="_blank">Github</a> | <a class="rss" href="https://geckoc.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">FastDFS On Java</h2>
+            <div class="post-date">2021-03-25</div>
+            
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/fastdfs-on-java.jpg')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <h2 id="在java工程中操作fastdfs实现上传下载替换删除">在Java工程中操作FastDFS实现上传下载替换删除...</h2>
+<!-- more -->
+<h3 id="fastdfs依赖">FastDFS依赖</h3>
+<h2 id="从-官方源码上下载fastdfs源代码到本地再通过命令-mvn-clean-install-编译打包导入-maven-本地仓库使用即可">从 <a href="https://codeload.github.com/happyfish100/fastdfs-client-java/zip/master">官方源码</a>上下载FastDFS源代码到本地<br>
+再通过命令 mvn clean install 编译打包导入 Maven 本地仓库使用即可。<br>
+<img src="https://geckoc.github.io//post-images/1616641994193.png" alt="" loading="lazy"></h2>
+<h3 id="创建工程">创建工程</h3>
+<figure data-type="image" tabindex="1"><img src="https://geckoc.github.io//post-images/1616634040489.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://geckoc.github.io//post-images/1616642202855.png" alt="" loading="lazy"></figure>
+<h3 id="添加依赖-poxxml">添加依赖  pox.xml</h3>
+<p>在项目的 pom.xml 中添加以下需要用到的依赖</p>
+<pre><code class="language-xml">&lt;dependencies&gt; 
+    &lt;!--FastDFS的java客户端依赖--&gt;
+    &lt;dependency&gt; 
+      &lt;groupId&gt;org.csource&lt;/groupId&gt;  
+      &lt;artifactId&gt;fastdfs-client-java&lt;/artifactId&gt;  
+      &lt;version&gt;1.27-SNAPSHOT&lt;/version&gt; 
+    &lt;/dependency&gt;
+    &lt;!-- apache commons lang3 工具包 --&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.apache.commons&lt;/groupId&gt;
+      &lt;artifactId&gt;commons-lang3&lt;/artifactId&gt;
+      &lt;version&gt;3.11&lt;/version&gt;
+    &lt;/dependency&gt;
+&lt;/dependencies&gt; 
+</code></pre>
+<h3 id="编辑配置文件-fdfs_clientconf">编辑配置文件 fdfs_client.conf</h3>
+<p>在github下载的fastdfs-client-java-master中解压缩后进入有一个fdfs_client.conf<br>
+将其copy到项目中</p>
+<pre><code>connect_timeout = 2
+network_timeout = 30
+# 字符集
+charset = UTF-8
+# tracker 服务器 HTTP 协议下暴露的端口
+http.tracker_http_port = 8080
+http.anti_steal_token = no
+http.secret_key = FastDFS1234567890
+# tracker 服务器的ip和端口
+tracker_server = 192.168.182.128:22122
+#tracker_server = 10.0.11.248:22122
+#tracker_server = 10.0.11.249:22122
+</code></pre>
+<h3 id="创建工具类">创建工具类</h3>
+<p>获取元数据时，如果你上传时没有给定元数据，则获取不到<br>
+可在文件上传时给定元数据<br>
+NameValuePair[] metaList = null;<br>
+// 第一组元数据，文件的原始名称<br>
+metaList[0] = new NameValuePair(&quot;file_name&quot;, fileName);<br>
+// 第二组元数据...等等<br>
+metaList[1] = new NameValuePair(&quot;file_length&quot;, fileLen);</p>
+<pre><code class="language-java">package com.gecko.fastdfs.util;
+
+import org.apache.commons.lang3.StringUtils;
+import org.csource.common.MyException;
+import org.csource.common.NameValuePair;
+import org.csource.fastdfs.*;
+
+import java.io.File;
+import java.io.IOException;
+
+/**
+ * FastDFS 分布式文件系统 Java 客户端工具类
+ * 具体功能：文件上传、下载、替换、删除、查询文件元数据、查看文件详情
+ */
+public class FastDFSUtils {
+    private static TrackerServer trackerServer = null;
+    private static StorageServer storageServer = null;
+    private static StorageClient storageClient = null;
+
+    static {
+        //1.加载配置文件，默认去classpath下加载
+        try {
+            ClientGlobal.init(&quot;fdfs_client.conf&quot;);
+        //2.创建TrackerClient对象
+        TrackerClient trackerClient = new TrackerClient();
+        //3.创建TrackerServer对象
+            trackerServer = trackerClient.getConnection();
+        //4.创建StorageServer对象
+            storageServer = trackerClient.getStoreStorage(trackerServer);
+            //5.创建StorageClient对象，这个对象完成对文件的操作
+            storageClient = new StorageClient(trackerServer, storageServer);
+        } catch (IOException | MyException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 资源释放
+     */
+    public static void releaseFastDFS() {
+        if (storageServer != null) {
+            try {
+                storageServer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (trackerServer != null) {
+            try {
+                trackerServer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
+
+    /**
+     * 文件上传
+     * @param localFileName 本地文件名[具体位置+文件名]
+     * @param fileExtName   上传文件的后缀
+     */
+    public static void fileUpload(String localFileName, String fileExtName) {
+        try {
+            //6.上传文件  第一个参数：本地文件路径 第二个参数：上传文件的后缀 第三个参数：文件信息
+            String[] uploadArray = storageClient.upload_file(localFileName, fileExtName, null);
+            for (String str : uploadArray) {
+                System.out.println(str);
+                // http:192.168.182.128/group1/M00/00/00/wKi2gGBas4aAEAdlACoeC5KngBs554.jpg
+            }
+        } catch (IOException | MyException e) {
+            e.printStackTrace();
+        } finally {
+            releaseFastDFS();
+        }
+    }
+
+    /**
+     * 文件上传
+     * @param bytes            byte字节数组
+     * @param fileExtName      文件拓展名[后缀]
+     * @return 组名/远程文件名   group1/M00/00/00/....
+     */
+    public static String fileUpload(byte[] bytes, String fileExtName) {
+        try {
+            String[] uploadFile = storageClient.upload_file(bytes, fileExtName, null);
+            for (String str : uploadFile) {
+                System.out.println(str);
+            }
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(&quot;http://192.168.182.128/&quot;);
+            stringBuilder.append(uploadFile[0]);
+            stringBuilder.append(&quot;/&quot;);
+            stringBuilder.append(uploadFile[1]);
+            return stringBuilder.toString();
+        } catch (IOException | MyException e) {
+            e.printStackTrace();
+        } finally {
+            releaseFastDFS();
+        }
+        return null;
+    }
+
+    /**
+     * 文件下载
+     * @param groupName       组/卷名，默认值：group1
+     * @param remoteFileName  文件名，例如：&quot;M00/00/00/wKgKZl9tkTCAJAanAADhaCZ_RF0495.jpg&quot;
+     * @param localFileName   本地文件位置  D:/222.jpg
+     * @return 0为成功 ，非0为失败
+     */
+    public static int fileDownload(String groupName, String remoteFileName, String localFileName){
+
+        int count = -1;
+        try {
+            count = storageClient.download_file(groupName == null ? &quot;group1&quot; : groupName, remoteFileName, localFileName);
+            System.out.println(&quot;downloadFile : &quot; + count);
+        } catch (IOException | MyException e) {
+            e.printStackTrace();
+        } finally {
+            releaseFastDFS();
+        }
+        return count;
+    }
+    /**
+     * 文件下载
+     * @param groupName       组/卷名，默认值：group1
+     * @param remoteFileName  文件名，例如：&quot;M00/00/00/wKgKZl9tkTCAJAanAADhaCZ_RF0495.jpg&quot;
+     * @return byte[]       文件字节数组
+     */
+    public static byte[] fileDownload(String groupName, String remoteFileName) {
+        byte[] bytes = null;
+        try {
+             bytes = storageClient.download_file(groupName, remoteFileName);
+        } catch (IOException | MyException e) {
+            e.printStackTrace();
+        } finally {
+            releaseFastDFS();
+        }
+        return bytes;
+    }
+    /**
+     * 文件删除
+     *
+     * @param groupName      组/卷名，默认值：group1
+     * @param remoteFileName 文件名，例如：&quot;M00/00/00/wKgKZl9tkTCAJAanAADhaCZ_RF0495.jpg&quot;
+     * @return 0为成功 true，非0为失败 false
+     */
+    public static boolean fileDelete(String groupName, String remoteFileName) {
+        int delete_file = -1;
+        try {
+            delete_file = storageClient.delete_file(groupName, remoteFileName);
+            System.out.println(&quot;deleteCount : &quot; + delete_file);
+        } catch (IOException | MyException e) {
+            e.printStackTrace();
+        } finally {
+            releaseFastDFS();
+        }
+        return delete_file == 0;
+    }
+
+    /**
+     * 修改一个已经存在的文件
+     *
+     * @param oldGroupName 旧组名
+     * @param oldFileName  旧文件名
+     * @param bytes         新文件
+     * @param fileName     新文件名
+     * @return
+     */
+    public static String modifyFile(String oldGroupName, String oldFileName, byte[] bytes, String fileName) {
+        // 先上传
+        String fileUpload = fileUpload(bytes, fileName);
+        if (fileUpload == null) {
+            return null;
+        }
+        // 再删除
+        boolean delResult = fileDelete(oldGroupName, oldFileName);
+        if (delResult) {
+            return null;
+        }
+        return fileUpload;
+    }
+    /**
+     * 获取元数据
+     *
+     * @param groupName      组/卷名，默认值：group1
+     * @param remoteFileName 文件名，例如：&quot;M00/00/00/wKgKZl9tkTCAJAanAADhaCZ_RF0495.jpg&quot;
+     * @return 文件的元数据数组
+     */
+    public static NameValuePair[] getMetaData(String groupName, String remoteFileName) {
+        try {
+            // 根据组名和文件名通过 Storage 客户端获取文件的元数据数组
+            return storageClient.get_metadata(groupName == null ? &quot;group1&quot; : groupName, remoteFileName);
+        } catch (IOException | MyException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 获取文件详情
+     *
+     * @param groupName      组/卷名，默认值：group1
+     * @param remoteFileName 文件名，例如：&quot;M00/00/00/wKgKZl9tkTCAJAanAADhaCZ_RF0495.jpg&quot;
+     * @return 文件详情
+     */
+    public static FileInfo getFileInfo(String groupName, String remoteFileName) {
+        try {
+            return storageClient.get_file_info(groupName == null ? &quot;group1&quot; : groupName, remoteFileName);
+        } catch (IOException | MyException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * 获取文件后缀名（不带点）
+     *
+     * @param fileName 文件名称
+     * @return 如：&quot;jpg&quot; or &quot;&quot;
+     */
+    public static String getFileExt(String fileName) {
+        if (StringUtils.isBlank(fileName) || !fileName.contains(&quot;.&quot;)) {
+            return &quot;&quot;;
+        }
+        return fileName.substring(fileName.lastIndexOf(&quot;.&quot;) + 1); // 不带最后的点
+    }
+
+    /**
+     * 获取文件后缀名（带点）
+     *
+     * @param fileName 文件名称
+     * @return 如：&quot;.jpg  .gif&quot; or &quot;&quot;
+     */
+    public static String getFileExtWithPoint(String fileName) {
+        if (StringUtils.isBlank(fileName) || !fileName.contains(&quot;.&quot;)) {
+            return &quot;&quot;;
+        }
+        return fileName.substring(fileName.lastIndexOf(&quot;.&quot;)); // 带最后的点
+    }
+
+}
+</code></pre>
+<h3 id="测试">测试</h3>
+<p>在下面创建main方法测试或单元测试  finish</p>
+<pre><code class="language-java">    public static void main(String[] args) {
+        fileDownload(&quot;group1&quot;, &quot;M00/00/00/wKi2gGBatYiASR5EACoeC5KngBs842.jpg&quot;, &quot;D:/888.jpg&quot;);
+    }
+</code></pre>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/mH43TFEcs/" class="tag">
+                    fastDFS
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
+                    JavaNote
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/pathvariable-he-requestparam/">
+                  <h3 class="post-title">
+                    PathVariable和RequestParam
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'efb43fc5663c1b20fb9a',
+        clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
+        repo: 'blogCommon',
+        owner: 'Geckoc',
+        admin: ['Geckoc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
