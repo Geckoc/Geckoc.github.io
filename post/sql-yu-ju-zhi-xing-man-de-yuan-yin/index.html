@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>SQL语句执行慢的原因？ | RichardTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1617330765619">
+<link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="这是在某一公众号看到的腾讯面试，觉得十分受用
+首先要分类讨论，一条SQL语句慢分为
+
+
+大多数情况下执行速度正常，偶尔出现执行变慢
+
+那么原因可能就不是出现在SQL语句本身，而是其他方面因素导致的
+
+当我们要往数据库插入一条数据、或者要更新..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://geckoc.github.io/">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1617330765619" class="site-logo">
+        <h1 class="site-title">RichardTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com" target="_blank">Github</a> | <a class="rss" href="https://geckoc.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">SQL语句执行慢的原因？</h2>
+            <div class="post-date">2021-04-02</div>
+            
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/sql-yu-ju-zhi-xing-man-de-yuan-yin.png')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <p>这是在某一公众号看到的腾讯面试，觉得十分受用<br>
+首先要分类讨论，一条SQL语句慢分为</p>
+<ol>
+<li>
+<p>大多数情况下执行速度正常，偶尔出现执行变慢</p>
+<ul>
+<li>那么原因可能就不是出现在SQL语句本身，而是其他方面因素导致的</li>
+</ul>
+<p><em>当我们要往数据库插入一条数据、或者要更新一条数据的时候，我们知道数据库会在<strong>内存</strong>中把对应字段的数据更新了，但是更新之后，这些更新的字段并不会马上同步持久化到<strong>磁盘</strong>中去，而是把这些更新的记录写入到 redo log 日记中去，等到空闲的时候，在通过 redo log 里的日记把最新的数据同步到<strong>磁盘</strong>中去</em></p>
+<blockquote>
+<p>当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”。</p>
+</blockquote>
+<ul>
+<li>刷脏页有以下4种场景</li>
+</ul>
+<p>A. <strong>redo log日志满了</strong></p>
+<p>redo log 里的容量是有限的，如果数据库一直很忙，更新又很频繁，这个时候 redo log 很快就会被写满了，这个时候就没办法等到空闲的时候再把数据同步到磁盘的，只能暂停其他操作，全身心来把数据同步到磁盘中去的，而这个时候，<strong>就会导致我们平时正常的SQL语句突然执行的很慢</strong>，所以说，数据库在在同步数据到磁盘的时候，就有可能导致我们的SQL语句执行的很慢了。</p>
+<p>B. <strong>没有拿到锁</strong></p>
+<p>在执行SQL语句前，有其他事务开启了并加了锁，导致取不到锁，需要排队等待</p>
+<p>C. <strong>MySQL 认为系统“空闲”的时候：</strong></p>
+<p>这时系统没什么压力。</p>
+<p>D. <strong>MySQL 正常关闭的时候：</strong></p>
+<p>这时候，MySQL 会把内存的脏页都 flush 到磁盘上，这样下次 MySQL 启动的时候，就可以直接从磁盘上读数据，启动速度会很快。</p>
+</li>
+<li>
+<p>一直执行速度都很慢</p>
+<p><em>如果在数据量一样大的情况下，这条 SQL 语句每次都执行的这么慢，那就就要好好考虑下你的 SQL 书写了，下面我们来分析下哪些原因会导致我们的 SQL 语句执行的很不理想。</em></p>
+<p>我们先来假设我们有一个表，表里有下面两个字段,分别是主键 id，和两个普通字段 c 和 d。</p>
+<pre><code class="language-mysql">mysql&gt; CREATE TABLE `t` (
+  `id` int(11) NOT NULL,
+  `c` int(11) DEFAULT NULL,
+  `d` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+</code></pre>
+<p>没有用上索引，我觉得这个原因是很多人都能想到的，例如你要查询这条语句</p>
+<pre><code class="language-mysql">select * from t where 100 &lt;c and c &lt; 100000;
+</code></pre>
+<ul>
+<li>
+<p><strong>没有使用索引</strong></p>
+<ul>
+<li>刚好你的 c 字段上没有索引，那么抱歉，只能走全表扫描了，你就体验不会索引带来的乐趣了，所以，这回导致这条查询语句很慢。</li>
+</ul>
+</li>
+<li>
+<p><strong>有索引，但未引用到</strong></p>
+<pre><code class="language-mysql"># 在where子句后的字段，对字段进行进行了运算操作，会导致索引失效
+select * from table where b-1 = 1000;
+# 应该为 select * from table where b = 1000 + 1;
+# 在where子句后的字段，使用了SQL函数()
+select * from table where substring(name,1,3)='abc';
+# 正确应该 select * from table where name = 'abc%';
+</code></pre>
+</li>
+<li>
+<p><strong>系统索引选错了</strong></p>
+<p>我们在进行查询操作的时候，例如</p>
+<pre><code class="language-mysql">select * from t where 100 &lt; c and c &lt; 100000;
+</code></pre>
+<p>我们知道，主键索引和非主键索引的有区别的，主键索引存放的值是<strong>整行字段的数据</strong>，而非主键索引上存放的值不是整行字段的数据，而且存放<strong>主键字段的值</strong>。</p>
+</li>
+</ul>
+<p>也就是说，如果走的是c这个字段的索引，最后会找到主键字段的值，然后根据主键字段的值走主键索引，查询到整行字段的数据。</p>
+<p>但是，就算是C字段上有索引，系统也不一定走C字段索引，而是有可能直接扫描全表</p>
+<p><strong>为什么呢</strong>？</p>
+<p>其实是这样，系统在执行这条语句前，会进行预测，究竟是走C索引扫描的行数少，还是全表扫描的行数少？因为扫描行数少当然是越好的，意味着I/O操作的次数越少。</p>
+</li>
+</ol>
+<p>​       如果扫描全表的话，那么扫描的次数就是这个表的总行数了，假设为n ;</p>
+<p>而如果走索引C的话，我们通过索引c找到主键字段的值，再通过主键字段的值找到主键索引来找我们的整行数据，也就是说需要找两次索引，而且我们也不知道 100&lt;c and c &lt; 10000 这个条件的数据有多少行，万一是这个表的所有数据都符合呢？就意味着走c索引不仅扫描的行数是n，同时还得每行数据走两次索引。</p>
+<p><strong>所以呢，系统是有可能走全表扫描而不走索引的。那系统是怎么判断呢？</strong></p>
+<p>判断是来自系统的预测，也就是说，如果要走C索引，系统会预测走c字段索引大概要扫描多少行，如果预测数据多的话，则很可能直接不走索引直接全表扫描了</p>
+<p><strong>问题是：系统是如何预测的呢?</strong></p>
+<p>系统是根据 <strong>索引的区分度</strong> 来预测的，一个索引上不同的值越多，<strong>索引的区分度</strong>越高，意味着出现相同数值的索引越少，我们也把索引区分度称之为 <strong>基数</strong>，即区分度越高，基数越大。</p>
+<p>基数越大，那么符合 100 &lt; c and c &lt; 10000的条件行数就越少。</p>
+<p>一个索引的基数越大，意味着走索引查询越有优势。</p>
+<p>那么系统是如何知道这个索引的基数呢？</p>
+<p>系统当然是不会遍历全部来获得一个索引的基数的，代价太大了，索引系统是通过遍历部分数据，也就是通过<strong>采样</strong>的方式，来预测索引的基数的。</p>
+<p><strong>扯了这么多，重点的来了</strong>，居然是采样，那就有可能出现<strong>失误</strong>的情况，也就是说，c 这个索引的基数实际上是很大的，但是采样的时候，却很不幸，把这个索引的基数预测成很小。例如你采样的那一部分数据刚好基数很小，然后就误以为索引的基数很小。<strong>然后就呵呵，系统就不走 c 索引了，直接走全部扫描了</strong>。</p>
+<p>所以呢，说了这么多，得出结论：<strong>由于统计的失误，导致系统没有走索引，而是走了全表扫描</strong>，而这，也是导致我们 SQL 语句执行的很慢的原因。</p>
+<blockquote>
+<p>这里我声明一下，系统判断是否走索引，扫描行数的预测其实只是原因之一，这条查询语句是否需要使用使用临时表、是否需要排序等也是会影响系统的选择的。</p>
+</blockquote>
+<p>不过呢，我们有时候也可以通过强制走索引的方式来查询，例如</p>
+<pre><code class="language-mysql">select * from t force index(a) where c &lt; 100 and c &lt; 100000;
+</code></pre>
+<p>我们也可以通过</p>
+<pre><code class="language-mysql">show index from t;
+</code></pre>
+<p>来查询索引的基数和实际是否符合，如果和实际很不符合的话，我们可以重新来统计索引的基数，可以用这条命令</p>
+<pre><code class="language-mysql">analyze table t;
+</code></pre>
+<p>来重新统计分析。</p>
+<p><strong>既然会预测错索引的基数，这也意味着，当我们的查询语句有多个索引的时候，系统有可能也会选错索引哦</strong>，这也可能是 SQL 执行的很慢的一个原因。</p>
+<p>好吧，就先扯这么多了，你到时候能扯出这么多，我觉得已经很棒了，下面做一个总结。</p>
+<p><strong>四、总结</strong></p>
+<p>以上是我的总结与理解，最后一个部分，我怕很多人不大懂<strong>数据库居然会选错索引</strong>，所以我详细解释了一下，下面我对以上做一个总结。</p>
+<p>一个 SQL 执行的很慢，我们要分两种情况讨论：</p>
+<p>1、大多数情况下很正常，偶尔很慢，则有如下原因</p>
+<p>(1)、数据库在刷新脏页，例如 redo log 写满了需要同步到磁盘。</p>
+<p>(2)、执行的时候，遇到锁，如表锁、行锁。</p>
+<p>2、这条 SQL 语句一直执行的很慢，则有如下原因。</p>
+<p>(1)、没有用上索引：例如该字段没有索引；由于对字段进行运算、函数操作导致无法用索引。</p>
+<p>(2)、数据库选错了索引。</p>
+
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/fastdfs-on-java/">
+                  <h3 class="post-title">
+                    FastDFS On Java
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'efb43fc5663c1b20fb9a',
+        clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
+        repo: 'blogCommon',
+        owner: 'Geckoc',
+        admin: ['Geckoc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
