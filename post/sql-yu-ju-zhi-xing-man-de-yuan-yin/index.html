@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1617330765619">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1617425105613">
 <link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
 
 
@@ -27,13 +27,16 @@
     <meta name="description" content="这是在某一公众号看到的腾讯面试，觉得十分受用
 首先要分类讨论，一条SQL语句慢分为
 
-
 大多数情况下执行速度正常，偶尔出现执行变慢
+一直执行速度都很慢
 
-那么原因可能就不是出现在SQL语句本身，而是其他方面因素导致的
 
-当我们要往数据库插入一条数据、或者要更新..." />
-    <meta name="keywords" content="" />
+
+
+针对偶尔很慢的情况
+
+那么原因可能就不是出现在SQL语句本身，而是其他方面因素导致..." />
+    <meta name="keywords" content="MySQL" />
   </head>
   <body>
     <div id="app" class="main">
@@ -42,7 +45,7 @@
   <div class="top-container" data-aos="fade-right">
     <div class="top-header-container">
       <a class="site-title-container" href="https://geckoc.github.io/">
-        <img src="https://geckoc.github.io//images/avatar.png?v=1617330765619" class="site-logo">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1617425105613" class="site-logo">
         <h1 class="site-title">RichardTech</h1>
       </a>
       <div class="menu-btn" @click="menuVisible = !menuVisible">
@@ -113,13 +116,21 @@
             <div class="post-content" v-pre>
               <p>这是在某一公众号看到的腾讯面试，觉得十分受用<br>
 首先要分类讨论，一条SQL语句慢分为</p>
-<ol>
+<ul>
+<li>大多数情况下执行速度正常，偶尔出现执行变慢</li>
+<li>一直执行速度都很慢</li>
+</ul>
+<hr>
+<ul>
 <li>
-<p>大多数情况下执行速度正常，偶尔出现执行变慢</p>
+<h2 id="针对偶尔很慢的情况">针对偶尔很慢的情况</h2>
 <ul>
 <li>那么原因可能就不是出现在SQL语句本身，而是其他方面因素导致的</li>
 </ul>
+</li>
+</ul>
 <p><em>当我们要往数据库插入一条数据、或者要更新一条数据的时候，我们知道数据库会在<strong>内存</strong>中把对应字段的数据更新了，但是更新之后，这些更新的字段并不会马上同步持久化到<strong>磁盘</strong>中去，而是把这些更新的记录写入到 redo log 日记中去，等到空闲的时候，在通过 redo log 里的日记把最新的数据同步到<strong>磁盘</strong>中去</em></p>
+<h3 id="数据库在刷新脏页flush">数据库在<strong>刷新脏页</strong>（flush）</h3>
 <blockquote>
 <p>当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”。</p>
 </blockquote>
@@ -128,15 +139,17 @@
 </ul>
 <p>A. <strong>redo log日志满了</strong></p>
 <p>redo log 里的容量是有限的，如果数据库一直很忙，更新又很频繁，这个时候 redo log 很快就会被写满了，这个时候就没办法等到空闲的时候再把数据同步到磁盘的，只能暂停其他操作，全身心来把数据同步到磁盘中去的，而这个时候，<strong>就会导致我们平时正常的SQL语句突然执行的很慢</strong>，所以说，数据库在在同步数据到磁盘的时候，就有可能导致我们的SQL语句执行的很慢了。</p>
-<p>B. <strong>没有拿到锁</strong></p>
-<p>在执行SQL语句前，有其他事务开启了并加了锁，导致取不到锁，需要排队等待</p>
-<p>C. <strong>MySQL 认为系统“空闲”的时候：</strong></p>
+<p>B. <strong>内存不够用了</strong></p>
+<p>如果一次查询较多的数据，恰好碰到所查数据页不在内存中时，需要申请内存，而此时恰好内存不足的时 候就需要淘汰一部分内存数据页，如果是干净页，就直接释放，如果恰好是脏页就需要刷脏页。</p>
+<p>C. <strong>MySQL 认为系统“空闲”的时候</strong></p>
 <p>这时系统没什么压力。</p>
-<p>D. <strong>MySQL 正常关闭的时候：</strong></p>
+<p>D. <strong>MySQL 正常关闭的时候</strong></p>
 <p>这时候，MySQL 会把内存的脏页都 flush 到磁盘上，这样下次 MySQL 启动的时候，就可以直接从磁盘上读数据，启动速度会很快。</p>
-</li>
-<li>
-<p>一直执行速度都很慢</p>
+<h3 id="拿不到锁我能怎么办">拿不到锁我能怎么办</h3>
+<p>这个就比较容易想到了，我们要执行的这条语句，刚好这条语句涉及到的<strong>表</strong>，别人在用，并且加锁了，我们拿不到锁，只能慢慢等待别人释放锁了。或者，表没有加锁，但要使用到的某个一行被加锁了，这个时候，我也没办法啊。</p>
+<p>如果要判断是否真的在等待锁，我们可以用 <strong>show processlist</strong>这个命令来查看当前的状态哦，这里我要提醒一下，有些命令最好记录一下，反正，我被问了好几个命令，都不知道怎么写，呵呵。</p>
+<p>下来我们来访分析下第二种情况，我觉得第二种情况的分析才是最重要的</p>
+<h2 id="一直执行速度都很慢">一直执行速度都很慢</h2>
 <p><em>如果在数据量一样大的情况下，这条 SQL 语句每次都执行的这么慢，那就就要好好考虑下你的 SQL 书写了，下面我们来分析下哪些原因会导致我们的 SQL 语句执行的很不理想。</em></p>
 <p>我们先来假设我们有一个表，表里有下面两个字段,分别是主键 id，和两个普通字段 c 和 d。</p>
 <pre><code class="language-mysql">mysql&gt; CREATE TABLE `t` (
@@ -147,7 +160,7 @@
 ) ENGINE=InnoDB;
 </code></pre>
 <p>没有用上索引，我觉得这个原因是很多人都能想到的，例如你要查询这条语句</p>
-<pre><code class="language-mysql">select * from t where 100 &lt;c and c &lt; 100000;
+<pre><code class="language-mysql">select * from t where 100 &lt; c and c &lt; 100000;
 </code></pre>
 <ul>
 <li>
@@ -167,19 +180,17 @@ select * from table where substring(name,1,3)='abc';
 </code></pre>
 </li>
 <li>
-<p><strong>系统索引选错了</strong></p>
+<p>数据库自己选错索引选错了**</p>
 <p>我们在进行查询操作的时候，例如</p>
 <pre><code class="language-mysql">select * from t where 100 &lt; c and c &lt; 100000;
 </code></pre>
-<p>我们知道，主键索引和非主键索引的有区别的，主键索引存放的值是<strong>整行字段的数据</strong>，而非主键索引上存放的值不是整行字段的数据，而且存放<strong>主键字段的值</strong>。</p>
 </li>
 </ul>
-<p>也就是说，如果走的是c这个字段的索引，最后会找到主键字段的值，然后根据主键字段的值走主键索引，查询到整行字段的数据。</p>
+<p>我们知道，主键索引和非主键索引的有区别的，主键索引存放的值是<strong>整行字段的数据</strong>，而非主键索引上存放的值不是整行字段的数据，而且存放<strong>主键字段的值</strong>。<br>
+也就是说，如果走的是c这个字段的索引，最后会找到主键字段的值，然后根据主键字段的值走主键索引，查询到整行字段的数据。</p>
 <p>但是，就算是C字段上有索引，系统也不一定走C字段索引，而是有可能直接扫描全表</p>
 <p><strong>为什么呢</strong>？</p>
 <p>其实是这样，系统在执行这条语句前，会进行预测，究竟是走C索引扫描的行数少，还是全表扫描的行数少？因为扫描行数少当然是越好的，意味着I/O操作的次数越少。</p>
-</li>
-</ol>
 <p>​       如果扫描全表的话，那么扫描的次数就是这个表的总行数了，假设为n ;</p>
 <p>而如果走索引C的话，我们通过索引c找到主键字段的值，再通过主键字段的值找到主键索引来找我们的整行数据，也就是说需要找两次索引，而且我们也不知道 100&lt;c and c &lt; 10000 这个条件的数据有多少行，万一是这个表的所有数据都符合呢？就意味着走c索引不仅扫描的行数是n，同时还得每行数据走两次索引。</p>
 <p><strong>所以呢，系统是有可能走全表扫描而不走索引的。那系统是怎么判断呢？</strong></p>
@@ -218,6 +229,14 @@ select * from table where substring(name,1,3)='abc';
 <p>(2)、数据库选错了索引。</p>
 
             </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/vKAwv3RGS/" class="tag">
+                    MySQL
+                  </a>
+                
+              </div>
             
             
               <div class="next-post">

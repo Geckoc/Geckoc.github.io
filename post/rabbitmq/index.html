@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" >
 
-<title>FOR Emotionally | RichardTech</title>
+<title>RabbitMQ | RichardTech</title>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
@@ -24,8 +24,27 @@
 
 
 
-    <meta name="description" content="在情感方面，我可能不那么善于去表达，尽管我的内心憋了一肚子的话，就是把自己闷坏了，想要直接表达出来也是非常的困难，我也不清楚这是什么病症。很抱歉，在面对问题的时候总是喜欢去逃避，甚至都没有你那种想说什么就说什么的勇气，尽管我知道敢于直面惨淡..." />
-    <meta name="keywords" content="" />
+    <meta name="description" content="RabbitMQ 初见端倪
+
+常见消息中间件
+
+Kafka
+
+吞吐量最高，适合大数据
+
+
+rocketMQ
+
+QPS 出自alibaba，性能10w+
+
+
+activeMQ
+
+已淘汰，吞吐量较低
+
+
+rabbitMQ    使用AMQP协议..." />
+    <meta name="keywords" content="MQ,JavaNote" />
   </head>
   <body>
     <div id="app" class="main">
@@ -96,21 +115,95 @@
       <div class="main-container">
         <div class="content-container" data-aos="fade-up">
           <div class="post-detail">
-            <h2 class="post-title">FOR Emotionally</h2>
-            <div class="post-date">2020-08-21</div>
+            <h2 class="post-title">RabbitMQ</h2>
+            <div class="post-date">2021-04-03</div>
             
-              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/for-emotionally.jpg')">
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/rabbitmq.jpg')">
               </div>
             
             <div class="post-content" v-pre>
-              <p>在情感方面，我可能不那么善于去表达，尽管我的内心憋了一肚子的话，就是把自己闷坏了，想要直接表达出来也是非常的困难，我也不清楚这是什么病症。很抱歉，在面对问题的时候总是喜欢去逃避，甚至都没有你那种想说什么就说什么的勇气，尽管我知道敢于直面惨淡的人生敢于面对真正的自己，才是真正的勇敢，有时想好了要和你说些什么话到嘴边就是说不出口，沉默沉默沉默，小事情总是弄成这样，三番五次......最后都是你给我台阶下来，过后心里是有些小确幸，可当再一次问题来临时还是恬不知耻。<br>
-之前我总说，希望有问题可以好好的说出来，而不是以一些伤人的偏激的话去刺激对方，回头细想又觉得既然能说出来必然是内心承受了太多委屈和不满，却又无从发泄，没有回应。是我那么多次让你受了太多不该受的委屈，没有设身处地去思考问题，太多时候都是只要做到事事有回应，就不会让你那么糟心，没有安全感，没有感觉被爱。<br>
-我不怕你闹我，让你瞎想才是我应该去改正的地方，当你需要我的时候，我却没有能力去帮到你，当你想要见见我时我也没有办法第一时间回应给出答案，不管是工作还是自身问题的束缚，这让我感到很惭愧，不知怎么去面对你不知你是否介怀。<br>
-我一天天好似很努力向着想去的目标向前，却又好像在原地踏步，一切都没有改变。遇到我这么一个人，真是麻烦你了，给你带来那么多不开心。<br>
-我也不想遇到什么人，遇到你就够了，很喜欢你，也从没想过和你分开，每一个和你待在一起的日子，可能显得稀松平常，没有惊世骇俗的浪漫，在一张桌子吃饭一起看剧一起下厨房在一起做很多很多事情，这不就是存在的意义，充满了生活的浪漫，和你待在一起就是浪漫。</p>
+              <h2 id="rabbitmq-初见端倪"><strong>RabbitMQ 初见端倪</strong></h2>
+<ol>
+<li>常见消息中间件
+<ul>
+<li>Kafka
+<ul>
+<li>吞吐量最高，适合大数据</li>
+</ul>
+</li>
+<li>rocketMQ
+<ul>
+<li>QPS 出自alibaba，性能10w+</li>
+</ul>
+</li>
+<li>activeMQ
+<ul>
+<li>已淘汰，吞吐量较低</li>
+</ul>
+</li>
+<li>rabbitMQ    使用<strong>AMQP</strong>协议
+<ul>
+<li>社区活跃度高，性能稳定  <em>响应速度唯一达到纳秒</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="rabbitmq应用场景"><em>RabbitMQ</em>应用场景</h3>
+<ul>
+<li>
+<p>通过<em>NIO</em>异步处理短时间能高流量涌入服务器的线程， 解决流量高峰期的响应速度减慢以及系统崩溃。</p>
+</li>
+<li>
+<p>对系统解耦</p>
+</li>
+<li>
+<p>通过Exchange交换发送消息队列</p>
+<ul>
+<li>
+<p><strong>Topic</strong> [动态路由规则]</p>
+<blockquote>
+<p><strong>*</strong> 表示一个且只有一个单词  <strong>#</strong> 表示0到任意个</p>
+</blockquote>
+</li>
+<li>
+<p><strong>fanout</strong> [广播类型 一对多]</p>
+</li>
+<li>
+<p><strong>direct</strong> [一对一]</p>
+</li>
+<li>
+<p><strong>workqueue</strong> [按需分配]</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-java">
+</code></pre>
 
             </div>
             
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/Nwb0e99fU/" class="tag">
+                    MQ
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
+                    JavaNote
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/sql-yu-ju-zhi-xing-man-de-yuan-yin/">
+                  <h3 class="post-title">
+                    SQL语句执行慢的原因？
+                  </h3>
+                </a>
+              </div>
             
 
             

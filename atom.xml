@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://geckoc.github.io/</id>
     <title>RichardTech</title>
-    <updated>2021-04-02T02:32:53.537Z</updated>
+    <updated>2021-04-03T04:45:17.425Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://geckoc.github.io/"/>
     <link rel="self" href="https://geckoc.github.io/atom.xml"/>
@@ -11,6 +11,72 @@
     <icon>https://geckoc.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, RichardTech</rights>
     <entry>
+        <title type="html"><![CDATA[RabbitMQ]]></title>
+        <id>https://geckoc.github.io/post/rabbitmq/</id>
+        <link href="https://geckoc.github.io/post/rabbitmq/">
+        </link>
+        <updated>2021-04-03T04:41:26.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="rabbitmq-初见端倪"><strong>RabbitMQ 初见端倪</strong></h2>
+<ol>
+<li>常见消息中间件
+<ul>
+<li>Kafka
+<ul>
+<li>吞吐量最高，适合大数据</li>
+</ul>
+</li>
+<li>rocketMQ
+<ul>
+<li>QPS 出自alibaba，性能10w+</li>
+</ul>
+</li>
+<li>activeMQ
+<ul>
+<li>已淘汰，吞吐量较低</li>
+</ul>
+</li>
+<li>rabbitMQ    使用<strong>AMQP</strong>协议
+<ul>
+<li>社区活跃度高，性能稳定  <em>响应速度唯一达到纳秒</em></li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h3 id="rabbitmq应用场景"><em>RabbitMQ</em>应用场景</h3>
+<ul>
+<li>
+<p>通过<em>NIO</em>异步处理短时间能高流量涌入服务器的线程， 解决流量高峰期的响应速度减慢以及系统崩溃。</p>
+</li>
+<li>
+<p>对系统解耦</p>
+</li>
+<li>
+<p>通过Exchange交换发送消息队列</p>
+<ul>
+<li>
+<p><strong>Topic</strong> [动态路由规则]</p>
+<blockquote>
+<p><strong>*</strong> 表示一个且只有一个单词  <strong>#</strong> 表示0到任意个</p>
+</blockquote>
+</li>
+<li>
+<p><strong>fanout</strong> [广播类型 一对多]</p>
+</li>
+<li>
+<p><strong>direct</strong> [一对一]</p>
+</li>
+<li>
+<p><strong>workqueue</strong> [按需分配]</p>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-java">
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[SQL语句执行慢的原因？]]></title>
         <id>https://geckoc.github.io/post/sql-yu-ju-zhi-xing-man-de-yuan-yin/</id>
         <link href="https://geckoc.github.io/post/sql-yu-ju-zhi-xing-man-de-yuan-yin/">
@@ -18,13 +84,21 @@
         <updated>2021-04-02T00:56:05.000Z</updated>
         <content type="html"><![CDATA[<p>这是在某一公众号看到的腾讯面试，觉得十分受用<br>
 首先要分类讨论，一条SQL语句慢分为</p>
-<ol>
+<ul>
+<li>大多数情况下执行速度正常，偶尔出现执行变慢</li>
+<li>一直执行速度都很慢</li>
+</ul>
+<hr>
+<ul>
 <li>
-<p>大多数情况下执行速度正常，偶尔出现执行变慢</p>
+<h2 id="针对偶尔很慢的情况">针对偶尔很慢的情况</h2>
 <ul>
 <li>那么原因可能就不是出现在SQL语句本身，而是其他方面因素导致的</li>
 </ul>
+</li>
+</ul>
 <p><em>当我们要往数据库插入一条数据、或者要更新一条数据的时候，我们知道数据库会在<strong>内存</strong>中把对应字段的数据更新了，但是更新之后，这些更新的字段并不会马上同步持久化到<strong>磁盘</strong>中去，而是把这些更新的记录写入到 redo log 日记中去，等到空闲的时候，在通过 redo log 里的日记把最新的数据同步到<strong>磁盘</strong>中去</em></p>
+<h3 id="数据库在刷新脏页flush">数据库在<strong>刷新脏页</strong>（flush）</h3>
 <blockquote>
 <p>当内存数据页跟磁盘数据页内容不一致的时候，我们称这个内存页为“脏页”。内存数据写入到磁盘后，内存和磁盘上的数据页的内容就一致了，称为“干净页”。</p>
 </blockquote>
@@ -33,15 +107,17 @@
 </ul>
 <p>A. <strong>redo log日志满了</strong></p>
 <p>redo log 里的容量是有限的，如果数据库一直很忙，更新又很频繁，这个时候 redo log 很快就会被写满了，这个时候就没办法等到空闲的时候再把数据同步到磁盘的，只能暂停其他操作，全身心来把数据同步到磁盘中去的，而这个时候，<strong>就会导致我们平时正常的SQL语句突然执行的很慢</strong>，所以说，数据库在在同步数据到磁盘的时候，就有可能导致我们的SQL语句执行的很慢了。</p>
-<p>B. <strong>没有拿到锁</strong></p>
-<p>在执行SQL语句前，有其他事务开启了并加了锁，导致取不到锁，需要排队等待</p>
-<p>C. <strong>MySQL 认为系统“空闲”的时候：</strong></p>
+<p>B. <strong>内存不够用了</strong></p>
+<p>如果一次查询较多的数据，恰好碰到所查数据页不在内存中时，需要申请内存，而此时恰好内存不足的时 候就需要淘汰一部分内存数据页，如果是干净页，就直接释放，如果恰好是脏页就需要刷脏页。</p>
+<p>C. <strong>MySQL 认为系统“空闲”的时候</strong></p>
 <p>这时系统没什么压力。</p>
-<p>D. <strong>MySQL 正常关闭的时候：</strong></p>
+<p>D. <strong>MySQL 正常关闭的时候</strong></p>
 <p>这时候，MySQL 会把内存的脏页都 flush 到磁盘上，这样下次 MySQL 启动的时候，就可以直接从磁盘上读数据，启动速度会很快。</p>
-</li>
-<li>
-<p>一直执行速度都很慢</p>
+<h3 id="拿不到锁我能怎么办">拿不到锁我能怎么办</h3>
+<p>这个就比较容易想到了，我们要执行的这条语句，刚好这条语句涉及到的<strong>表</strong>，别人在用，并且加锁了，我们拿不到锁，只能慢慢等待别人释放锁了。或者，表没有加锁，但要使用到的某个一行被加锁了，这个时候，我也没办法啊。</p>
+<p>如果要判断是否真的在等待锁，我们可以用 <strong>show processlist</strong>这个命令来查看当前的状态哦，这里我要提醒一下，有些命令最好记录一下，反正，我被问了好几个命令，都不知道怎么写，呵呵。</p>
+<p>下来我们来访分析下第二种情况，我觉得第二种情况的分析才是最重要的</p>
+<h2 id="一直执行速度都很慢">一直执行速度都很慢</h2>
 <p><em>如果在数据量一样大的情况下，这条 SQL 语句每次都执行的这么慢，那就就要好好考虑下你的 SQL 书写了，下面我们来分析下哪些原因会导致我们的 SQL 语句执行的很不理想。</em></p>
 <p>我们先来假设我们有一个表，表里有下面两个字段,分别是主键 id，和两个普通字段 c 和 d。</p>
 <pre><code class="language-mysql">mysql&gt; CREATE TABLE `t` (
@@ -52,7 +128,7 @@
 ) ENGINE=InnoDB;
 </code></pre>
 <p>没有用上索引，我觉得这个原因是很多人都能想到的，例如你要查询这条语句</p>
-<pre><code class="language-mysql">select * from t where 100 &lt;c and c &lt; 100000;
+<pre><code class="language-mysql">select * from t where 100 &lt; c and c &lt; 100000;
 </code></pre>
 <ul>
 <li>
@@ -72,19 +148,17 @@ select * from table where substring(name,1,3)='abc';
 </code></pre>
 </li>
 <li>
-<p><strong>系统索引选错了</strong></p>
+<p>数据库自己选错索引选错了**</p>
 <p>我们在进行查询操作的时候，例如</p>
 <pre><code class="language-mysql">select * from t where 100 &lt; c and c &lt; 100000;
 </code></pre>
-<p>我们知道，主键索引和非主键索引的有区别的，主键索引存放的值是<strong>整行字段的数据</strong>，而非主键索引上存放的值不是整行字段的数据，而且存放<strong>主键字段的值</strong>。</p>
 </li>
 </ul>
-<p>也就是说，如果走的是c这个字段的索引，最后会找到主键字段的值，然后根据主键字段的值走主键索引，查询到整行字段的数据。</p>
+<p>我们知道，主键索引和非主键索引的有区别的，主键索引存放的值是<strong>整行字段的数据</strong>，而非主键索引上存放的值不是整行字段的数据，而且存放<strong>主键字段的值</strong>。<br>
+也就是说，如果走的是c这个字段的索引，最后会找到主键字段的值，然后根据主键字段的值走主键索引，查询到整行字段的数据。</p>
 <p>但是，就算是C字段上有索引，系统也不一定走C字段索引，而是有可能直接扫描全表</p>
 <p><strong>为什么呢</strong>？</p>
 <p>其实是这样，系统在执行这条语句前，会进行预测，究竟是走C索引扫描的行数少，还是全表扫描的行数少？因为扫描行数少当然是越好的，意味着I/O操作的次数越少。</p>
-</li>
-</ol>
 <p>​       如果扫描全表的话，那么扫描的次数就是这个表的总行数了，假设为n ;</p>
 <p>而如果走索引C的话，我们通过索引c找到主键字段的值，再通过主键字段的值找到主键索引来找我们的整行数据，也就是说需要找两次索引，而且我们也不知道 100&lt;c and c &lt; 10000 这个条件的数据有多少行，万一是这个表的所有数据都符合呢？就意味着走c索引不仅扫描的行数是n，同时还得每行数据走两次索引。</p>
 <p><strong>所以呢，系统是有可能走全表扫描而不走索引的。那系统是怎么判断呢？</strong></p>
@@ -1283,94 +1357,6 @@ $('li').each(function(k,v){
 &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Ajax&JQuery发送请求]]></title>
-        <id>https://geckoc.github.io/post/ajaxandjquery-fa-song-qing-qiu/</id>
-        <link href="https://geckoc.github.io/post/ajaxandjquery-fa-song-qing-qiu/">
-        </link>
-        <updated>2021-01-06T12:52:51.000Z</updated>
-        <summary type="html"><![CDATA[<h3 id="ajax原生发送请求">Ajax原生发送请求</h3>
-]]></summary>
-        <content type="html"><![CDATA[<h3 id="ajax原生发送请求">Ajax原生发送请求</h3>
-<!-- more -->
-<pre><code class="language-javascript">        window.onload = function () {
-          var btn1 = document.getElementById(&quot;btn1&quot;);
-          btn1.onclick = function () {
-              // 1.创建用于AJAX方式的一个核心对象
-            var xmlHttpRequest = new XMLHttpRequest;
-              // alert(xmlHttpRequest);
-              // 2.为xmlHttpRequest对象绑定一个固定事件
-            /**
-             * 事件触发，在一次请求过程中共有5次会被触发
-             * 功能是为了接受服务器端传回的数据的。
-             */
-            xmlHttpRequest.onreadystatechange = function () {
-              /**
-               * readyState
-               *      为0时，表示创建核心对象，初始化之前
-               *      为1时，表示创建核心对象后，初始化时
-               *      为2时，表示创建核心对象后，发出请求时
-               *      为3时，表示服务器端开始响应浏览器
-               *      为4时，表示服务器端响应结束
-               * @type {number}
-               */
-              var rState = xmlHttpRequest.readyState;
-              if(rState == 4){
-                // alert(&quot;事件绑定成功--&gt;&quot;+rState);
-                //使用核心对象接受服务器传回的唯一数据
-                var responseText = xmlHttpRequest.responseText;
-                // alert(responseText);
-               document.getElementById(&quot;d1&quot;).innerText = responseText;
-
-              }
-            }
-              //3.初始化请求  &quot;get&quot;请求方式，&quot;ajaxResponse?name=&quot;+name 请求名称携带参数，默认是异步ajax请求
-              var name = document.getElementById(&quot;name&quot;).value;
-              xmlHttpRequest.open(&quot;get&quot;,&quot;ajaxResponse?name=&quot;+name);
-               //4发出请求
-              xmlHttpRequest.send();
-          }
-        }
-</code></pre>
-<h3 id="jquery发送ajax请求">jQuery发送Ajax请求</h3>
-<pre><code class="language-javascript">$(function () {
-    $(&quot;#empno&quot;).blur(function () {
-        //获取请求参数
-        var empno = $(&quot;#empno&quot;).val();
-        var ename = $(&quot;#ename&quot;).val();
-        $.ajax({ //在ajax函数中传递一个json数据，json数据中包含所有的参数
-            url:&quot;getEmpById&quot;, //请求名称
-            data:{&quot;empno&quot;:empno,&quot;ename&quot;:ename},//请求参数
-            datatype:&quot;json&quot;,//规定从服务器端传回的数据类型，&quot;json&quot;,&quot;text&quot;
-            async:true,//异步请求true,同步请求false,默认异步
-            type:&quot;post&quot;,//请求方式，post或get,默认是get
-            success:function(data){//函数中需要添加一个参数，这个参数可以自动接收服务器传回的数据
-                alert(data);
-            }
-        });
-    })
-})
-</code></pre>
-<h3 id="post-get">$.post()   $.get()</h3>
-<h4 id="post-和-get-使用同理">post 和 get 使用同理</h4>
-<p>格式：jQuery.post(url, [data], [callback], [type])</p>
-<p><strong>url</strong>:发送请求地址。</p>
-<p><strong>data</strong>:待发送 Key/value 参数。</p>
-<p><strong>callback</strong>:发送成功时回调函数。</p>
-<p><strong>type</strong>:返回内容格式，xml, html, script, json, text, _default。</p>
-<pre><code class="language-javascript">$.post(&quot;/deleteInfo.do&quot;,{&quot;id&quot;:id}
-       function(data){
-    		alert(data);
-	  },&quot;json&quot;);
-</code></pre>
-<p>&quot;xml&quot;: 返回 XML 文档，可用 jQuery 处理。</p>
-<p>&quot;html&quot;: 返回纯文本 HTML 信息；包含的script标签会在插入dom时执行。</p>
-<p>&quot;script&quot;: 返回纯文本 JavaScript 代码。不会自动缓存结果。除非设置了&quot;cache&quot;参数。'''注意：'''在远程请求时(不在同一个域下)，所有POST请求都将转为GET请求。(因为将使用DOM的script标签来加载)</p>
-<p>&quot;json&quot;: 返回 JSON 数据 。</p>
-<p>&quot;jsonp&quot;: <a href="http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/">JSONP</a> 格式。使用 <a href="http://bob.pythonmac.org/archives/2005/12/05/remote-json-jsonp/">JSONP</a> 形式调用函数时，如 &quot;myurl?callback=?&quot; jQuery 将自动替换 ? 为正确的函数名，以执行回调函数。</p>
-<p>&quot;text&quot;: 返回纯文本字符串</p>
 ]]></content>
     </entry>
 </feed>
