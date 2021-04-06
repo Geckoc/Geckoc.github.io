@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>List去重 | RichardTech</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://geckoc.github.io//favicon.ico?v=1617708445858">
+<link rel="stylesheet" href="https://geckoc.github.io//styles/main.css">
+
+
+  
+    <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css" />
+  
+
+  
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="[TOC]
+常规遍历
+
+常规元素遍历
+
+// 遍历后判断赋给另一个List集合，保持原来顺序
+    public static void ridRepeat1(List&lt;String&gt; list) {
+        Syst..." />
+    <meta name="keywords" content="List,JavaNote" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://geckoc.github.io/">
+        <img src="https://geckoc.github.io//images/avatar.png?v=1617708445858" class="site-logo">
+        <h1 class="site-title">RichardTech</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      温故而知新
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/Geckoc" target="_blank">Github</a> | <a class="rss" href="https://geckoc.github.io//atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">List去重</h2>
+            <div class="post-date">2021-04-06</div>
+            
+              <div class="feature-container" style="background-image: url('https://geckoc.github.io//post-images/list-qu-chong.jpg')">
+              </div>
+            
+            <div class="post-content" v-pre>
+              <p>[TOC]</p>
+<h2 id="常规遍历">常规遍历</h2>
+<ul>
+<li>常规元素遍历</li>
+</ul>
+<pre><code class="language-java">// 遍历后判断赋给另一个List集合，保持原来顺序
+    public static void ridRepeat1(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;();
+        for (String str : list) {
+            if (!listNew.contains(str)) {
+                listNew.add(str);
+            }
+        }
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+</code></pre>
+<h2 id="set集合去重">Set集合去重</h2>
+<ul>
+<li>除了遍历去重，我们常常想到利用Set集合不允许重复元素的特点，通过List和Set互转，来去掉重复元素。</li>
+</ul>
+<pre><code class="language-java">	// Set集合去重，保持原来顺序
+    public static void ridRepeat2(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;();
+        Set set = new HashSet();
+        for (String str : list) {
+            if (set.add(str)) {
+                listNew.add(str);
+            }
+        }
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+
+    // Set去重     由于Set(HashSet)的无序性，不会保持原来顺序
+    public static void ridRepeat3(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        Set set = new HashSet();
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;();
+        set.addAll(list);
+        listNew.addAll(set);
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+
+    // Set通过HashSet去重（将ridRepeat3方法缩减为一行） 无序
+    public static void ridRepeat4(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;(new HashSet(list));
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+
+    // Set通过TreeSet去重   会按字典顺序重排序
+    public static void ridRepeat5(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;(new TreeSet&lt;String&gt;(list));
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+
+    // Set通过LinkedHashSet去重  保持原来顺序
+    public static void ridRepeat6(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;(new LinkedHashSet&lt;String&gt;(list));
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+</code></pre>
+<h2 id="java8-stream去重">Java8 Stream去重</h2>
+<ul>
+<li>除此之外，可以利用Java8的stream来实现去重</li>
+</ul>
+<pre><code class="language-java">  // 利用java8的stream去重 
+  // 如果集合是存的是自定义对象，对象实现hashCode()和equals()也可实现
+  List uniqueList = list.stream().distinct().collect(Collectors.toList());
+  System.out.println(uniqueList.toString());
+</code></pre>
+<ul>
+<li>上面的方法在List元素为基本数据类型及String类型时是可以的，但是如果List集合元素为对象，却不会奏效</li>
+</ul>
+<pre><code class="language-java">public class ObjectRidRepeat {
+    
+    public static void main(String[] args) {
+        List&lt;User&gt; userList = new ArrayList&lt;User&gt;();
+        userList.add(new User(&quot;小黄&quot;,10));
+        userList.add(new User(&quot;小红&quot;,23));
+        userList.add(new User(&quot;小黄&quot;,78));
+        userList.add(new User(&quot;小黄&quot;,10));
+        
+        //使用HashSet,无序
+        Set&lt;User&gt; userSet = new HashSet&lt;User&gt;();
+        userSet.addAll(userList);
+        System.out.println(userSet);
+        
+        //使用LinkedHashSet，有序
+        List&lt;User&gt; listNew = new ArrayList&lt;User&gt;(new LinkedHashSet(userList));
+        System.out.println(listNew.toString());
+    }
+}
+</code></pre>
+<ul>
+<li>对象去重 Java8</li>
+</ul>
+<pre><code class="language-java">//根据name属性去重
+        List&lt;User&gt; unique1 = userList.stream().collect(
+                collectingAndThen(
+                        toCollection(() -&gt; new TreeSet&lt;&gt;(comparing(User::getName))), ArrayList::new));
+
+        System.out.println(unique1.toString());
+
+        //根据name,age属性去重
+        List&lt;User&gt; unique2 = userList.stream().collect(
+                collectingAndThen(
+                        toCollection(() -&gt; new TreeSet&lt;&gt;(comparing(o -&gt; o.getName() + &quot;;&quot; + o.getAge()))), ArrayList::new)
+        );
+
+        System.out.println(unique2.toString());
+</code></pre>
+<h2 id="重写hashcode和equals方法">重写hashCode和equals方法</h2>
+<ul>
+<li>在User类中重写equals()方法和hashCode()方法：</li>
+</ul>
+<pre><code class="language-java">//重写equals方法
+ @Override
+    public boolean equals(Object obj) {
+        User user = (User) obj;
+        return name.equals(user.getName()) &amp;&amp; (age==user.getAge());
+    }
+
+//重写hashCode方法
+    @Override
+    public int hashCode() {
+        String str = name + age;
+        return str.hashCode();
+    }
+</code></pre>
+<h4 id="通过最具代表的的string中的equals方法和hashcode方法源码来探究两个方法的实现">通过最具代表的的String中的equals()方法和hashCode()方法源码来探究两个方法的实现</h4>
+<ul>
+<li>equals()方法</li>
+</ul>
+<pre><code class="language-java">	/**
+     * Compares this string to the specified object.  The result is {@code
+     * true} if and only if the argument is not {@code null} and is a {@code
+     * String} object that represents the same sequence of characters as this
+     * object.
+     *
+     * @param  anObject
+     *         The object to compare this {@code String} against
+     *
+     * @return  {@code true} if the given object represents a {@code String}
+     *          equivalent to this string, {@code false} otherwise
+     *
+     * @see  #compareTo(String)
+     * @see  #equalsIgnoreCase(String)
+     */
+    public boolean equals(Object anObject) {
+        if (this == anObject) {
+            return true;
+        }
+        if (anObject instanceof String) {
+            String anotherString = (String)anObject;
+            int n = value.length;
+            if (n == anotherString.value.length) {
+                char v1[] = value;
+                char v2[] = anotherString.value;
+                int i = 0;
+                while (n-- != 0) {
+                    if (v1[i] != v2[i])
+                        return false;
+                    i++;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+</code></pre>
+<p><u>比较两个对象时，首先先去判断两个对象是否具有相同的地址，如果是同一个对象的引用，则直接放回true；如果地址不一样，则证明不是引用同一个对象，接下来就是挨个去比较两个字符串对象的内容是否一致，完全相等返回true，否则false。</u></p>
+<ul>
+<li>hashCode()方法</li>
+</ul>
+<pre><code class="language-java">	/**
+     * Returns a hash code for this string. The hash code for a
+     * {@code String} object is computed as
+     * &lt;blockquote&gt;&lt;pre&gt;
+     * s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
+     * &lt;/pre&gt;&lt;/blockquote&gt;
+     * using {@code int} arithmetic, where {@code s[i]} is the
+     * &lt;i&gt;i&lt;/i&gt;th character of the string, {@code n} is the length of
+     * the string, and {@code ^} indicates exponentiation.
+     * (The hash value of the empty string is zero.)
+     *
+     * @return  a hash code value for this object.
+     */
+    public int hashCode() {
+        int h = hash;
+        if (h == 0 &amp;&amp; value.length &gt; 0) {
+            char val[] = value;
+
+            for (int i = 0; i &lt; value.length; i++) {
+                h = 31 * h + val[i];
+            }
+            hash = h;
+        }
+        return h;
+    }
+</code></pre>
+<p><u>当equals方法被重写时，通常有必要重写 hashCode 方法，以维护 hashCode 方法的常规协定，该协定声明相等对象必须具有相等的哈希码。</u></p>
+<p>根据《Effective Java》第二版的第九条：<strong>覆盖equals时总要覆盖hashCode</strong> 中的内容，总结如下：</p>
+<ul>
+<li>在程序执行期间，只要equals方法的比较操作用到的信息没有被修改，那么对这同一个对象调用多次，hashCode方法必须始终如一地返回同一个整数。</li>
+<li>如果两个对象根据equals方法比较是相等的，那么调用两个对象的hashCode方法必须返回相同的整数结果。</li>
+<li>如果两个对象根据equals方法比较是不等的，则hashCode方法不一定得返回不同的整数。但是，程序员应该知道，为不相等的对象生成不同整数结果可以提高哈希表的性能。</li>
+</ul>
+<p>《Java编程思想》中也有类似总结：</p>
+<p>设计hashCode()时最重要的因素就是：无论何时，对同一个对象调用hashCode()都应该产生同样的值。如果在讲一个对象用put()添加进HashMap时产生一个hashCdoe值，而用get()取出时却产生了另一个hashCode值，那么就无法获取该对象了。所以如果你的hashCode方法依赖于对象中易变的数据，用户就要当心了，因为此数据发生变化时，hashCode()方法就会生成一个不同的散列码。</p>
+
+            </div>
+            
+              <div class="tag-container">
+                
+                  <a href="https://geckoc.github.io/tag/Oan8DEXPl/" class="tag">
+                    List
+                  </a>
+                
+                  <a href="https://geckoc.github.io/tag/m3MrWnh7T/" class="tag">
+                    JavaNote
+                  </a>
+                
+              </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://geckoc.github.io/post/rabbitmq/">
+                  <h3 class="post-title">
+                    RabbitMQ
+                  </h3>
+                </a>
+              </div>
+            
+
+            
+              
+                <div id="gitalk-container" data-aos="fade-in"></div>
+              
+
+              
+            
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
+
+
+  <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>
+    hljs.initHighlightingOnLoad()
+  </script>
+
+
+
+
+  
+    <script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+    <script>
+
+      var gitalk = new Gitalk({
+        clientID: 'efb43fc5663c1b20fb9a',
+        clientSecret: 'ae39da7462f16dfbada5371e0181900ef4faf543',
+        repo: 'blogCommon',
+        owner: 'Geckoc',
+        admin: ['Geckoc'],
+        id: (location.pathname).substring(0, 49),      // Ensure uniqueness and length less than 50
+        distractionFreeMode: false  // Facebook-like distraction free mode
+      })
+
+      gitalk.render('gitalk-container')
+
+    </script>
+  
+
+  
+
+
+
+
+  </body>
+</html>
