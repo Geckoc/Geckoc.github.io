@@ -1,0 +1,465 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>PathVariable与RequestParam | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1718088569832">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://bc-travel.oss-cn-shenzhen.aliyuncs.com/weboss/21110217CDEA8580F.jpg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2021-11-02 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>PathVariable与RequestParam</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <p>我们可以从请求中获取查询参数，表单参数甚至文件, 事实上，这两种URL设计都是可以的：<strong>@RequestParam</strong> 和 <strong>@PathVariable</strong></p>
+<!-- more -->
+<p>都能够完成类似的功能<br>
+——因为本质上，它们都是用户的输入，只不过输入的部分不同，一个在URL路径部分，另一个在参数部分。</p>
+<ul>
+<li>
+<p>通过 <strong>@PathVariable</strong>，例如/blogs/1</p>
+</li>
+<li>
+<p>通过 <strong>@RequestParam</strong>，例如blogs?blogId=1</p>
+</li>
+<li>
+<p>根据不同应用场景来选择使用：</p>
+<ul>
+<li>当<em>URL</em>指向的是某一具体业务资源（或资源列表），使用 <strong>@PathVariable</strong></li>
+<li>当<em>URL</em>需要对资源或者资源列表进行过滤，筛选时，使用 <strong>@RequestParam</strong></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="参数的属性值">参数的属性值</h3>
+<ol>
+<li><strong>name</strong> (指定请求参数名称)
+<ul>
+<li>在变量名称和参数名称都相同的情况则不需制定。但有时我们希望这些不同。或者，如果我们不使用Spring Boot，我们可能需要进行特殊的编译时配置，否则参数名称实际上不会在编译后的字节码中</li>
+</ul>
+</li>
+</ol>
+<pre><code class="language-java">    @GetMapping(&quot;/user/play&quot;)
+    @ResponseBody
+    public String toLoanInfo(@RequestParam(name = &quot;id&quot;) String userId, @RequestParam name){
+
+        return &quot;play: &quot; + userId + name;
+    }
+</code></pre>
+<ol>
+<li>value
+<ul>
+<li>@RequestParam（value =“id”）等同于 @RequestParam（“id”）</li>
+</ul>
+</li>
+<li>required
+<ul>
+<li>一旦我们在方法中定义了@RequestParam变量，如果访问的uri中不带有相应的参数，就会抛出异常——这是显然的，Spring尝试帮我们进行绑定，然而没有成功。但有的时候，参数确实不一定永远都存在，这时我们可以通过定义required属性，我们可以将@RequestParam的required设置为false ，默认为true（必选）：</li>
+</ul>
+</li>
+</ol>
+<pre><code class="language-java">    @GetMapping(&quot;/user/play&quot;)
+    @ResponseBody
+    public String toLoanInfo(@RequestParam(required = false) String id){
+
+        return &quot;play: &quot; + id;
+    }
+</code></pre>
+<ol>
+<li>defaultValue
+<ul>
+<li>在参数不存在的情况下，可能希望变量有一个默认值</li>
+</ul>
+</li>
+</ol>
+<pre><code>@RequestParam(value = &quot;id&quot;, required = false, defaultValue = &quot;0&quot;)
+</code></pre>
+<p>注意：在使@PathVariable成为可选时我们应该小心，以避免路径冲突。</p>
+<p>在 <strong>SpringBoot</strong> 的<em>Thymeleaf</em>表达式中，使用@PathVariable需要符合其URL风格</p>
+<pre><code class="language-html">  &lt;!-- Restful Style 需要 + 号拼接，路径后的斜杠不能忽略 --&gt;
+  &lt;a th:href=&quot;@{'/user/play/'+拼接的参数}&quot;&gt;跳转&lt;/a&gt;
+  &lt;!-- Normal Style --&gt;
+  &lt;a th:href=&quot;@{/user/play(id=&quot;id&quot;,name=&quot;name&quot;)}&quot;&gt;跳转&lt;/a&gt;
+</code></pre>
+<p>而 <strong>@PathVariable</strong> 中使用required=false 还需要注意的是：当参数不存在时，需要配置多个uri映射，避免404</p>
+<pre><code class="language-java">@GetMapping({&quot;/user/play/{productType}&quot;,&quot;/user/play/&quot;})
+public String toLoanInfo(@PathVariable(required = false) Integer productType){
+        return &quot;play&quot;;
+}
+</code></pre>
+<hr>
+<h4 id="拓展">拓展</h4>
+<h5 id="uri编码">URI编码</h5>
+<blockquote>
+<p>RFC3986文档规定，Url中只允许包含英文字母（a-zA-Z）、数字（0-9）、-_.~4个特殊字符以及所有保留字符。US-ASCII字符集中没有对应的可打印字符：Url中只允许使用可打印字符。US-ASCII码中的10-7F字节全都表示控制字符，这些字符都不能直接出现在Url中。同时，对于80-FF字节（ISO-8859-1），由于已经超出了US-ACII定义的字节范围，因此也不可以放在Url中。</p>
+</blockquote>
+<blockquote>
+<p>保留字符：Url可以划分成若干个组件，协议、主机、路径等。有一些字符（😕?#[]@）是用作分隔不同组件的。例如：冒号用于分隔协议和主机，/用于分隔主机和路径，?用于分隔路径和查询参数，等等。还有一些字符（!$&amp;’()*+,;=）用于在每个组件中起到分隔作用的，如=用于表示查询参数中的键值对，&amp;符号用于分隔查询多个键值对。当组件中的普通数据包含这些特殊字符时，需要对其进行编码。RFC3986中指定了以下字符为保留字符：! * ’ ( ) ; : @ &amp; = + $ , / ? # [ ]</p>
+</blockquote>
+<p>感兴趣可以做个测试：<strong>@PathVariable</strong> 和 <strong>@RequestParam</strong> 两种注解的编码问题<br>
+<em>@PathVariable</em> 从路径中获取是不用编码解码的，而 <strong>@RequestParam</strong> 会进行编码解码。这种特性很少有人注意到</p>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1718088569832" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/profound/">下一篇->运算符的奥义</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+
