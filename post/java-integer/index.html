@@ -1,0 +1,474 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>Integer等号判断 | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1757283171155">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://chenbaicheng.top/post-images/java-integer.jpg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2021-11-24 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>Integer等号判断</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <h2 id="java-integer"><em>Java Integer</em></h2>
+<p>在比较中，其实都知道Integer是一种对象包装类，在程序使用中需要稍加注意就能避免绝大部分问题，在一次使用中因为使用 <strong>==</strong> (双等号) 判断导致程序运行出现偏差...😨😨😨</p>
+<!-- more -->
+<p>场景为：<br>
+某指定属性为Integer类型， 其中使用了 101 ，201 两个数值去表示A类、B类<br>
+当时A类101,并未出现问题，B类201总是无法按照预定程序执行。</p>
+<p>于是调试了一下发现罪魁祸首 &quot;==&quot; 判断，恍然大悟...💡</p>
+<p><strong>==运算符</strong><br>
+如果使用 <strong>==</strong> 运算符进行比较的话，由于检测的是对象是否指向同一个内存区域，由于初始化时的不确定性，比较的结果也可能不是我们想要的。如下所示：</p>
+<pre><code class="language-java">Integer integer1 = new Integer(101);
+Integer integer2 = new Integer(101);
+Integer integer3 = 101;
+Integer integer4 = 101;
+Integer integer5 = 201;
+Integer integer6 = 201;
+// false 两个new的对象
+System.out.println(integer1 == integer2);
+// false integer1在堆中, integer3指向IntegerCache缓存(方法区中) 
+System.out.println(integer1 == integer3);
+// true 都指向缓存中同一个对象
+System.out.println(integer3 == integer4);
+// false 超出缓存范围, 分别是两个new出来的对象
+System.out.println(integer5 == integer6);
+</code></pre>
+<p>相信到这里，已经不难看出为什么201为什么出现运行偏差了<br>
+而《阿里Java开发手册》中有这样一项强制要求：</p>
+<blockquote>
+<p>“所有整形包装类对象之间值的比较，全部使用equals方法比较。说明：对于Integer var= ？在-128到127范围内的赋值，Integer对象在IntegerCache.cache产生，会复用已有对象，这个区间的Integer值可以直接使用==进行判断，但是这个区间之外的所有数据都会在堆上产生，并不会复用已有对象，这是一个大坑，推荐使用equals方法进行判断。”<br>
+如果有些结果和我们预料的不太一样，我们还是认真深究一下。</p>
+</blockquote>
+<h4 id="不同创建形式的比较">不同创建形式的比较</h4>
+<pre><code class="language-java">// 自动装箱，会调用valueOf();
+ Integer i1 = 88;    
+ // 手动装箱 与直接赋值操作效果一致
+Integer i2 = Integer.valueOf(88);
+// 创建新的类
+Integer i3 = new Integer(88);
+ System.out.println(i2 == i3);
+</code></pre>
+<p>通过new和valueOf创建的是完全两个对象，那么 i2 == i3 项，直接比较两个对象的引用肯定是不相等的，因此结果为false。</p>
+<p>Integer直接赋值和valueOf是等效的，那先看一下valueOf及相关的方法。</p>
+<pre><code class="language-java">public static Integer valueOf(int i) {
+    if (i &gt;= IntegerCache.low &amp;&amp; i &lt;= IntegerCache.high)
+        return IntegerCache.cache[i + (-IntegerCache.low)];
+    return new Integer(i);
+}
+
+
+private static class IntegerCache {
+        static final int low = -128;
+    static final int high;
+    static final Integer cache[];
+
+    static {
+        // high value may be configured by property
+        int h = 127;
+        String integerCacheHighPropValue =
+            sun.misc.VM.getSavedProperty(&quot;java.lang.Integer.IntegerCache.high&quot;);
+        if (integerCacheHighPropValue != null) {
+            try {
+                int i = parseInt(integerCacheHighPropValue);
+                i = Math.max(i, 127);
+                // Maximum array size is Integer.MAX_VALUE
+                h = Math.min(i, Integer.MAX_VALUE - (-low) -1);
+            } catch( NumberFormatException nfe) {
+                // If the property cannot be parsed into an int, ignore it.
+            }
+        }
+        high = h;
+
+        cache = new Integer[(high - low) + 1];
+        int j = low;
+        for(int k = 0; k &lt; cache.length; k++)
+            cache[k] = new Integer(j++);
+
+        // range [-128, 127] must be interned (JLS7 5.1.7)
+        assert IntegerCache.high &gt;= 127;
+    }
+
+    private IntegerCache() {}
+}
+</code></pre>
+<p>valueOf方法判断数字是否大于low（-128）并且小于high（127），如果满足条件，则直接从IntegerCache中返回对应数字。</p>
+<p>IntegerCache用于存储一些常用的数，防止重复创建，在Integer类装入内存时通过静态代码进行初始化。</p>
+<p>所以只要是用valueOf或者Integer直接赋值的方式创建的对象，其值小于127且大于-128的，无论对其进行==比较还是equals 比较，都是true。</p>
+<p>上面的源码及原理也解释了阿里Java开发手册中所说明的原因。</p>
+<pre><code class="language-java"> public boolean equals(Object obj) {
+    if (obj instanceof Integer) {
+        return value == ((Integer)obj).intValue();
+    }
+    return false;
+}
+</code></pre>
+<p>Integer类重写了object的equals方法，调用时实际比较的是两个对象的值，和对象存储在哪里没有关系。<br>
+equals实现比较简单，先比较类型是否一致，如果不一致，直接返回false；否则，再比较两者的值，相同则返回true。<br>
+所以为了保持对象之间比较结果的一致性，同时我们进行比较的初衷应该也是比较它们之间的值，所以使用equals方法</p>
+<h4 id="finally"><em>FINALLY</em></h4>
+<p>关于Integer的比较核心点有以下三点：引用对象的存储结构、Integer的缓存机制、自动装箱与拆箱。</p>
+<p>Integer在==运算时，总结一下：</p>
+<p>（1）如果==两端有一个是基础类型(int)，则会发生自动拆箱操作，这时比较的是值。</p>
+<p>（2）如果==两端都是包装类型(Integer)，则不会自动拆箱，首先会面临缓存问题，即便在缓存范围内的数据还会再次面临创建方式的问题，因此强烈建议使用equals方法进行比较。</p>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1757283171155" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/hollisi/">下一篇->HollisⅠ</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+
