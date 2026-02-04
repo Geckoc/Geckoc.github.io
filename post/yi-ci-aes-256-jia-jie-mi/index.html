@@ -1,0 +1,527 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>一次AES-256加解密 | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://chenbaicheng.top/post-images/yi-ci-aes-256-jia-jie-mi.jpeg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2022-01-06 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>一次AES-256加解密</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <p>新接口标准：所有敏感信息都必须使用AES的256位密钥加解密，发现测试在加密的时候报java.security.InvalidKeyException: Illegal key size错误。</p>
+<!-- more -->
+<p>产生错误原因：为了数据代码在传输过程中的安全，很多时候我们都会将要传输的数据进行加密，然后等对方拿到后再解密使用。我们在使用AES加解密的时候，在遇到128位密钥加解密的时候，没有进行什么特殊处理；然而，在使用256位密钥加解密的时候，如果不进行特殊处理的话，可能会因为jdk版本的问题出现这个异常java.security.InvalidKeyException: Illegal key size。<br>
+为什么会产生这样的错误？</p>
+<p>我们做Java开发，都会先在电脑上安装JDK(Java Development Kit) 并配置环境变量，JDK中包含有JRE（Java Runtime Environment，即：Java运行环境），JRE中包括Java虚拟机（Java Virtual Machine）、Java核心类库和支持文件，而我们今天要说的主角就在Java的核心类库中。在Java的核心类库中有一个JCE（Java Cryptography Extension），JCE是一组包，它们提供用于加密、密钥生成和协商以及 Message Authentication Code（MAC）算法的框架和实现，所以这个是实现加密解密的重要类库。</p>
+<p>在我们安装的JRE目录下有这样一个文件夹：%JAVE_HOME%\jre\lib\security（%JAVE_HOME%是自己电脑的Java路径，），其中包含有两个.jar文件：“local_policy.jar ”和“US_export_policy.jar”，也就是我们平时说的jar包，这两个jar包就是我们JCE中的核心类库了。JRE中自带的“local_policy.jar ”和“US_export_policy.jar”是支持128位密钥的加密算法，而当我们要使用256位密钥算法的时候，已经超出它的范围，无法支持，所以才会报：“java.security.InvalidKeyException: Illegal key size or default parameters”的异常。</p>
+<p>那么我们怎么解决呢？</p>
+<p>首先进入%JAVE_HOME%/jre/lib/security/ 目录，看下目录里面是有一个 policy 文件夹，还是有local_policy.jar，</p>
+<figure data-type="image" tabindex="1"><img src="https://chenbaicheng.top/post-images/1641462412461.png" alt="" loading="lazy"></figure>
+<figure data-type="image" tabindex="2"><img src="https://chenbaicheng.top/post-images/1641462418680.png" alt="" loading="lazy"></figure>
+<p>第一种情况：如果有policy 文件夹，说明此版本为JVM启用 无限制强度管辖策略 有了一种新的更简单的方法。</p>
+<p>请在 当前文件夹中查找文件 java.security。</p>
+<p>现在用文本编辑器打开java.security，并找到定义java安全性属性crypto.policy的行，它可以有两个值limited或unlimited - 默认值是limited。</p>
+<p>默认情况下，您应该能找到一条注释掉的行：</p>
+<pre><code>#crypto.policy=unlimited
+</code></pre>
+<p>可以通过取消注释该行来启用无限制，删除＃：</p>
+<pre><code>crypto.policy=unlimited
+</code></pre>
+<p>现在重新启动指向JVM的Java应用程序即可。</p>
+<p>第二种情况：没有policy 文件夹，而是直接就有local_policy.jar，US_export_policy.jar两个jar包。</p>
+<p>去官方下载JCE无限制权限策略文件。</p>
+<p><a href="http://www.oracle.com/technetwork/java/javasebusiness/downloads/java-archive-downloads-java-plat-419418.html#jce_policy-1.5.0-oth-JPR">JDK 5 VERSION</a></p>
+<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/jce-6-download-429243.html">JDK 6 VERSIOn</a></p>
+<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/jce-7-download-432124.html">JDK 7 VERSION</a></p>
+<p><a href="http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html">JDK 8 VERSION</a></p>
+<p>下载后解压，可以看到local_policy.jar和US_export_policy.jar以及readme.txt<br>
+将两个jar文件放到%JAVE_HOME%\jre\lib\security目录下覆盖原来文件。</p>
+<p>下载时若没有Oracle账户，这里提供一个账户网站。 <a href="http://bugmenot.com/view/oracle.com">OracleAccount</a></p>
+<p>加密的问题迎刃而解，接下来是解密，关于解密其实是个小问题，关于Base64转换的问题而已<br>
+解密报错 <strong>Input length must be multiple of 16 when decrypting with padded cipher</strong></p>
+<p>于是乎回头看了一眼加密返回的代码似乎不对劲，直接返回byte数组了，只需要将字节数组byte[]转为base64字符串即可。</p>
+<h3 id="错误的返回">错误的返回</h3>
+<p>只是将byte[]数组toString了</p>
+<p><s>return Arrays.toString(new Base64().encode(result));</s></p>
+<p>正确转换</p>
+<h3 id="字节数组转为base64字符串">字节数组转为base64字符串</h3>
+<pre><code>public String byteToBase64(byte[] b){
+ 
+String image=Base64.getEncoder().encodeToString(b);
+ 
+return image;
+ 
+}
+</code></pre>
+<h3 id="base64字符串转为字节数组">base64字符串转为字节数组</h3>
+<pre><code>public byte[] base64ToByte(String base64str){
+return Base64.getDecoder().decode(base64);
+}
+</code></pre>
+<h2 id="福利aes256加解密工具类">福利：AES256加解密工具类</h2>
+<pre><code>import org.apache.commons.codec.binary.Base64;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.nio.charset.StandardCharsets;
+
+
+/**
+ * @ClassName: AesEncryptUtil
+ * @Description: AES256加解密
+ * @Author: Richard_Chan
+ * @Create: 2022-01-06 16:57
+ */
+public class AesEncryptUtil {
+    //使用AES-256-CBC加密模式，key需要为32位,key和iv可以相同！
+
+    /**
+     * 加密方法
+     * @param data  要加密的数据
+     * @param key 加密key
+     * @param iv 加密iv
+     * @return 加密的结果
+     * @throws Exception
+     */
+    public static String encrypt(String data, String key, String iv) throws Exception {
+        try {
+            SecretKeySpec keys = new SecretKeySpec(key.getBytes(), &quot;AES&quot;);
+            //&quot;算法/模式/补码方式&quot;
+            Cipher cipher = Cipher.getInstance(&quot;AES/CBC/PKCS5PADDING&quot;);
+            byte[] dataBytes = data.getBytes(StandardCharsets.UTF_8);
+            // 偏移量
+            byte[] ivBytes = iv.getBytes();
+            IvParameterSpec ivSpec = new IvParameterSpec(ivBytes);
+            // 初始化AES密码器为加密器
+            cipher.init(Cipher.ENCRYPT_MODE, keys, ivSpec);
+            // 进行AES加密
+            byte[] result = cipher.doFinal(dataBytes);
+            return java.util.Base64.getEncoder().encodeToString(result);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * 解密方法
+     * @param data 要解密的数据
+     * @param key  解密key
+     * @param iv 解密iv
+     * @return 解密的结果
+     * @throws Exception
+     */
+    public static String desEncrypt(String data, String key, String iv) throws Exception {
+        try {
+            byte[] encrypted1 = (byte[]) new Base64().decode(data);
+
+            Cipher cipher = Cipher.getInstance(&quot;AES/CBC/PKCS5PADDING&quot;);
+            SecretKeySpec keyspec = new SecretKeySpec(key.getBytes(), &quot;AES&quot;);
+            IvParameterSpec ivspec = new IvParameterSpec(iv.getBytes());
+            //使用密钥初始化，设置为解密模式
+            cipher.init(Cipher.DECRYPT_MODE, keyspec, ivspec);
+
+            byte[] original = cipher.doFinal(encrypted1);	//执行操作
+            String originalString = new String(original);
+            return originalString;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /**
+     * 测试
+     */
+    public static void main(String args[]) throws Exception {
+        // 携程与供应商协商授权用的用户名
+        String authUser = &quot;test&quot;;
+        // 对user做md5（32位小写）
+        String key = Md5Helper.MD5(authUser);
+        // iv向量，取md5码后16位作为iv
+        String iv = key.substring(key.length() - 16);
+        // 被aes加密后的密文
+        String security = &quot;88i6PIuXaQm7QbUBDut1AA==&quot;;
+        // 待脱敏的信息，以手机号为例说明
+        String mobile = &quot;13800000000&quot;;
+        // 加密
+        String enData = encrypt(mobile, key, iv);
+
+        System.out.println(key);
+        System.out.println(iv);
+        System.out.println(enData);
+        // 解密
+        System.out.println(desEncrypt(enData, key, iv));
+    }
+}
+</code></pre>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/hollis-iix/">下一篇->Hollis II</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+

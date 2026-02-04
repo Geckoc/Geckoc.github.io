@@ -1,0 +1,430 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>MySQL Set Password | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://chenbaicheng.top/post-images/mysql-set-password.jpg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2021-11-09 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>MySQL Set Password</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <p>忘记密码和修改密码，首先进入mysql控制台</p>
+<!-- more -->
+<pre><code class="language-java">mysql&gt; use mysql;
+Database changed
+mysql&gt; update user set password = PASSWORD('你想要修改的密码') where user = 'root';
+</code></pre>
+<ul>
+<li>
+<p>如果报错，则是新版变动问题</p>
+<pre><code class="language-java">无报错的话，直接输入
+mysql&gt; flush privileges;   //刷新表，使密码生效
+-----------------------------------------
+新版---&gt;
+mysql&gt; update user set authentication_string = PASSWORD('你想要修改的密码') 
+     &gt; where user = 'root';
+     &gt; 最后仍然需要刷新表
+</code></pre>
+</li>
+<li>
+<p>为什么MySQL设置密码后，仍可以不输入密码直接登录？</p>
+<p>之前设置了密码，但输入mysql后，可直接进入mysql，而输入mysql -uroot -p，则需要输入密码，这是为什么呢？</p>
+<ul>
+<li>原来是因为数据库里面有空用户</li>
+</ul>
+<pre><code class="language-java">use mysql;
+select * from user where user='';  // 找出空账户，如果有则删除
+delete from user where user = '';  // 删除空账户
+flush privileges;		// 刷新表，使其生效
+exit;
+</code></pre>
+</li>
+<li>
+<p><strong>注意</strong>：<strong>必要时需要重启MySQL服务器</strong></p>
+</li>
+</ul>
+<h3 id="关于忘记密码">关于忘记密码</h3>
+<ol>
+<li>
+<p>以window为例，进入到mysql安装目录，打开my.ini文件</p>
+</li>
+<li>
+<p>找到[mysqld]配置行，</p>
+<p>(注意：不是[mysql])</p>
+<p>，在其下一行输入：</p>
+<ul>
+<li>skip-grant-tables</li>
+<li>或者 --skip-grant-tables</li>
+<li>两者区别是有时两个横线会导致服务器无法重启需要测试应当添加否</li>
+</ul>
+</li>
+<li>
+<p>cmd命令：services.msi，找到mysql服务并重启</p>
+</li>
+<li>
+<p>修改密码即可</p>
+</li>
+</ol>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/saved/">下一篇->ForumsHardwareZone</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+

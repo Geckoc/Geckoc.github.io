@@ -1,0 +1,527 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>Springboot leak | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202206282144379.jpg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2022-06-28 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>Springboot leak</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <h4 id="前记"><strong>前记：</strong></h4>
+<p>美团技术团队的文章质量真的业界TOP ! 项目最近也遇到疑似<u>内存泄漏</u>的问题，所谓他山之石，可以攻玉</p>
+<p>你须自行实践，且体验自己的失败。你须观察他人的实践与失败。你须看看别人是怎样蹒跚学步，再转头研究他们的路数。你须看看别人是如何绞尽脑汁做出决策，又是如何为错误决策付出代价</p>
+<!-- more -->
+<p>知识阅读需要沉淀，多花心思。很多时候都不是上个厕所就能读完的“感觉不错”的抖音式碎片化知识。</p>
+<p>而且你要去琢磨某段代码好在什么地方、坏在什么地方。在我们分解，而后组合模块时，你得亦步亦趋地跟上。这得花些工夫，不过值得一试。</p>
+<h2 id="背景">背景</h2>
+<blockquote>
+<p>文章原创：纪兵，2015年加入美团，目前主要从事酒店C端相关的工作。</p>
+<p>原文链接 : <a href="https://tech.meituan.com/2019/01/03/spring-boot-native-memory-leak.html">美团技术团队</a></p>
+</blockquote>
+<p>为了更好地实现对项目的管理，我们将组内一个项目迁移到MDP框架（基于Spring Boot），随后我们就发现系统会频繁报出Swap区域使用量过高的异常。笔者被叫去帮忙查看原因，发现配置了4G堆内内存，但是实际使用的物理内存竟然高达7G，确实不正常。JVM参数配置是“-XX:MetaspaceSize=256M -XX:MaxMetaspaceSize=256M -XX:+AlwaysPreTouch -XX:ReservedCodeCacheSize=128m -XX:InitialCodeCacheSize=128m, -Xss512k -Xmx4g -Xms4g,-XX:+UseG1GC -XX:G1HeapRegionSize=4M”，实际使用的物理内存如下图所示：</p>
+<figure data-type="image" tabindex="1"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/0834c647.png" alt="top命令显示的内存情况" loading="lazy"></figure>
+<h2 id="排查过程">排查过程</h2>
+<h3 id="1-使用java层面的工具定位内存区域堆内内存-code区域或者使用unsafeallocatememory和directbytebuffer申请的堆外内存">1. 使用Java层面的工具定位内存区域（堆内内存、Code区域或者使用unsafe.allocateMemory和DirectByteBuffer申请的堆外内存）</h3>
+<p>笔者在项目中添加<code>-XX:NativeMemoryTracking=detail</code>JVM参数重启项目，使用命令<code>jcmd pid VM.native_memory detail</code>查看到的内存分布如下：</p>
+<figure data-type="image" tabindex="2"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/34b8e79d.png" alt="jcmd显示的内存情况" loading="lazy"></figure>
+<p>jcmd显示的内存情况</p>
+<p>发现命令显示的committed的内存小于物理内存，因为jcmd命令显示的内存包含堆内内存、Code区域、通过unsafe.allocateMemory和DirectByteBuffer申请的内存，但是不包含其他Native Code（C代码）申请的堆外内存。所以猜测是使用Native Code申请内存所导致的问题。</p>
+<p>为了防止误判，笔者使用了pmap查看内存分布，发现大量的64M的地址；而这些地址空间不在jcmd命令所给出的地址空间里面，基本上就断定就是这些64M的内存所导致。</p>
+<figure data-type="image" tabindex="3"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/14063492.png" alt="pmap显示的内存情况" loading="lazy"></figure>
+<h3 id="2-使用系统层面的工具定位堆外内存">2. 使用系统层面的工具定位堆外内存</h3>
+<p>因为笔者已经基本上确定是Native Code所引起，而Java层面的工具不便于排查此类问题，只能使用系统层面的工具去定位问题。</p>
+<h4 id="首先使用了gperftools去定位问题">首先，使用了gperftools去定位问题</h4>
+<p>gperftools的使用方法可以参考<a href="https://github.com/gperftools/gperftools">gperftools</a>，gperftools的监控如下：</p>
+<figure data-type="image" tabindex="4"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/ec7740f1.png" alt="gperftools监控" loading="lazy"></figure>
+<p>从上图可以看出：使用malloc申请的的内存最高到3G之后就释放了，之后始终维持在700M-800M。笔者第一反应是：难道Native Code中没有使用malloc申请，直接使用mmap/brk申请的？（gperftools原理就使用动态链接的方式替换了操作系统默认的内存分配器（glibc）。）</p>
+<h4 id="然后使用strace去追踪系统调用">然后，使用strace去追踪系统调用</h4>
+<p>因为使用gperftools没有追踪到这些内存，于是直接使用命令“strace -f -e”brk,mmap,munmap” -p pid”追踪向OS申请内存请求，但是并没有发现有可疑内存申请。strace监控如下图所示:</p>
+<figure data-type="image" tabindex="5"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/d865697e.jpg" alt="strace监控" loading="lazy"></figure>
+<h4 id="接着使用gdb去dump可疑内存">接着，使用GDB去dump可疑内存</h4>
+<p>因为使用strace没有追踪到可疑内存申请；于是想着看看内存中的情况。就是直接使用命令<code>gdp -pid pid</code>进入GDB之后，然后使用命令<code>dump memory mem.bin startAddress endAddress</code>dump内存，其中startAddress和endAddress可以从/proc/pid/smaps中查找。然后使用<code>strings mem.bin</code>查看dump的内容，如下：</p>
+<figure data-type="image" tabindex="6"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/94def72f.jpg" alt="gperftools监控" loading="lazy"></figure>
+<p>从内容上来看，像是解压后的JAR包信息。读取JAR包信息应该是在项目启动的时候，那么在项目启动之后使用strace作用就不是很大了。所以应该在项目启动的时候使用strace，而不是启动完成之后。</p>
+<h4 id="再次项目启动时使用strace去追踪系统调用">再次，项目启动时使用strace去追踪系统调用</h4>
+<p>项目启动使用strace追踪系统调用，发现确实申请了很多64M的内存空间，截图如下：</p>
+<figure data-type="image" tabindex="7"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/025d9f15.png" alt="strace监控" loading="lazy"></figure>
+<p>使用该mmap申请的地址空间在pmap对应如下：</p>
+<figure data-type="image" tabindex="8"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/bd4b1892.png" alt="strace申请内容对应的pmap地址空间" loading="lazy"></figure>
+<h4 id="最后使用jstack去查看对应的线程">最后，使用jstack去查看对应的线程</h4>
+<p>因为strace命令中已经显示申请内存的线程ID。直接使用命令<code>jstack pid</code>去查看线程栈，找到对应的线程栈（注意10进制和16进制转换）如下：</p>
+<figure data-type="image" tabindex="9"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/00ca5985.png" alt="strace申请空间的线程栈" loading="lazy"></figure>
+<p>这里基本上就可以看出问题来了：MCC（美团统一配置中心）使用了Reflections进行扫包，底层使用了Spring Boot去加载JAR。因为解压JAR使用Inflater类，需要用到堆外内存，然后使用Btrace去追踪这个类，栈如下：</p>
+<figure data-type="image" tabindex="10"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/6158ede5.png" alt="btrace追踪栈" loading="lazy"></figure>
+<p>然后查看使用MCC的地方，发现没有配置扫包路径，默认是扫描所有的包。于是修改代码，配置扫包路径，发布上线后内存问题解决。</p>
+<h3 id="3-为什么堆外内存没有释放掉呢">3. 为什么堆外内存没有释放掉呢？</h3>
+<p>虽然问题已经解决了，但是有几个疑问：</p>
+<ul>
+<li>为什么使用旧的框架没有问题？</li>
+<li>为什么堆外内存没有释放？</li>
+<li>为什么内存大小都是64M，JAR大小不可能这么大，而且都是一样大？</li>
+<li>为什么gperftools最终显示使用的的内存大小是700M左右，解压包真的没有使用malloc申请内存吗？</li>
+</ul>
+<p>带着疑问，笔者直接看了一下<a href="https://github.com/spring-projects/spring-boot/tree/master/spring-boot-project/spring-boot-tools/spring-boot-loader/src/main/java/org/springframework/boot/loader">Spring Boot Loader</a>那一块的源码。发现Spring Boot对Java JDK的InflaterInputStream进行了包装并且使用了Inflater，而Inflater本身用于解压JAR包的需要用到堆外内存。而包装之后的类ZipInflaterInputStream没有释放Inflater持有的堆外内存。于是笔者以为找到了原因，立马向Spring Boot社区反馈了<a href="https://github.com/spring-projects/spring-boot/issues/13935">这个bug</a>。但是反馈之后，笔者就发现Inflater这个对象本身实现了finalize方法，在这个方法中有调用释放堆外内存的逻辑。也就是说Spring Boot依赖于GC释放堆外内存。</p>
+<p>笔者使用jmap查看堆内对象时，发现已经基本上没有Inflater这个对象了。于是就怀疑GC的时候，没有调用finalize。带着这样的怀疑，笔者把Inflater进行包装在Spring Boot Loader里面替换成自己包装的Inflater，在finalize进行打点监控，结果finalize方法确实被调用了。于是笔者又去看了Inflater对应的C代码，发现初始化的使用了malloc申请内存，end的时候也调用了free去释放内存。</p>
+<p>此刻，笔者只能怀疑free的时候没有真正释放内存，便把Spring Boot包装的InflaterInputStream替换成Java JDK自带的，发现替换之后，内存问题也得以解决了。</p>
+<p>这时，再返过来看gperftools的内存分布情况，发现使用Spring Boot时，内存使用一直在增加，突然某个点内存使用下降了好多（使用量直接由3G降为700M左右）。这个点应该就是GC引起的，内存应该释放了，但是在操作系统层面并没有看到内存变化，那是不是没有释放到操作系统，被内存分配器持有了呢？</p>
+<p>继续探究，发现系统默认的内存分配器（glibc 2.12版本）和使用gperftools内存地址分布差别很明显，2.5G地址使用smaps发现它是属于Native Stack。内存地址分布如下：</p>
+<figure data-type="image" tabindex="11"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/036c6f2d.png" alt="gperftools显示的内存地址分布" loading="lazy"></figure>
+<p>到此，基本上可以确定是内存分配器在捣鬼；搜索了一下glibc 64M，发现glibc从2.11开始对每个线程引入内存池（64位机器大小就是64M内存），原文如下：</p>
+<figure data-type="image" tabindex="12"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/d43ef51b.jpg" alt="glib内存池说明" loading="lazy"></figure>
+<p>按照文中所说去修改MALLOC_ARENA_MAX环境变量，发现没什么效果。查看tcmalloc（gperftools使用的内存分配器）也使用了内存池方式。</p>
+<p>为了验证是内存池搞的鬼，笔者就简单写个不带内存池的内存分配器。使用命令<code>gcc zjbmalloc.c -fPIC -shared -o zjbmalloc.so</code>生成动态库，然后使用<code>export LD_PRELOAD=zjbmalloc.so</code>替换掉glibc的内存分配器。其中代码Demo如下：</p>
+<pre><code class="language-c">#include&lt;sys/mman.h&gt;
+#include&lt;stdlib.h&gt;
+#include&lt;string.h&gt;
+#include&lt;stdio.h&gt;
+//作者使用的64位机器，sizeof(size_t)也就是sizeof(long) 
+void* malloc ( size_t size )
+{
+   long* ptr = mmap( 0, size + sizeof(long), PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, 0, 0 );
+   if (ptr == MAP_FAILED) {
+  	return NULL;
+   }
+   *ptr = size;                     // First 8 bytes contain length.
+   return (void*)(&amp;ptr[1]);        // Memory that is after length variable
+}
+
+void *calloc(size_t n, size_t size) {
+ void* ptr = malloc(n * size);
+ if (ptr == NULL) {
+	return NULL;
+ }
+ memset(ptr, 0, n * size);
+ return ptr;
+}
+void *realloc(void *ptr, size_t size)
+{
+ if (size == 0) {
+	free(ptr);
+	return NULL;
+ }
+ if (ptr == NULL) {
+	return malloc(size);
+ }
+ long *plen = (long*)ptr;
+ plen--;                          // Reach top of memory
+ long len = *plen;
+ if (size &lt;= len) {
+	return ptr;
+ }
+ void* rptr = malloc(size);
+ if (rptr == NULL) {
+	free(ptr);
+	return NULL;
+ }
+ rptr = memcpy(rptr, ptr, len);
+ free(ptr);
+ return rptr;
+}
+
+void free (void* ptr )
+{
+   if (ptr == NULL) {
+	 return;
+   }
+   long *plen = (long*)ptr;
+   plen--;                          // Reach top of memory
+   long len = *plen;               // Read length
+   munmap((void*)plen, len + sizeof(long));
+}
+</code></pre>
+<p>通过在自定义分配器当中埋点可以发现其实程序启动之后应用实际申请的堆外内存始终在700M-800M之间，gperftools监控显示内存使用量也是在700M-800M左右。但是从操作系统角度来看进程占用的内存差别很大（这里只是监控堆外内存）。</p>
+<p>笔者做了一下测试，使用不同分配器进行不同程度的扫包，占用的内存如下：</p>
+<figure data-type="image" tabindex="13"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/daa0c8d0.jpg" alt="内存测试对比" loading="lazy"></figure>
+<p>为什么自定义的malloc申请800M，最终占用的物理内存在1.7G呢？</p>
+<p>因为自定义内存分配器采用的是mmap分配内存，mmap分配内存按需向上取整到整数个页，所以存在着巨大的空间浪费。通过监控发现最终申请的页面数目在536k个左右，那实际上向系统申请的内存等于512k * 4k（pagesize） = 2G。 为什么这个数据大于1.7G呢？</p>
+<p>因为操作系统采取的是延迟分配的方式，通过mmap向系统申请内存的时候，系统仅仅返回内存地址并没有分配真实的物理内存。只有在真正使用的时候，系统产生一个缺页中断，然后再分配实际的物理Page。</p>
+<h2 id="总结">总结</h2>
+<figure data-type="image" tabindex="14"><img src="https://awps-assets.meituan.net/mit-x/blog-images-bundle-2019a/3612ea5b.jpg" alt="流程图" loading="lazy"></figure>
+<p>整个内存分配的流程如上图所示。MCC扫包的默认配置是扫描所有的JAR包。在扫描包的时候，Spring Boot不会主动去释放堆外内存，导致在扫描阶段，堆外内存占用量一直持续飙升。当发生GC的时候，Spring Boot依赖于finalize机制去释放了堆外内存；但是glibc为了性能考虑，并没有真正把内存归返到操作系统，而是留下来放入内存池了，导致应用层以为发生了“内存泄漏”。所以修改MCC的配置路径为特定的JAR包，问题解决。笔者在发表这篇文章时，发现Spring Boot的最新版本（2.0.5.RELEASE）已经做了修改，在ZipInflaterInputStream主动释放了堆外内存不再依赖GC；所以Spring Boot升级到最新版本，这个问题也可以得到解决。</p>
+<h2 id="参考资料">参考资料</h2>
+<ol>
+<li><a href="https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/6/html/6.0_release_notes/compiler">GNU C Library (glibc)</a></li>
+<li><a href="https://docs.oracle.com/javase/8/docs/technotes/guides/troubleshoot/tooldescr007.html">Native Memory Tracking</a></li>
+<li><a href="https://github.com/spring-projects/spring-boot">Spring Boot</a></li>
+<li><a href="https://github.com/gperftools/gperftools">gperftools</a></li>
+<li><a href="https://github.com/btraceio/btrace">Btrace</a></li>
+</ol>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/1garbage-collection/">下一篇->G1GC &amp; CMS Garbage Collection</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+

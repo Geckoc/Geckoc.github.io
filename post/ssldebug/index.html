@@ -1,0 +1,1015 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>开放证书异常SSLHandshakeException排查 | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://chenbaicheng.top/post-images/ssldebug.jpeg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2022-03-16 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>开放证书异常SSLHandshakeException排查</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <p>在一次API接口请求中，在正式环境下请求是没有问题，在测试环境中，请求HTTPS，出现开放证书验证异常</p>
+<!-- more -->
+<p><code>javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path buildin</code></p>
+<h3 id="主要异常">主要异常</h3>
+<ul>
+<li>javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path buildin</li>
+</ul>
+<h3 id="解决过程中出现的问题">解决过程中出现的问题</h3>
+<ul>
+<li>java.net.SocketException: Connection reset</li>
+<li>javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure</li>
+<li>javax.net.ssl.SSLException: Unrecognized SSL message, plaintext connection?</li>
+</ul>
+<h3 id="关键词">关键词</h3>
+<p>使用HTTPClient时不检测服务器证书</p>
+<h3 id="解决过程">解决过程</h3>
+<h4 id="使用httpurlconnection-使用jdk原生提供的net">使用HttpURLConnection 使用JDK原生提供的net</h4>
+<p>网上查了很久，说是证书出问题了，服务器不信任我们自己创建的证书，所以在代码中必须要忽略证书信任问题。只要在创建connection之前调用两个方法：</p>
+<pre><code class="language-java">trustAllHttpsCertificates();  
+HttpsURLConnection.setDefaultHostnameVerifier(hv);  
+</code></pre>
+<p><strong>具体实现</strong></p>
+<pre><code class="language-java">HostnameVerifier hv = new HostnameVerifier() {  
+        public boolean verify(String urlHostName, SSLSession session) {  
+            System.out.println(&quot;Warning: URL Host: &quot; + urlHostName + &quot; vs. &quot;  
+                               + session.getPeerHost());  
+            return true;  
+        }  
+    };  
+      
+    private static void trustAllHttpsCertificates() throws Exception {  
+        javax.net.ssl.TrustManager[] trustAllCerts = new javax.net.ssl.TrustManager[1];  
+        javax.net.ssl.TrustManager tm = new miTM();  
+        trustAllCerts[0] = tm;  
+        javax.net.ssl.SSLContext sc = javax.net.ssl.SSLContext  
+                .getInstance(&quot;SSL&quot;);  
+        sc.init(null, trustAllCerts, null);  
+        javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory(sc  
+                .getSocketFactory());  
+    }  
+  
+    static class miTM implements javax.net.ssl.TrustManager,  
+            javax.net.ssl.X509TrustManager {  
+        public java.security.cert.X509Certificate[] getAcceptedIssuers() {  
+            return null;  
+        }  
+  
+        public boolean isServerTrusted(  
+                java.security.cert.X509Certificate[] certs) {  
+            return true;  
+        }  
+  
+        public boolean isClientTrusted(  
+                java.security.cert.X509Certificate[] certs) {  
+            return true;  
+        }  
+  
+        public void checkServerTrusted(  
+                java.security.cert.X509Certificate[] certs, String authType)  
+                throws java.security.cert.CertificateException {  
+            return;  
+        }  
+  
+        public void checkClientTrusted(  
+                java.security.cert.X509Certificate[] certs, String authType)  
+                throws java.security.cert.CertificateException {  
+            return;  
+        }  
+    }  
+</code></pre>
+<p>完整代码 GET 例子</p>
+<pre><code class="language-java">import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSession;
+
+import org.apache.log4j.Logger;
+import org.htmlparser.util.ParserException;
+
+import com.xwtech.parser.GetRequestHtmlParser;
+import com.xwtech.pojo.ExtendCandidate;
+/*
+ * GET请求类
+ */
+public class GetRequest {
+    private String url = &quot;https://b2b.10086.cn/b2b/main/viewNoticeContent.html?noticeBean.id=&quot;;
+    private Logger logger;
+    public GetRequest() {
+        logger = Logger.getLogger(GetRequest.class);
+    }
+    private static void trustAllHttpsCertificates() throws Exception {
+        javax.net.ssl.TrustManager[] trustAllCerts = new javax.net.ssl.TrustManager[1];
+        javax.net.ssl.TrustManager tm = new miTM();
+        trustAllCerts[0] = tm;
+        javax.net.ssl.SSLContext sc = javax.net.ssl.SSLContext.getInstance(&quot;SSL&quot;);
+        sc.init(null, trustAllCerts, null);
+        javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+    }
+    //为更好的演示，去掉了不相关的代码
+    public void getData(String id) {
+        this.url = url + id;
+        BufferedReader in = null;
+        HttpURLConnection conn = null;
+        String result = &quot;&quot;;
+        try {　　　　　　　　//该部分必须在获取connection前调用
+            trustAllHttpsCertificates();
+            HostnameVerifier hv = new HostnameVerifier() {
+                public boolean verify(String urlHostName, SSLSession session) {
+                    logger.info(&quot;Warning: URL Host: &quot; + urlHostName + &quot; vs. &quot; + session.getPeerHost());
+                    return true;
+                }
+            };
+            HttpsURLConnection.setDefaultHostnameVerifier(hv);
+            conn = (HttpURLConnection)new URL(url).openConnection();
+            // 发送GET请求必须设置如下两行
+            conn.setDoInput(true);
+            conn.setRequestMethod(&quot;GET&quot;);
+            // flush输出流的缓冲
+            in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+            while ((line = in.readLine()) != null) {
+                result += line;
+            }
+        } catch (Exception e) {
+            logger.error(&quot;发送 GET 请求出现异常！\t请求ID:&quot;+id+&quot;\n&quot;+e.getMessage()+&quot;\n&quot;);
+        } finally {// 使用finally块来关闭输出流、输入流
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException ex) {
+                logger.error(&quot;关闭数据流出错了！\n&quot;+ex.getMessage()+&quot;\n&quot;);
+            }
+        }
+        // 获得相应结果result,可以直接处理......
+        
+    }
+    static class miTM implements javax.net.ssl.TrustManager, javax.net.ssl.X509TrustManager {
+        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+            return null;
+        }
+
+        public boolean isServerTrusted(java.security.cert.X509Certificate[] certs) {
+            return true;
+        }
+
+        public boolean isClientTrusted(java.security.cert.X509Certificate[] certs) {
+            return true;
+        }
+
+        public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType)
+                throws java.security.cert.CertificateException {
+            return;
+        }
+
+        public void checkClientTrusted(java.security.cert.X509Certificate[] certs, String authType)
+                throws java.security.cert.CertificateException {
+            return;
+        }
+    }
+}
+</code></pre>
+<p>Post请求需要忽略证书信任与这个一样，在获取连接前，加上以上代码。</p>
+<pre><code class="language-java">// 这是一个方法，具体见上面
+trustAllHttpsCertificates();　　　　
+//这里HttpsURLConnection是类名,hv参数需要自己创建，具体可以参考上面。
+HttpsURLConnection.setDefaultHostnameVerifier(hv);　　　　　　　　
+</code></pre>
+<p>最终结论：此方法并未解决能问题<br>
+并且请求时出现了SSLHandshakeException</p>
+<pre><code class="language-java">javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
+</code></pre>
+<p>起初也怀疑是客户端和服务端SSL协议版本不一致导致产生此异常。最终也并不是SSL协议版本不一致。<br>
+有兴趣了解更多https.protocols在Java中的使用，可以阅读这篇文章：<a href="https://emacsist.github.io/2017/03/02/https.protocols%E5%9C%A8java%E4%B8%AD%E7%9A%84%E4%BD%BF%E7%94%A8/">https.protocols在Java中的使用</a><br>
+尝试解决：<br>
+需要设置Java客户端https.protocols环境变量，使用服务端支持的SSL协议版本。</p>
+<ol>
+<li>安装 nmap</li>
+</ol>
+<p>使用nmap可以查看服务端支持是SSL协议版本，如果你的机器上未安装nmap，可以使用下面的命令安装（以CentOS为例）：<br>
+<code>sudo yum install nmap</code></p>
+<p>查看该服务支持的HTTPS协议版本：</p>
+<pre><code class="language-java">$ nmap --script ssl-enum-ciphers -p 443 kubeboard.yidian-inc.com
+
+Starting Nmap 6.40 ( http://nmap.org ) at 2019-12-04 18:37 CST
+Nmap scan report for 10.101.211.62
+Host is up (0.000094s latency).
+PORT    STATE SERVICE
+443/tcp open  https
+| ssl-enum-ciphers:
+|   TLSv1.0: No supported ciphers found
+|   TLSv1.1: No supported ciphers found
+|_  TLSv1.2: No supported ciphers found
+</code></pre>
+<ol start="2">
+<li>设置https.protocols</li>
+</ol>
+<p>从上面的信息可以看到，该服务支持TLSv1.0、TLSv1.1、TLSv1.2，所以我将https.protocols设置成了下面的模样：</p>
+<pre><code class="language-java">System.setProperty(&quot;https.protocols&quot;, &quot;TLSv1.2,TLSv1.1,TLSv1.0,SSLv3&quot;);
+</code></pre>
+<p>但紧接着抛出下面的错误信息：</p>
+<pre><code class="language-java">Caused by: java.lang.IllegalArgumentException: TLSv1.0
+    at sun.security.ssl.ProtocolVersion.valueOf(ProtocolVersion.java:187)
+    at sun.security.ssl.ProtocolList.convert(ProtocolList.java:84)
+    at sun.security.ssl.ProtocolList.&lt;init&gt;(ProtocolList.java:52)
+</code></pre>
+<p>原因是：我使用的JDK 8不支持TLSv1.0，那就把TLSv1.0去掉吧。</p>
+<ol start="3">
+<li>输出网络日志</li>
+</ol>
+<pre><code class="language-java">Caused by: javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
+    at sun.security.ssl.Alerts.getSSLException(Alerts.java:192)
+    at sun.security.ssl.Alerts.getSSLException(Alerts.java:154)
+</code></pre>
+<p>可以通过在启动命令中设置-Djavax.net.debug=all或在Java代码中以下面的方式启动网络调试输出：</p>
+<pre><code class="language-java">System.setProperty(&quot;javax.net.debug&quot;, &quot;all&quot;);
+</code></pre>
+<p>然后看到下面的输出：</p>
+<pre><code class="language-java">main, WRITE: TLSv1.2 Handshake, length = 88
+[Raw write]: length = 93
+0000: 16 03 03 00 58 01 00 00   54 03 03 5D E7 98 04 87  ....X...T..]....
+0010: BF 47 63 0F 9E C1 B6 BA   BF 39 05 78 28 00 54 87  .Gc......9.x(.T.
+0020: 55 F5 71 B2 7B DF 8B E7   55 0A E4 00 00 02 00 35  U.q.....U......5
+0030: 01 00 00 29 00 0D 00 1C   00 1A 06 03 06 01 05 03  ...)............
+0040: 05 01 04 03 04 01 04 02   03 03 03 01 03 02 02 03  ................
+0050: 02 01 02 02 00 17 00 00   FF 01 00 01 00           .............
+[Raw read]: length = 5
+0000: 15 03 03 00 02                                     .....
+[Raw read]: length = 2
+0000: 02 28                                              .(
+main, READ: TLSv1.2 Alert, length = 2
+main, RECV TLSv1.2 ALERT:  fatal, handshake_failure
+main, called closeSocket()
+main, handling exception: javax.net.ssl.SSLHandshakeException: Received fatal alert: handshake_failure
+</code></pre>
+<p>从第1行和第14行可以看到，客户端和服务端都使用了TLSv1.2，说明并不是协议版本不一致。</p>
+<p>善用Google最终在OSCHINA找到了解决方法<br>
+这个是JDK导致的，JDK里面有一个jce的包，安全性机制导致的访问https会报错，官网上有替代的jar包，将其替换掉即可。<br>
+JCE包下载地址：</p>
+<ul>
+<li>JDK6 <a href="https://www.oracle.com/java/technologies/java-archive-downloads-java-plat-downloads.html#jce_policy-6-oth-JPR">jce_policy-6.zip</a></li>
+<li>JDK7 <a href="https://www.oracle.com/java/technologies/javase-jce7-downloads.html">UnlimitedJCEPolicyJDK7.zip</a></li>
+<li>JDK8 <a href="https://www.oracle.com/java/technologies/javase-jce8-downloads.html">jce_policy-8.zip</a></li>
+</ul>
+<p>下载后解压，可以看到local_policy.jar和US_export_policy.jar以及readme.txt，<br>
+替换${java_home}/jre/lib/security/ 下面的local_policy.jar和US_export_policy.jar即可。<br>
+想更深入的里了解，请参考 <a href="https://blog.51cto.com/zpf666/2341494?source=dra">Java密钥长度受限制问题解决</a></p>
+<p>异常解决后，满心欢喜再次发送请求，再次爆出异常</p>
+<pre><code class="language-java"> java.net.SocketException: Connection reset
+</code></pre>
+<p>直接看就对了， <a href="https://www.cnblogs.com/shoren/p/httpclient-connectionreset.html">一次SocketException: Connection reset</a></p>
+<p>再次发送请求，最后依然是</p>
+<pre><code class="language-java">javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException:
+unable to find valid certification path to requested target
+</code></pre>
+<h3 id="尝试自己生成安全证书">尝试自己生成安全证书</h3>
+<p>写一个安全程序专门用于获取安全证书：</p>
+<pre><code class="language-java">/*
+ * Copyright 2006 Sun Microsystems, Inc.  All Rights Reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ *   - Redistributions of source code must retain the above copyright
+ *     notice, this list of conditions and the following disclaimer.
+ *
+ *   - Redistributions in binary form must reproduce the above copyright
+ *     notice, this list of conditions and the following disclaimer in the
+ *     documentation and/or other materials provided with the distribution.
+ *
+ *   - Neither the name of Sun Microsystems nor the names of its
+ *     contributors may be used to endorse or promote products derived
+ *     from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS
+ * IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+ * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+ * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+ 
+import java.io.*;
+import java.net.URL;
+ 
+import java.security.*;
+import java.security.cert.*;
+ 
+import javax.net.ssl.*;
+ 
+public class InstallCert {
+ 
+    public static void main(String[] args) throws Exception {
+    String host;
+    int port;
+    char[] passphrase;
+    if ((args.length == 1) || (args.length == 2)) {
+        String[] c = args[0].split(&quot;:&quot;);
+        host = c[0];
+        port = (c.length == 1) ? 443 : Integer.parseInt(c[1]);
+        String p = (args.length == 1) ? &quot;changeit&quot; : args[1];
+        passphrase = p.toCharArray();
+    } else {
+        System.out.println(&quot;Usage: java InstallCert &lt;host&gt;[:port] [passphrase]&quot;);
+        return;
+    }
+ 
+    File file = new File(&quot;jssecacerts&quot;);
+    if (file.isFile() == false) {
+        char SEP = File.separatorChar;
+        File dir = new File(System.getProperty(&quot;java.home&quot;) + SEP
+            + &quot;lib&quot; + SEP + &quot;security&quot;);
+        file = new File(dir, &quot;jssecacerts&quot;);
+        if (file.isFile() == false) {
+        file = new File(dir, &quot;cacerts&quot;);
+        }
+    }
+    System.out.println(&quot;Loading KeyStore &quot; + file + &quot;...&quot;);
+    InputStream in = new FileInputStream(file);
+    KeyStore ks = KeyStore.getInstance(KeyStore.getDefaultType());
+    ks.load(in, passphrase);
+    in.close();
+ 
+    SSLContext context = SSLContext.getInstance(&quot;TLS&quot;);
+    TrustManagerFactory tmf =
+        TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+    tmf.init(ks);
+    X509TrustManager defaultTrustManager = (X509TrustManager)tmf.getTrustManagers()[0];
+    SavingTrustManager tm = new SavingTrustManager(defaultTrustManager);
+    context.init(null, new TrustManager[] {tm}, null);
+    SSLSocketFactory factory = context.getSocketFactory();
+ 
+    System.out.println(&quot;Opening connection to &quot; + host + &quot;:&quot; + port + &quot;...&quot;);
+    SSLSocket socket = (SSLSocket)factory.createSocket(host, port);
+    socket.setSoTimeout(10000);
+    try {
+        System.out.println(&quot;Starting SSL handshake...&quot;);
+        socket.startHandshake();
+        socket.close();
+        System.out.println();
+        System.out.println(&quot;No errors, certificate is already trusted&quot;);
+    } catch (SSLException e) {
+        System.out.println();
+        e.printStackTrace(System.out);
+    }
+ 
+    X509Certificate[] chain = tm.chain;
+    if (chain == null) {
+        System.out.println(&quot;Could not obtain server certificate chain&quot;);
+        return;
+    }
+ 
+    BufferedReader reader =
+        new BufferedReader(new InputStreamReader(System.in));
+ 
+    System.out.println();
+    System.out.println(&quot;Server sent &quot; + chain.length + &quot; certificate(s):&quot;);
+    System.out.println();
+    MessageDigest sha1 = MessageDigest.getInstance(&quot;SHA1&quot;);
+    MessageDigest md5 = MessageDigest.getInstance(&quot;MD5&quot;);
+    for (int i = 0; i &lt; chain.length; i++) {
+        X509Certificate cert = chain[i];
+        System.out.println
+            (&quot; &quot; + (i + 1) + &quot; Subject &quot; + cert.getSubjectDN());
+        System.out.println(&quot;   Issuer  &quot; + cert.getIssuerDN());
+        sha1.update(cert.getEncoded());
+        System.out.println(&quot;   sha1    &quot; + toHexString(sha1.digest()));
+        md5.update(cert.getEncoded());
+        System.out.println(&quot;   md5     &quot; + toHexString(md5.digest()));
+        System.out.println();
+    }
+ 
+    System.out.println(&quot;Enter certificate to add to trusted keystore or 'q' to quit: [1]&quot;);
+    String line = reader.readLine().trim();
+    int k;
+    try {
+        k = (line.length() == 0) ? 0 : Integer.parseInt(line) - 1;
+    } catch (NumberFormatException e) {
+        System.out.println(&quot;KeyStore not changed&quot;);
+        return;
+    }
+ 
+    X509Certificate cert = chain[k];
+    String alias = host + &quot;-&quot; + (k + 1);
+    ks.setCertificateEntry(alias, cert);
+ 
+    OutputStream out = new FileOutputStream(&quot;jssecacerts&quot;);
+    ks.store(out, passphrase);
+    out.close();
+ 
+    System.out.println();
+    System.out.println(cert);
+    System.out.println();
+    System.out.println
+        (&quot;Added certificate to keystore 'jssecacerts' using alias '&quot;
+        + alias + &quot;'&quot;);
+    }
+ 
+    private static final char[] HEXDIGITS = &quot;0123456789abcdef&quot;.toCharArray();
+ 
+    private static String toHexString(byte[] bytes) {
+    StringBuilder sb = new StringBuilder(bytes.length * 3);
+    for (int b : bytes) {
+        b &amp;= 0xff;
+        sb.append(HEXDIGITS[b &gt;&gt; 4]);
+        sb.append(HEXDIGITS[b &amp; 15]);
+        sb.append(' ');
+    }
+    return sb.toString();
+    }
+ 
+    private static class SavingTrustManager implements X509TrustManager {
+ 
+    private final X509TrustManager tm;
+    private X509Certificate[] chain;
+ 
+    SavingTrustManager(X509TrustManager tm) {
+        this.tm = tm;
+    }
+ 
+    public X509Certificate[] getAcceptedIssuers() {
+        throw new UnsupportedOperationException();
+    }
+ 
+    public void checkClientTrusted(X509Certificate[] chain, String authType)
+        throws CertificateException {
+        throw new UnsupportedOperationException();
+    }
+ 
+    public void checkServerTrusted(X509Certificate[] chain, String authType)
+        throws CertificateException {
+        this.chain = chain;
+        tm.checkServerTrusted(chain, authType);
+    }
+    }
+ 
+}
+
+</code></pre>
+<p>将代码保存为InstallCert.java文件，并通过javac InstallCert.java 命令编译Java程序<br>
+执行 java InstallCert hostname 命令，如：java InstallCert 192.168.1.137:8443（要访问的目标程序的IP地址和端口），然后会看到如下信息：</p>
+<p>插曲：javac编译成功，在使用java命令执行Java程序时，出现 <strong>无法运行java“找不到或无法加载主类”</strong><br>
+我原地螺旋升天，这到底什么时候才是个头？<br>
+尝试在CLASSPATH环境变量中添加一个当前路径&quot;.;&quot;，但是我发现本身已经有了。<br>
+于是尝试cd 到主目录执行java命令，仍然无法找到主目录，cd到文件当前目录下也是无法找到！<br>
+一番思考找到问题！由于源码中有包名，所以才会导致加载主类失败。<br>
+所以在执行时要cd到主目录，java名字带上包名即可</p>
+<p>模拟例子</p>
+<pre><code class="language-java">// 执行完没有异常返回即可，可查看是否生成对应class文件
+javac HelloWorld.java   
+
+// 假设当前为 D/code/test/com/frist/
+cd d/code/test
+java com.frist.helloWorld
+
+</code></pre>
+<pre><code class="language-java">java InstallCert ecc.fedora.redhat.com
+Loading KeyStore /usr/jdk/instances/jdk1.5.0/jre/lib/security/cacerts...
+Opening connection to ecc.fedora.redhat.com:443...
+Starting SSL handshake...
+ 
+javax.net.ssl.SSLHandshakeException: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+at com.sun.net.ssl.internal.ssl.Alerts.getSSLException(Alerts.java:150)
+at com.sun.net.ssl.internal.ssl.SSLSocketImpl.fatal(SSLSocketImpl.java:1476)
+at com.sun.net.ssl.internal.ssl.Handshaker.fatalSE(Handshaker.java:174)
+at com.sun.net.ssl.internal.ssl.Handshaker.fatalSE(Handshaker.java:168)
+at com.sun.net.ssl.internal.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:846)
+at com.sun.net.ssl.internal.ssl.ClientHandshaker.processMessage(ClientHandshaker.java:106)
+at com.sun.net.ssl.internal.ssl.Handshaker.processLoop(Handshaker.java:495)
+at com.sun.net.ssl.internal.ssl.Handshaker.process_record(Handshaker.java:433)
+at com.sun.net.ssl.internal.ssl.SSLSocketImpl.readRecord(SSLSocketImpl.java:815)
+at com.sun.net.ssl.internal.ssl.SSLSocketImpl.performInitialHandshake(SSLSocketImpl.java:1025)
+at com.sun.net.ssl.internal.ssl.SSLSocketImpl.startHandshake(SSLSocketImpl.java:1038)
+at InstallCert.main(InstallCert.java:63)
+Caused by: sun.security.validator.ValidatorException: PKIX path building failed: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:221)
+at sun.security.validator.PKIXValidator.engineValidate(PKIXValidator.java:145)
+at sun.security.validator.Validator.validate(Validator.java:203)
+at com.sun.net.ssl.internal.ssl.X509TrustManagerImpl.checkServerTrusted(X509TrustManagerImpl.java:172)
+at InstallCert$SavingTrustManager.checkServerTrusted(InstallCert.java:158)
+at com.sun.net.ssl.internal.ssl.JsseX509TrustManager.checkServerTrusted(SSLContextImpl.java:320)
+at com.sun.net.ssl.internal.ssl.ClientHandshaker.serverCertificate(ClientHandshaker.java:839)
+... 7 more
+Caused by: sun.security.provider.certpath.SunCertPathBuilderException: unable to find valid certification path to requested target
+at sun.security.provider.certpath.SunCertPathBuilder.engineBuild(SunCertPathBuilder.java:236)
+at java.security.cert.CertPathBuilder.build(CertPathBuilder.java:194)
+at sun.security.validator.PKIXValidator.doBuild(PKIXValidator.java:216)
+... 13 more
+ 
+Server sent 2 certificate(s):
+ 
+1 Subject CN=ecc.fedora.redhat.com, O=example.com, C=US
+   Issuer CN=Certificate Shack, O=example.com, C=US
+   sha1    2e 7f 76 9b 52 91 09 2e 5d 8f 6b 61 39 2d 5e 06 e4 d8 e9 c7
+   md5     dd d1 a8 03 d7 6c 4b 11 a7 3d 74 28 89 d0 67 54
+ 
+2 Subject CN=Certificate Shack, O=example.com, C=US
+   Issuer CN=Certificate Shack, O=example.com, C=US
+   sha1    fb 58 a7 03 c4 4e 3b 0e e3 2c 40 2f 87 64 13 4d df e1 a1 a6
+   md5     72 a0 95 43 7e 41 88 18 ae 2f 6d 98 01 2c 89 68
+ 
+Enter certificate to add to trusted keystore or 'q' to quit: [1]
+
+</code></pre>
+<p>直接输入1，然后会在相应的目录下产生一个名为‘jssecacerts’的证书，将证书copy到$JAVA_HOME/jre/lib/security目录下，或者通过执行：<br>
+System.setProperty(“javax.net.ssl.trustStore”, &quot;D:\UTA\DOC_E_Health_XML\Keystore\jssecacerts</p>
+<p>重启程序即可解决</p>
+<p>生成文件失败，可能有人能成功。<br>
+报出异常</p>
+<pre><code class="language-java">javax.net.ssl.SSLException: Unrecognized SSL message, plaintext connection?
+</code></pre>
+<p>异常记录分析 <a href="https://www.cnblogs.com/langtianya/p/4286368.html">javax.net.ssl.SSLException: Unrecognized SSL message</a></p>
+<p>被Exception包围的一天！<br>
+祭出最终杀招，可谓妙药良方，Exception消除。<br>
+创建一个信任所有证书的HttpClient对象</p>
+<pre><code class="language-java"> /**
+     * 创建一个SSL信任所有证书的httpClient对象
+     *
+     * @return
+     */
+    public static CloseableHttpClient createSSLClientDefault() {
+        try {
+            SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
+                // 信任所有
+                @Override
+                public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+                    return true;
+                }
+            }).build();
+            SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslContext);
+            return HttpClients.custom().setSSLSocketFactory(sslsf).build();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyStoreException e) {
+            e.printStackTrace();
+        }
+        return HttpClients.createDefault();
+    }
+</code></pre>
+<p>完整请求</p>
+<pre><code class="language-java"> /**
+     * @Title:POST请求
+     * @param url    请求地址
+     * @param params Map集合(输入参数要求为JSON对象)
+     * @return String
+     */
+public static String sendPost(String url, Map&lt;String, Object&gt; params) throws IOException {
+        // 设置默认请求头
+        Map&lt;String, String&gt; headers = new HashMap&lt;&gt;();
+        headers.put(&quot;Content-Type&quot;, &quot;application/json&quot;);
+
+        // 将map转成json
+        JSONObject data = JSONObject.parseObject(JSON.toJSONString(params));
+        return doPostByJSON(url, headers, data, ENCODING);
+    }
+    
+private static String doPostByJSON(String url, Map&lt;String, String&gt; headers, JSONObject data, String encoding) throws IOException {
+        // 请求返回结果
+        String resultJson = null;
+        // 创建Client
+        CloseableHttpClient client = createSSLClientDefault();
+        // 发送请求,返回响应对象
+        CloseableHttpResponse response = null;
+        // 创建HttpPost对象
+        HttpPost httpPost = new HttpPost();
+
+        /**
+         * setConnectTimeout：设置连接超时时间，单位毫秒。
+         * setConnectionRequestTimeout：设置从connect Manager(连接池)获取Connection
+         * 超时时间，单位毫秒。这个属性是新加的属性，因为目前版本是可以共享连接池的。
+         * setSocketTimeout：请求获取数据的超时时间(即响应时间)，单位毫秒。
+         * 如果访问一个接口，多少时间内无法返回数据，就直接放弃此次调用。
+         */
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(CONNECT_TIMEOUT).setSocketTimeout(SOCKET_TIMEOUT).build();
+        httpPost.setConfig(requestConfig);
+
+        try {
+            // 设置请求地址
+            httpPost.setURI(new URI(url));
+            // 设置请求头
+            packageHeader(headers, httpPost);
+
+            // 设置实体
+            httpPost.setEntity(new StringEntity(JSON.toJSONString(data)));
+
+            // 发送请求,返回响应对象
+            response = client.execute(httpPost);
+            // 获取响应状态
+            int status = response.getStatusLine().getStatusCode();
+
+            if (status != HttpStatus.SC_OK) {
+                System.out.println(&quot;响应失败，状态码：&quot; + status);
+            }
+            // 获取响应结果
+            resultJson = EntityUtils.toString(response.getEntity(), encoding);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            release(response, client);
+        }
+        return resultJson;
+    }
+
+   /**
+     * Description: 封装请求头
+     *
+     * @param params
+     * @param httpMethod
+     */
+public static void packageHeader(Map&lt;String, String&gt; params, HttpRequestBase httpMethod) {
+        // 封装请求头
+        if (params != null) {
+            Set&lt;Map.Entry&lt;String, String&gt;&gt; entrySet = params.entrySet();
+            for (Map.Entry&lt;String, String&gt; entry : entrySet) {
+                // 设置到请求头到HttpRequestBase对象中
+                httpMethod.setHeader(entry.getKey(), entry.getValue());
+            }
+        }
+    }   
+
+</code></pre>
+<p>参考博文：<br>
+<a href="https://blog.csdn.net/male09/article/details/80527655">HTTP请求HTTPS请求 (忽略验证)</a></p>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/wen-yi-fu-xing-zhi-yang-li/">下一篇->文艺复兴之杨笠</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+

@@ -1,0 +1,530 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>JVM故障分析及性能优化系列之二：Thread Dump日志结构解析 | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://chenbaicheng.top/post-images/jvm-system-II.jpg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2022-03-03 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>JVM故障分析及性能优化系列之二：Thread Dump日志结构解析</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <p>上一篇文章讲述了<a href="https://geckoc.github.io/post/jvm-systme-i/">如何使用jstack生成日志文件</a>，这篇文章首先对Thread Dump日志文件的结构进行分析。</p>
+<!-- more -->
+<p>一个典型的thread dump文件主要由一下几个部分组成：<br>
+<img src="https://chenbaicheng.top/post-images/1646299013380.png" alt="" loading="lazy"><br>
+上图将JVM上的线程堆栈信息和线程信息做了详细的拆解。</p>
+<ul>
+<li><a href="#full-thread-dump-identifier">第一部分：Full thread dump identifier</a></li>
+<li><a href="#javaee-middleware-third-party-custom-application-threads">第二部分：Java EE middleware, third party &amp; custom application Threads</a></li>
+<li><a href="#hotspot-vm-thread">第三部分：HotSpot VM Thread</a></li>
+<li><a href="#attach-listener">3.1 &quot;Attach Listener&quot;</a></li>
+<li><a href="#destroy-javavm">3.2 &quot;DestroyJavaVM&quot;</a></li>
+<li><a href="#service-thread">3.3 &quot;Service Thread&quot;</a></li>
+<li><a href="#compiler-thread">3.4 &quot;CompilerThread&quot;</a></li>
+<li><a href="#signal-dispatcher">3.5 &quot;Signal Dispatcher&quot;</a></li>
+<li><a href="#finalizer">3.6 &quot;Finalizer&quot;</a></li>
+<li><a href="#reference-handler">3.7 &quot;Reference Handler&quot;</a></li>
+<li><a href="#vm-thread">3.8 &quot;VM Thread&quot;</a></li>
+<li><a href="#hotspot-gc-thread">第四部分：HotSpot GC Thread</a></li>
+<li><a href="#vm-periodic-task-thread">4.1 &quot;VM Periodic Task Thread&quot;</a></li>
+<li><a href="#gc-task-thread-parallel-gc">4.2 &quot;GC task thread#0 (ParallelGC)&quot;</a></li>
+<li><a href="#gang-worker-parallel-gc-threads">4.3 &quot;Gang worker#0 (Parallel GC Threads)&quot;</a></li>
+<li><a href="#concurrent-mark-sweep-gc-thread">4.4 &quot;Concurrent Mark-Sweep GC Thread&quot;</a></li>
+<li><a href="#surrogate-locker-thread-concurrent-gc">4.5 &quot;Surrogate Locker Thread (Concurrent GC)&quot;</a></li>
+<li><a href="#jni-global-references-count">第五部分：JNI global references count</a></li>
+</ul>
+<h1 id="第一部分">第一部分</h1>
+<h1 id="full-thread-dump-identifier">full-thread-dump-identifier</h1>
+<p>这一部分是内容最开始的部分，展示了快照文件的生成时间和JVM的版本信息。</p>
+<pre><code class="language-java">2022-03-03 17:19:11
+Full thread dump Java HotSpot(TM) 64-Bit Server VM (24.79-b02 mixed mode):
+</code></pre>
+<h1 id="第二部分">第二部分</h1>
+<h1 id="javaee-middleware-third-party-custom-application-threads">javaee-middleware-third-party-custom-application-threads</h1>
+<p>这是整个文件的核心部分，里面展示了JavaEE容器（如tomcat、resin等）、自己的程序中所使用的线程信息。这一部分详细的含义见 Java内存泄漏分析系列之四：jstack生成的Thread Dump日志线程状态分析。</p>
+<pre><code class="language-java">&quot;resin-22129&quot; daemon prio=10 tid=0x00007fbe5c34e000 nid=0x4cb1 waiting on condition [0x00007fbe4ff7c000]
+   java.lang.Thread.State: WAITING (parking)
+    at sun.misc.Unsafe.park(Native Method)
+    at java.util.concurrent.locks.LockSupport.park(LockSupport.java:315)
+    at com.caucho.env.thread2.ResinThread2.park(ResinThread2.java:196)
+    at com.caucho.env.thread2.ResinThread2.runTasks(ResinThread2.java:147)
+    at com.caucho.env.thread2.ResinThread2.run(ResinThread2.java:118)
+</code></pre>
+<h1 id="第三部分">第三部分</h1>
+<h1 id="hotspot-vm-thread">hotspot-vm-thread</h1>
+<p>这一部分展示了JVM内部线程的信息，用于执行内部的原生操作。下面常见的集中内置线程：</p>
+<h1 id="attach-listener">attach-listener</h1>
+<p>该线程负责接收外部命令，执行该命令并把结果返回给调用者，此种类型的线程通常在桌面程序中出现。</p>
+<pre><code class="language-java">&quot;Attach Listener&quot; daemon prio=5 tid=0x00007fc6b6800800 nid=0x3b07 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+</code></pre>
+<h1 id="destroy-javavm">destroy-javavm</h1>
+<p>执行main()的线程在执行完之后调用JNI中的 jni_DestroyJavaVM() 方法会唤起DestroyJavaVM 线程。在JBoss启动之后，也会唤起DestroyJavaVM线程，处于等待状态，等待其它线程（java线程和native线程）退出时通知它卸载JVM。</p>
+<pre><code class="language-java">&quot;DestroyJavaVM&quot; prio=5 tid=0x00007fc6b3001000 nid=0x1903 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+</code></pre>
+<h1 id="service-thread">service-thread&quot;</h1>
+<p>用于启动服务的线程</p>
+<pre><code class="language-java">&quot;Service Thread&quot; daemon prio=10 tid=0x00007fbea81b3000 nid=0x5f2 runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+</code></pre>
+<h1 id="compiler-thread">compiler-thread&quot;</h1>
+<p>用来调用JITing，实时编译装卸CLASS。通常JVM会启动多个线程来处理这部分工作，线程名称后面的数字也会累加，比如CompilerThread1。</p>
+<pre><code class="language-java">&quot;C2 CompilerThread1&quot; daemon prio=10 tid=0x00007fbea814b000 nid=0x5f1 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+
+&quot;C2 CompilerThread0&quot; daemon prio=10 tid=0x00007fbea8142000 nid=0x5f0 waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+</code></pre>
+<h1 id="signal-dispatcher">signal-dispatcher</h1>
+<p>Attach Listener线程的职责是接收外部jvm命令，当命令接收成功后，会交给signal dispather 线程去进行分发到各个不同的模块处理命令，并且返回处理结果。<br>
+signal dispather线程也是在第一次接收外部jvm命令时，进行初始化工作。</p>
+<pre><code class="language-java">&quot;Signal Dispatcher&quot; daemon prio=10 tid=0x00007fbea81bf800 nid=0x5ef runnable [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+</code></pre>
+<h1 id="finalizer">finalizer</h1>
+<p>这个线程也是在main线程之后创建的，其优先级为10，主要用于在垃圾收集前，调用对象的finalize()方法；关于Finalizer线程的几点：<br>
+（1）只有当开始一轮垃圾收集时，才会开始调用finalize()方法；因此并不是所有对象的finalize()方法都会被执行；<br>
+（2）该线程也是daemon线程，因此如果虚拟机中没有其他非daemon线程，不管该线程有没有执行完finalize()方法，JVM也会退出；<br>
+（3）JVM在垃圾收集时会将失去引用的对象包装成Finalizer对象（Reference的实现），并放入ReferenceQueue，由Finalizer线程来处理；最后将该Finalizer对象的引用置为null，由垃圾收集器来回收；<br>
+（4）JVM为什么要单独用一个线程来执行finalize()方法呢？<br>
+如果JVM的垃圾收集线程自己来做，很有可能由于在finalize()方法中误操作导致GC线程停止或不可控，这对GC线程来说是一种灾难。</p>
+<pre><code class="language-java">&quot;Finalizer&quot; daemon prio=10 tid=0x00007fbea80da000 nid=0x5eb in Object.wait() [0x00007fbeac044000]
+   java.lang.Thread.State: WAITING (on object monitor)
+    at java.lang.Object.wait(Native Method)
+    at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:135)
+    - locked &lt;0x00000006d173c1a8&gt; (a java.lang.ref.ReferenceQueue$Lock)
+    at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:151)
+    at java.lang.ref.Finalizer$FinalizerThread.run(Finalizer.java:209)
+</code></pre>
+<h1 id="reference-handler">reference-handler</h1>
+<p>JVM在创建main线程后就创建Reference Handler线程，其优先级最高，为10，它主要用于处理引用对象本身（软引用、弱引用、虚引用）的垃圾回收问题 。</p>
+<pre><code class="language-java">&quot;Reference Handler&quot; daemon prio=10 tid=0x00007fbea80d8000 nid=0x5ea in Object.wait() [0x00007fbeac085000]
+   java.lang.Thread.State: WAITING (on object monitor)
+    at java.lang.Object.wait(Native Method)
+    at java.lang.Object.wait(Object.java:503)
+    at java.lang.ref.Reference$ReferenceHandler.run(Reference.java:133)
+    - locked &lt;0x00000006d173c1f0&gt; (a java.lang.ref.Reference$Lock)
+</code></pre>
+<h1 id="vm-thread">vm-thread</h1>
+<p>JVM中线程的母体，根据HotSpot源码中关于vmThread.hpp里面的注释，它是一个单例的对象（最原始的线程）会产生或触发所有其他的线程，这个单例的VM线程是会被其他线程所使用来做一些VM操作（如清扫垃圾等）。<br>
+在 VM Thread 的结构体里有一个VMOperationQueue列队，所有的VM线程操作(vm_operation)都会被保存到这个列队当中，VMThread 本身就是一个线程，它的线程负责执行一个自轮询的loop函数(具体可以参考：VMThread.cpp里面的void VMThread::loop()) ，该loop函数从VMOperationQueue列队中按照优先级取出当前需要执行的操作对象(VM_Operation)，并且调用VM_Operation-&gt;evaluate函数去执行该操作类型本身的业务逻辑。<br>
+VM操作类型被定义在vm_operations.hpp文件内，列举几个：ThreadStop、ThreadDump、PrintThreads、GenCollectFull、GenCollectFullConcurrent、CMS_Initial_Mark、CMS_Final_Remark….. 有兴趣的同学，可以自己去查看源文件。</p>
+<pre><code class="language-java">&quot;VM Thread&quot; prio=10 tid=0x00007fbea80d3800 nid=0x5e9 runnable
+</code></pre>
+<h1 id="第四部分">第四部分</h1>
+<h1 id="hotspot-gc-thread">hotspot-gc-thread</h1>
+<p>JVM中用于进行资源回收的线程，包括以下几种类型的线程：</p>
+<h1 id="vm-periodic-task-thread">vm-periodic-task-thread</h1>
+<p>该线程是JVM周期性任务调度的线程，它由WatcherThread创建，是一个单例对象。该线程在JVM内使用得比较频繁，比如：定期的内存监控、JVM运行状况监控。</p>
+<pre><code class="language-java">&quot;VM Periodic Task Thread&quot; prio=10 tid=0x00007fbea82ae800 nid=0x5fa waiting on condition 
+</code></pre>
+<p>可以使用jstat 命令查看GC的情况，比如查看某个进程没有存活必要的引用可以使用命令 <code>jstat -gcutil &lt;pid&gt; 250 7</code>参数中pid是进程id，后面的250和7表示每250毫秒打印一次，总共打印7次。<br>
+这对于防止因为应用代码中直接使用native库或者第三方的一些监控工具的内存泄漏有非常大的帮助。</p>
+<h1 id="gc-task-thread-parallel-gc">gc-task-thread-parallel-gc</h1>
+<p>垃圾回收线程，该线程会负责进行垃圾回收。通常JVM会启动多个线程来处理这个工作，线程名称中#后面的数字也会累加。</p>
+<pre><code class="language-java">&quot;GC task thread#0 (ParallelGC)&quot; prio=5 tid=0x00007fc6b480d000 nid=0x2503 runnable
+
+&quot;GC task thread#1 (ParallelGC)&quot; prio=5 tid=0x00007fc6b2812000 nid=0x2703 runnable
+
+&quot;GC task thread#2 (ParallelGC)&quot; prio=5 tid=0x00007fc6b2812800 nid=0x2903 runnable
+
+&quot;GC task thread#3 (ParallelGC)&quot; prio=5 tid=0x00007fc6b2813000 nid=0x2b03 runnable
+</code></pre>
+<p><strong>如果在JVM中增加了 -XX:+UseConcMarkSweepGC 参数将会启用CMS （Concurrent Mark-Sweep）GC Thread方式，以下是该模式下的线程类型：</strong></p>
+<h1 id="gang-worker-parallel-gc-threads">gang-worker-parallel-gc-threads</h1>
+<p>原来垃圾回收线程GC task thread#0 (ParallelGC) 被替换为 Gang worker#0 (Parallel GC Threads)。Gang worker 是JVM用于年轻代垃圾回收(minor gc)的线程。</p>
+<pre><code class="language-java">&quot;Gang worker#0 (Parallel GC Threads)&quot; prio=10 tid=0x00007fbea801b800 nid=0x5e4 runnable 
+
+&quot;Gang worker#1 (Parallel GC Threads)&quot; prio=10 tid=0x00007fbea801d800 nid=0x5e7 runnable 
+</code></pre>
+<h1 id="concurrent-mark-sweep-gc-thread">concurrent-mark-sweep-gc-thread</h1>
+<p>并发标记清除垃圾回收器（就是通常所说的CMS GC）线程， 该线程主要针对于年老代垃圾回收。</p>
+<pre><code class="language-java">&quot;Concurrent Mark-Sweep GC Thread&quot; prio=10 tid=0x00007fbea8073800 nid=0x5e8 runnable 
+</code></pre>
+<h1 id="surrogate-locker-thread-concurrent-gc">surrogate-locker-thread-concurrent-gc</h1>
+<p>此线程主要配合CMS垃圾回收器来使用，是一个守护线程，主要负责处理GC过程中Java层的Reference（指软引用、弱引用等等）与jvm 内部层面的对象状态同步。</p>
+<pre><code class="language-java">&quot;Surrogate Locker Thread (Concurrent GC)&quot; daemon prio=10 tid=0x00007fbea8158800 nid=0x5ee waiting on condition [0x0000000000000000]
+   java.lang.Thread.State: RUNNABLE
+</code></pre>
+<p>这里以 WeakHashMap 为例进行说明，首先是一个关键点：</p>
+<ul>
+<li>WeakHashMap和HashMap一样，内部有一个Entry[]数组;</li>
+<li>WeakHashMap的Entry比较特殊，它的继承体系结构为Entry-&gt;WeakReference-&gt;Reference;</li>
+<li>Reference 里面有一个全局锁对象：Lock，它也被称为pending_lock，注意：它是静态对象；</li>
+<li>Reference 里面有一个静态变量：pending；</li>
+<li>Reference 里面有一个静态内部类：ReferenceHandler的线程，它在static块里面被初始化并且启动，启动完成后处于wait状态，它在一个Lock同步锁模块中等待；</li>
+<li>WeakHashMap里面还实例化了一个ReferenceQueue列队</li>
+</ul>
+<p>假设，WeakHashMap对象里面已经保存了很多对象的引用，JVM 在进行CMS GC的时候会创建一个ConcurrentMarkSweepThread（简称CMST）线程去进行GC。ConcurrentMarkSweepThread线程被创建的同时会创建一个SurrogateLockerThread（简称SLT）线程并且启动它，SLT启动之后，处于等待阶段。<br>
+CMST开始GC时，会发一个消息给SLT让它去获取Java层Reference对象的全局锁：Lock。直到CMS GC完毕之后，JVM 会将WeakHashMap中所有被回收的对象所属的WeakReference容器对象放入到Reference 的pending属性当中（每次GC完毕之后，pending属性基本上都不会为null了），然后通知SLT释放并且notify全局锁:Lock。此时激活了ReferenceHandler线程的run方法，使其脱离wait状态，开始工作了。<br>
+ReferenceHandler这个线程会将pending中的所有WeakReference对象都移动到它们各自的列队当中，比如当前这个WeakReference属于某个WeakHashMap对象，那么它就会被放入相应的ReferenceQueue列队里面（该列队是链表结构）。 当我们下次从WeakHashMap对象里面get、put数据或者调用size方法的时候，WeakHashMap就会将ReferenceQueue列队中的WeakReference依依poll出来去和Entry[]数据做比较，如果发现相同的，则说明这个Entry所保存的对象已经被GC掉了，那么将Entry[]内的Entry对象剔除掉。</p>
+<h1 id="第五部分">第五部分</h1>
+<h1 id="jni-global-references-count">jni-global-references-count</h1>
+<p>这一部分主要回收那些在native代码上被引用，但在java代码中却没有存活必要的引用，对于防止因为应用代码中直接使用native库或第三方的一些监控工具的内存泄漏有非常大的帮助。</p>
+<pre><code class="language-java">JNI global references: 830
+</code></pre>
+<p><em>下一篇文章将要讲述一个直接找出CPU 100%线程的例子。</em></p>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/jvm-systme-i/">下一篇->JVM故障分析及性能优化系列之一：jstack定位线程堆栈信息</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+

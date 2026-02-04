@@ -1,0 +1,586 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>Remove Duplication | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://chenbaicheng.top/post-images/remove-duplication.jpg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2021-11-02 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>Remove Duplication</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <ul>
+<li>常规元素遍历<br>
+在实际工作业务场景中，对于List集合去重是不可避免的一件事情...</li>
+</ul>
+<!-- more -->
+<pre><code class="language-java">// 遍历后判断赋给另一个List集合，保持原来顺序
+    public static void ridRepeat1(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;();
+        for (String str : list) {
+            if (!listNew.contains(str)) {
+                listNew.add(str);
+            }
+        }
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+</code></pre>
+<h2 id="set集合去重">Set集合去重</h2>
+<ul>
+<li>除了遍历去重，我们常常想到利用Set集合不允许重复元素的特点，通过List和Set互转，来去掉重复元素。</li>
+</ul>
+<pre><code class="language-java">	// Set集合去重，保持原来顺序
+    public static void ridRepeat2(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;();
+        Set set = new HashSet();
+        for (String str : list) {
+            if (set.add(str)) {
+                listNew.add(str);
+            }
+        }
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+
+    // Set去重     由于Set(HashSet)的无序性，不会保持原来顺序
+    public static void ridRepeat3(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        Set set = new HashSet();
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;();
+        set.addAll(list);
+        listNew.addAll(set);
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+
+    // Set通过HashSet去重（将ridRepeat3方法缩减为一行） 无序
+    public static void ridRepeat4(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;(new HashSet(list));
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+
+    // Set通过TreeSet去重   会按字典顺序重排序
+    public static void ridRepeat5(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;(new TreeSet&lt;String&gt;(list));
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+
+    // Set通过LinkedHashSet去重  保持原来顺序
+    public static void ridRepeat6(List&lt;String&gt; list) {
+        System.out.println(&quot;list = [&quot; + list + &quot;]&quot;);
+        List&lt;String&gt; listNew = new ArrayList&lt;String&gt;(new LinkedHashSet&lt;String&gt;(list));
+        System.out.println(&quot;listNew = [&quot; + listNew + &quot;]&quot;);
+    }
+</code></pre>
+<h2 id="java8-stream去重">Java8 Stream去重</h2>
+<ul>
+<li>除此之外，可以利用Java8的stream来实现去重</li>
+</ul>
+<pre><code class="language-java">  // 利用java8的stream去重 
+  // 如果集合是存的是自定义对象，对象实现hashCode()和equals()也可实现
+  List uniqueList = list.stream().distinct().collect(Collectors.toList());
+  System.out.println(uniqueList.toString());
+</code></pre>
+<ul>
+<li>上面的方法在List元素为基本数据类型及String类型时是可以的，但是如果List集合元素为对象，却不会奏效</li>
+</ul>
+<pre><code class="language-java">public class ObjectRidRepeat {
+    
+    public static void main(String[] args) {
+        List&lt;User&gt; userList = new ArrayList&lt;User&gt;();
+        userList.add(new User(&quot;小黄&quot;,10));
+        userList.add(new User(&quot;小红&quot;,23));
+        userList.add(new User(&quot;小黄&quot;,78));
+        userList.add(new User(&quot;小黄&quot;,10));
+        
+        //使用HashSet,无序
+        Set&lt;User&gt; userSet = new HashSet&lt;User&gt;();
+        userSet.addAll(userList);
+        System.out.println(userSet);
+        
+        //使用LinkedHashSet，有序
+        List&lt;User&gt; listNew = new ArrayList&lt;User&gt;(new LinkedHashSet(userList));
+        System.out.println(listNew.toString());
+    }
+}
+</code></pre>
+<ul>
+<li>对象去重 Java8</li>
+</ul>
+<pre><code class="language-java">//根据name属性去重
+        List&lt;User&gt; unique1 = userList.stream().collect(
+                collectingAndThen(
+                        toCollection(() -&gt; new TreeSet&lt;&gt;(comparing(User::getName))), ArrayList::new));
+
+        System.out.println(unique1.toString());
+
+        //根据name,age属性去重
+        List&lt;User&gt; unique2 = userList.stream().collect(
+                collectingAndThen(
+                        toCollection(() -&gt; new TreeSet&lt;&gt;(comparing(o -&gt; o.getName() + &quot;;&quot; + o.getAge()))), ArrayList::new)
+        );
+
+        System.out.println(unique2.toString());
+</code></pre>
+<h2 id="重写hashcode和equals方法">重写hashCode和equals方法</h2>
+<ul>
+<li>在User类中重写equals()方法和hashCode()方法：</li>
+</ul>
+<pre><code class="language-java">//重写equals方法
+ @Override
+    public boolean equals(Object obj) {
+        User user = (User) obj;
+        return name.equals(user.getName()) &amp;&amp; (age==user.getAge());
+    }
+
+//重写hashCode方法
+    @Override
+    public int hashCode() {
+        String str = name + age;
+        return str.hashCode();
+    }
+</code></pre>
+<h4 id="通过最具代表的的string中的equals方法和hashcode方法源码来探究两个方法的实现">通过最具代表的的String中的equals()方法和hashCode()方法源码来探究两个方法的实现</h4>
+<ul>
+<li>equals()方法</li>
+</ul>
+<pre><code class="language-java">	/**
+     * Compares this string to the specified object.  The result is {@code
+     * true} if and only if the argument is not {@code null} and is a {@code
+     * String} object that represents the same sequence of characters as this
+     * object.
+     *
+     * @param  anObject
+     *         The object to compare this {@code String} against
+     *
+     * @return  {@code true} if the given object represents a {@code String}
+     *          equivalent to this string, {@code false} otherwise
+     *
+     * @see  #compareTo(String)
+     * @see  #equalsIgnoreCase(String)
+     */
+    public boolean equals(Object anObject) {
+        if (this == anObject) {
+            return true;
+        }
+        if (anObject instanceof String) {
+            String anotherString = (String)anObject;
+            int n = value.length;
+            if (n == anotherString.value.length) {
+                char v1[] = value;
+                char v2[] = anotherString.value;
+                int i = 0;
+                while (n-- != 0) {
+                    if (v1[i] != v2[i])
+                        return false;
+                    i++;
+                }
+                return true;
+            }
+        }
+        return false;
+    }
+</code></pre>
+<p>比较两个对象时，首先先去判断两个对象是否具有相同的地址，如果是同一个对象的引用，则直接放回true；如果地址不一样，则证明不是引用同一个对象，接下来就是挨个去比较两个字符串对象的内容是否一致，完全相等返回true，否则false。</p>
+<ul>
+<li>hashCode()方法</li>
+</ul>
+<pre><code class="language-java">	/**
+     * Returns a hash code for this string. The hash code for a
+     * {@code String} object is computed as
+     * &lt;blockquote&gt;&lt;pre&gt;
+     * s[0]*31^(n-1) + s[1]*31^(n-2) + ... + s[n-1]
+     * &lt;/pre&gt;&lt;/blockquote&gt;
+     * using {@code int} arithmetic, where {@code s[i]} is the
+     * &lt;i&gt;i&lt;/i&gt;th character of the string, {@code n} is the length of
+     * the string, and {@code ^} indicates exponentiation.
+     * (The hash value of the empty string is zero.)
+     *
+     * @return  a hash code value for this object.
+     */
+    public int hashCode() {
+        int h = hash;
+        if (h == 0 &amp;&amp; value.length &gt; 0) {
+            char val[] = value;
+
+            for (int i = 0; i &lt; value.length; i++) {
+                h = 31 * h + val[i];
+            }
+            hash = h;
+        }
+        return h;
+    }
+</code></pre>
+<p>当equals方法被重写时，通常有必要重写 hashCode 方法，以维护 hashCode 方法的常规协定，该协定声明相等对象必须具有相等的哈希码。</p>
+<p>根据《Effective Java》第二版的第九条：<strong>覆盖equals时总要覆盖hashCode</strong> 中的内容，总结如下：</p>
+<ul>
+<li>在程序执行期间，只要equals方法的比较操作用到的信息没有被修改，那么对这同一个对象调用多次，hashCode方法必须始终如一地返回同一个整数。</li>
+<li>如果两个对象根据equals方法比较是相等的，那么调用两个对象的hashCode方法必须返回相同的整数结果。</li>
+<li>如果两个对象根据equals方法比较是不等的，则hashCode方法不一定得返回不同的整数。但是，程序员应该知道，为不相等的对象生成不同整数结果可以提高哈希表的性能。</li>
+</ul>
+<p>《Java编程思想》中也有类似总结：</p>
+<p>设计hashCode()时最重要的因素就是：无论何时，对同一个对象调用hashCode()都应该产生同样的值。如果在讲一个对象用put()添加进HashMap时产生一个hashCdoe值，而用get()取出时却产生了另一个hashCode值，那么就无法获取该对象了。所以如果你的hashCode方法依赖于对象中易变的数据，用户就要当心了，因为此数据发生变化时，hashCode()方法就会生成一个不同的散列码。</p>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/ajax-yuan-sheng/">下一篇->AJAX原生</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+

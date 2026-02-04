@@ -1,0 +1,592 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>JVM故障分析及性能优化系列之四：Thread Dump日志线程状态 | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://chenbaicheng.top/post-images/jvm-system-IV.jpg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2022-03-04 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>JVM故障分析及性能优化系列之四：Thread Dump日志线程状态</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <p>前面只分析了Thread Dump日志文件的结构，今天针对日志文件中 Java EE middleware, third party &amp; custom application Threads 部分线程的状态进行详细的分析。</p>
+<!-- more -->
+<h1 id="thread-dump日志的线程信息">Thread Dump日志的线程信息</h1>
+<p>以下面的日志为例：</p>
+<pre><code class="language-java">&quot;resin-22129&quot; daemon prio=10 tid=0x00007fbe5c34e000 nid=0x4cb1 waiting on condition [0x00007fbe4ff7c000]
+   java.lang.Thread.State: WAITING (parking)
+    at sun.misc.Unsafe.park(Native Method)
+    at java.util.concurrent.locks.LockSupport.park(LockSupport.java:315)
+    at com.caucho.env.thread2.ResinThread2.park(ResinThread2.java:196)
+    at com.caucho.env.thread2.ResinThread2.runTasks(ResinThread2.java:147)
+    at com.caucho.env.thread2.ResinThread2.run(ResinThread2.java:118)
+
+&quot;Timer-20&quot; daemon prio=10 tid=0x00007fe3a4bfb800 nid=0x1a31 in Object.wait() [0x00007fe3a077a000]
+   java.lang.Thread.State: TIMED_WAITING (on object monitor)
+    at java.lang.Object.wait(Native Method)
+    - waiting on &lt;0x00000006f0620ff0&gt; (a java.util.TaskQueue)
+    at java.util.TimerThread.mainLoop(Timer.java:552)
+    - locked &lt;0x00000006f0620ff0&gt; (a java.util.TaskQueue)
+    at java.util.TimerThread.run(Timer.java:505)
+</code></pre>
+<p>以上依次是：</p>
+<ul>
+<li><code>&quot;resin-22129&quot;</code> <strong>线程名称</strong>：如果使用 java.lang.Thread 类生成一个线程的时候，线程名称为 Thread-(数字) 的形式，这里是resin生成的线程；</li>
+<li><code>daemon</code> <strong>线程类型</strong>：线程分为守护线程 (daemon) 和非守护线程 (non-daemon) 两种，通常都是守护线程；</li>
+<li><code>prio=10</code> <strong>线程优先级</strong>：默认为5，数字越大优先级越高；</li>
+<li><code>tid=0x00007fbe5c34e000</code> <strong>JVM线程的id</strong>：JVM内部线程的唯一标识，通过java.lang.Thread.getId()获取，通常用自增的方式实现；</li>
+<li><code>nid=0x4cb1</code> <strong>系统线程id</strong>：对应的系统线程id（Native Thread ID)，可以通过 top 命令进行查看，现场id是十六进制的形式；</li>
+<li><code>waiting on condition</code> <strong>系统线程状态</strong>：这里是系统的线程状态，具体的含义见下面 系统线程状态 部分；</li>
+<li><code>[0x00007fbe4ff7c000]</code> <strong>起始栈地址</strong>：线程堆栈调用的其实内存地址；</li>
+<li><code>java.lang.Thread.State: WAITING (parking)</code> <strong>JVM线程状态</strong>：这里标明了线程在代码级别的状态，详细的内容见下面的 JVM线程运行状态 部分。<br>
+线程调用栈信息：下面就是当前线程调用的详细栈信息，用于代码的分析。堆栈信息应该从下向上解读，因为程序调用的顺序是从下向上的。</li>
+</ul>
+<hr>
+<h1 id="系统线程状态-native-thread-status">系统线程状态 (Native Thread Status)</h1>
+<p>系统线程有如下状态：</p>
+<h2 id="deadlock">deadlock</h2>
+<p>死锁线程，一般指多个线程调用期间进入了相互资源占用，导致一直等待无法释放的情况。</p>
+<h2 id="runnable">runnable</h2>
+<p>一般指该线程正在执行状态中，该线程占用了资源，正在处理某个操作，如通过SQL语句查询数据库、对某个文件进行写入等。</p>
+<h2 id="blocked">blocked</h2>
+<p>线程正处于阻塞状态，指当前线程执行过程中，所需要的资源长时间等待却一直未能获取到，被容器的线程管理器标识为阻塞状态，可以理解为等待资源超时的线程。<br>
+线程正处于等待资源或等待某个条件的发生，具体的原因需要结合下面堆栈信息进行分析。</p>
+<p>（1）如果堆栈信息明确是应用代码，则证明该线程正在等待资源，一般是大量读取某种资源且该资源采用了资源锁的情况下，线程进入等待状态，等待资源的读取，或者正在等待其他线程的执行等。</p>
+<p>（2）如果发现有大量的线程都正处于这种状态，并且堆栈信息中得知正等待网络读写，这是因为网络阻塞导致线程无法执行，很有可能是一个网络瓶颈的征兆：</p>
+<ul>
+<li>网络非常繁忙，几乎消耗了所有的带宽，仍然有大量数据等待网络读写；</li>
+<li>网络可能是空闲的，但由于路由或防火墙等原因，导致包无法正常到达；</li>
+</ul>
+<p>所以一定要结合系统的一些性能观察工具进行综合分析，比如netstat统计单位时间的发送包的数量，看是否很明显超过了所在网络带宽的限制；观察CPU的利用率，看系统态的CPU时间是否明显大于用户态的CPU时间。这些都指向由于网络带宽所限导致的网络瓶颈。</p>
+<p>（3）还有一种常见的情况是该线程在 sleep，等待 sleep 的时间到了，将被唤醒。</p>
+<h2 id="waiting-on-condition">waiting on condition</h2>
+<p>Moniter 是Java中用以实现线程之间的互斥与协作的主要手段，它可以看成是对象或者class的锁，每个对象都有，也仅有一个 Monitor。<br>
+<img src="https://chenbaicheng.top/post-images/1646383607591.png" alt="" loading="lazy"><br>
+从上图可以看出，每个Monitor在某个时刻只能被一个线程拥有，该线程就是 &quot;Active Thread&quot;，而其他线程都是 &quot;Waiting Thread&quot;，分别在两个队列 &quot;Entry Set&quot;和&quot;Waint Set&quot;里面等待。其中在 &quot;Entry Set&quot; 中等待的线程状态是 waiting for monitor entry，在 &quot;Wait Set&quot; 中等待的线程状态是 in Object.wait()。<br>
+（1）&quot;Entry Set&quot;里面的线程。<br>
+我们称被 <code>synchronized</code> 保护起来的代码段为临界区，对应的代码如下：</p>
+<pre><code class="language-java">synchronized(obj) {
+
+}
+</code></pre>
+<h2 id="waiting-for-monitor-entry-或-in-objectwait">waiting for monitor entry 或 in Object.wait()</h2>
+<p>当一个线程申请进入临界区时，它就进入了 &quot;Entry Set&quot; 队列中，这时候有两种可能性：</p>
+<ul>
+<li>该Monitor不被其他线程拥有，&quot;Entry Set&quot;里面也没有其他等待的线程。本线程即成为相应类或者对象的Monitor的Owner，执行临界区里面的代码；此时在Thread Dump中显示线程处于 &quot;Runnable&quot; 状态。</li>
+<li>该Monitor被其他线程拥有，本线程在 &quot;Entry Set&quot; 队列中等待。此时在Thread Dump中显示线程处于 &quot;waiting for monity entry&quot; 状态。</li>
+</ul>
+<p>临界区的设置是为了保证其内部的代码执行的原子性和完整性，但因为临界区在任何时间只允许线程串行通过，这和我们使用多线程的初衷是相反的。如果在多线程程序中大量使用synchronized，或者不适当的使用它，会造成大量线程在临界区的入口等待，造成系统的性能大幅下降。如果在Thread Dump中发现这个情况，应该审视源码并对其进行改进。</p>
+<p>（2）&quot;Wait Set&quot;里面的线程<br>
+当线程获得了Monitor，进入了临界区之后，如果发现线程继续运行的条件没有满足，它则调用对象（通常是被synchronized的对象）的wait()方法，放弃Monitor，进入 &quot;Wait Set&quot;队列。只有当别的线程在该对象上调用了 notify()或者notifyAll()方法，&quot;Wait Set&quot;队列中的线程才得到机会去竞争，但是只有一个线程获得对象的Monitor，恢复到运行态。&quot;Wait Set&quot;中的线程在Thread Dump中显示的状态为 in Object.wait()。通常来说，</p>
+<p>通常来说，当CPU很忙的时候关注 Runnable 状态的线程，反之则关注 waiting for monitor entry 状态的线程。</p>
+<h1 id="jvm线程运行状态-jvm-thread-status">JVM线程运行状态 (JVM Thread Status)</h1>
+<figure data-type="image" tabindex="1"><img src="https://chenbaicheng.top/post-images/1646383848688.png" alt="" loading="lazy"></figure>
+<p>在<a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html">java.lang.Thread.State</a> 中定义了线程的状态：</p>
+<h1 id="new"><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html#NEW">NEW</a></h1>
+<p>至今尚未启动的线程的状态。线程刚被创建，但尚未启动。</p>
+<h1 id="runnable-2"><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html#RUNNABLE">RUNNABLE</a></h1>
+<p>可运行线程的线程状态。线程正在JVM中执行，有可能在等待操作系统中的其他资源，比如处理器。</p>
+<h1 id="blocked-2"><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html#BLOCKED">BLOCKED</a></h1>
+<p>受阻塞并且正在等待监视器的某一线程的线程状态。处于受阻塞状态的某一线程正在等待监视器锁，以便进入一个同步的块/方法，或者在调用 Object.wait 之后再次进入同步的块/方法。<br>
+在Thread Dump日志中通常显示为 java.lang.Thread.State: BLOCKED (on object monitor)。</p>
+<h1 id="waiting"><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html#WAITING">WAITING</a></h1>
+<p>某一等待线程的线程状态。线程正在无期限地等待另一个线程来执行某一个特定的操作，线程因为调用下面的方法之一而处于等待状态：</p>
+<p>不带超时的 Object.wait 方法，日志中显示为 java.lang.Thread.State: WAITING (on object monitor)<br>
+不带超时的 Thread.join 方法<br>
+LockSupport.park 方法，日志中显示为 java.lang.Thread.State: WAITING (parking)</p>
+<h1 id="timed_waiting"><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html#TIMED_WAITING">TIMED_WAITING</a></h1>
+<p>指定了等待时间的某一等待线程的线程状态。线程正在等待另一个线程来执行某一个特定的操作，并设定了指定等待的时间，线程因为调用下面的方法之一而处于定时等待状态：</p>
+<p>Thread.sleep 方法<br>
+指定超时值的 Object.wait 方法<br>
+指定超时值的 Thread.join 方法<br>
+LockSupport.parkNanos<br>
+LockSupport.parkUntil</p>
+<h1 id="terminated"><a href="https://docs.oracle.com/javase/7/docs/api/java/lang/Thread.State.html#TERMINATED">TERMINATED</a></h1>
+<p>线程处于终止状态。</p>
+<p>根据Java Doc中的说明，在给定的时间上，一个只能处于上述的一种状态之中，并且这些状态都是JVM的状态，跟操作系统中的线程状态无关。</p>
+<h1 id="线程状态样例">线程状态样例</h1>
+<h2 id="等待状态样例">等待状态样例</h2>
+<figure data-type="image" tabindex="2"><img src="https://chenbaicheng.top/post-images/1646385675841.png" alt="" loading="lazy"></figure>
+<pre><code class="language-java"> &quot;IoWaitThread&quot; prio=6 tid=0x0000000007334800 nid=0x2b3c waiting on condition [0x000000000893f000]
+   java.lang.Thread.State: WAITING (parking)
+                at sun.misc.Unsafe.park(Native Method)
+                - parking to wait for  &lt;0x00000007d5c45850&gt; (a java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject)
+                at java.util.concurrent.locks.LockSupport.park(LockSupport.java:156)
+                at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject.await(AbstractQueuedSynchronizer.java:1987)
+                at java.util.concurrent.LinkedBlockingDeque.takeFirst(LinkedBlockingDeque.java:440)
+                at java.util.concurrent.LinkedBlockingDeque.take(LinkedBlockingDeque.java:629)
+                at com.nbp.theplatform.threaddump.ThreadIoWaitState$IoWaitHandler2.run(ThreadIoWaitState.java:89)
+                at java.lang.Thread.run(Thread.java:662) 
+</code></pre>
+<p>上面例子中，IoWaitThread 线程保持等待状态并从 LinkedBlockingQueue 接收消息，如果 LinkedBlockingQueue 一直没有消息，该线程的状态将不会改变。</p>
+<h2 id="阻塞状态样例">阻塞状态样例</h2>
+<figure data-type="image" tabindex="3"><img src="https://chenbaicheng.top/post-images/1646385726926.png" alt="" loading="lazy"></figure>
+<pre><code class="language-java">&quot;BLOCKED_TEST pool-1-thread-1&quot; prio=6 tid=0x0000000006904800 nid=0x28f4 runnable [0x000000000785f000]
+   java.lang.Thread.State: RUNNABLE
+                at java.io.FileOutputStream.writeBytes(Native Method)
+                at java.io.FileOutputStream.write(FileOutputStream.java:282)
+                at java.io.BufferedOutputStream.flushBuffer(BufferedOutputStream.java:65)
+                at java.io.BufferedOutputStream.flush(BufferedOutputStream.java:123)
+                - locked &lt;0x0000000780a31778&gt; (a java.io.BufferedOutputStream)
+                at java.io.PrintStream.write(PrintStream.java:432)
+                - locked &lt;0x0000000780a04118&gt; (a java.io.PrintStream)
+                at sun.nio.cs.StreamEncoder.writeBytes(StreamEncoder.java:202)
+                at sun.nio.cs.StreamEncoder.implFlushBuffer(StreamEncoder.java:272)
+                at sun.nio.cs.StreamEncoder.flushBuffer(StreamEncoder.java:85)
+                - locked &lt;0x0000000780a040c0&gt; (a java.io.OutputStreamWriter)
+                at java.io.OutputStreamWriter.flushBuffer(OutputStreamWriter.java:168)
+                at java.io.PrintStream.newLine(PrintStream.java:496)
+                - locked &lt;0x0000000780a04118&gt; (a java.io.PrintStream)
+                at java.io.PrintStream.println(PrintStream.java:687)
+                - locked &lt;0x0000000780a04118&gt; (a java.io.PrintStream)
+                at com.nbp.theplatform.threaddump.ThreadBlockedState.monitorLock(ThreadBlockedState.java:44)
+                - locked &lt;0x0000000780a000b0&gt; (a com.nbp.theplatform.threaddump.ThreadBlockedState)
+                at com.nbp.theplatform.threaddump.ThreadBlockedState$1.run(ThreadBlockedState.java:7)
+                at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+                at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+                at java.lang.Thread.run(Thread.java:662)
+   Locked ownable synchronizers:
+                - &lt;0x0000000780a31758&gt; (a java.util.concurrent.locks.ReentrantLock$NonfairSync)
+&quot;BLOCKED_TEST pool-1-thread-2&quot; prio=6 tid=0x0000000007673800 nid=0x260c waiting for monitor entry [0x0000000008abf000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+                at com.nbp.theplatform.threaddump.ThreadBlockedState.monitorLock(ThreadBlockedState.java:43)
+                - waiting to lock &lt;0x0000000780a000b0&gt; (a com.nbp.theplatform.threaddump.ThreadBlockedState)
+                at com.nbp.theplatform.threaddump.ThreadBlockedState$2.run(ThreadBlockedState.java:26)
+                at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886)
+                at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+                at java.lang.Thread.run(Thread.java:662)
+   Locked ownable synchronizers:
+                - &lt;0x0000000780b0c6a0&gt; (a java.util.concurrent.locks.ReentrantLock$NonfairSync)
+&quot;BLOCKED_TEST pool-1-thread-3&quot; prio=6 tid=0x00000000074f5800 nid=0x1994 waiting for monitor entry [0x0000000008bbf000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+                at com.nbp.theplatform.threaddump.ThreadBlockedState.monitorLock(ThreadBlockedState.java:42)
+                - waiting to lock &lt;0x0000000780a000b0&gt; (a com.nbp.theplatform.threaddump.ThreadBlockedState)
+                at com.nbp.theplatform.threaddump.ThreadBlockedState$3.run(ThreadBlockedState.java:34)
+                at java.util.concurrent.ThreadPoolExecutor$Worker.runTask(ThreadPoolExecutor.java:886
+                at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:908)
+                at java.lang.Thread.run(Thread.java:662)
+   Locked ownable synchronizers:
+                - &lt;0x0000000780b0e1b8&gt; (a java.util.concurrent.locks.ReentrantLock$NonfairSync)
+</code></pre>
+<p>在上面的例子中，BLOCKED_TEST pool-1-thread-1 线程占用了 &lt;0x0000000780a000b0&gt; 锁，然而 BLOCKED_TEST pool-1-thread-2 和 BLOCKED_TEST pool-1-thread-3 threads 正在等待获取锁。</p>
+<h2 id="死锁状态样例">死锁状态样例</h2>
+<figure data-type="image" tabindex="4"><img src="https://chenbaicheng.top/post-images/1646385775253.png" alt="" loading="lazy"></figure>
+<pre><code class="language-java">&quot;DEADLOCK_TEST-1&quot; daemon prio=6 tid=0x000000000690f800 nid=0x1820 waiting for monitor entry [0x000000000805f000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+                at com.nbp.theplatform.threaddump.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
+                - waiting to lock &lt;0x00000007d58f5e60&gt; (a com.nbp.theplatform.threaddump.ThreadDeadLockState$Monitor)
+                at com.nbp.theplatform.threaddump.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)
+                - locked &lt;0x00000007d58f5e48&gt; (a com.nbp.theplatform.threaddump.ThreadDeadLockState$Monitor)
+                at com.nbp.theplatform.threaddump.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)
+
+   Locked ownable synchronizers:
+                - None
+
+&quot;DEADLOCK_TEST-2&quot; daemon prio=6 tid=0x0000000006858800 nid=0x17b8 waiting for monitor entry [0x000000000815f000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+                at com.nbp.theplatform.threaddump.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
+                - waiting to lock &lt;0x00000007d58f5e78&gt; (a com.nbp.theplatform.threaddump.ThreadDeadLockState$Monitor)
+                at com.nbp.theplatform.threaddump.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)
+                - locked &lt;0x00000007d58f5e60&gt; (a com.nbp.theplatform.threaddump.ThreadDeadLockState$Monitor)
+                at com.nbp.theplatform.threaddump.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)
+
+   Locked ownable synchronizers:
+                - None
+
+&quot;DEADLOCK_TEST-3&quot; daemon prio=6 tid=0x0000000006859000 nid=0x25dc waiting for monitor entry [0x000000000825f000]
+   java.lang.Thread.State: BLOCKED (on object monitor)
+                at com.nbp.theplatform.threaddump.ThreadDeadLockState$DeadlockThread.goMonitorDeadlock(ThreadDeadLockState.java:197)
+                - waiting to lock &lt;0x00000007d58f5e48&gt; (a com.nbp.theplatform.threaddump.ThreadDeadLockState$Monitor)
+                at com.nbp.theplatform.threaddump.ThreadDeadLockState$DeadlockThread.monitorOurLock(ThreadDeadLockState.java:182)
+                - locked &lt;0x00000007d58f5e78&gt; (a com.nbp.theplatform.threaddump.ThreadDeadLockState$Monitor)
+                at com.nbp.theplatform.threaddump.ThreadDeadLockState$DeadlockThread.run(ThreadDeadLockState.java:135)
+
+   Locked ownable synchronizers:
+                - None
+</code></pre>
+<p>上面的例子中，当线程 A 需要获取线程 B 的锁来继续它的任务，然而线程 B 也需要获取线程 A 的锁来继续它的任务的时候发生的。在 thread dump 中，你能看到 DEADLOCK_TEST-1 线程持有 0x00000007d58f5e48 锁，并且尝试获取 0x00000007d58f5e60 锁。你也能看到 DEADLOCK_TEST-2 线程持有 0x00000007d58f5e60，并且尝试获取 0x00000007d58f5e78，同时 DEADLOCK_TEST-3 线程持有 0x00000007d58f5e78，并且在尝试获取 0x00000007d58f5e48 锁，如你所见，每个线程都在等待获取另外一个线程的锁，这状态将不会被改变直到一个线程丢弃了它的锁。</p>
+<h2 id="无限等待的runnable状态样例">无限等待的Runnable状态样例</h2>
+<figure data-type="image" tabindex="5"><img src="https://chenbaicheng.top/post-images/1646385825558.png" alt="" loading="lazy"></figure>
+<pre><code class="language-java">&quot;socketReadThread&quot; prio=6 tid=0x0000000006a0d800 nid=0x1b40 runnable [0x00000000089ef000]
+   java.lang.Thread.State: RUNNABLE
+                at java.net.SocketInputStream.socketRead0(Native Method)
+                at java.net.SocketInputStream.read(SocketInputStream.java:129)
+                at sun.nio.cs.StreamDecoder.readBytes(StreamDecoder.java:264)
+                at sun.nio.cs.StreamDecoder.implRead(StreamDecoder.java:306)
+                at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:158)
+                - locked &lt;0x00000007d78a2230&gt; (a java.io.InputStreamReader)
+                at sun.nio.cs.StreamDecoder.read0(StreamDecoder.java:107)
+                - locked &lt;0x00000007d78a2230&gt; (a java.io.InputStreamReader)
+                at sun.nio.cs.StreamDecoder.read(StreamDecoder.java:93)
+                at java.io.InputStreamReader.read(InputStreamReader.java:151)
+                at com.nbp.theplatform.threaddump.ThreadSocketReadState$1.run(ThreadSocketReadState.java:27)
+                at java.lang.Thread.run(Thread.java:662)
+</code></pre>
+<p>上例中线程的状态是RUNNABLE，但在下面的堆栈日志中发现socketReadThread 线程正在无限等待读取 socket，因此不能单纯通过线程的状态来确定线程是否处于阻塞状态，应该根据详细的堆栈信息进行分析。</p>
+<p>参考资料：<br>
+<a href="https://dzone.com/articles/how-analyze-java-thread-dumps">How to Analyze Java Thread Dumps</a> | <a href="https://segmentfault.com/a/1190000000615690">中文版</a><br>
+<a href="https://www.cnblogs.com/zhengyun_ustc/archive/2013/01/06/dumpanalysis.html">三个实例演示 Java Thread Dump 日志分析</a><br>
+<a href="https://www.iteye.com/blog/just2do-2275894">性能分析之-- JAVA Thread Dump 分析综述</a><br>
+<a href="https://www.cnblogs.com/zhengyun_ustc/archive/2013/03/18/tda.html">各种 Java Thread State 第一分析法则</a></p>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/jvm-system-III/">下一篇->JVM故障分析及性能优化系列之三：VM Thread分析</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+

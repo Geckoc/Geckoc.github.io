@@ -1,0 +1,472 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>JVM故障分析及性能优化系列之六：JVM Heap Dump（堆转储文件）的生成和MAT的使用 | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://chenbaicheng.top/post-images/jvm-system-VI.jpg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2022-03-12 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>JVM故障分析及性能优化系列之六：JVM Heap Dump（堆转储文件）的生成和MAT的使用</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <p>前面的文章详细讲述了分析Thread Dump文件，实际在处理Java内存泄漏问题的时候，还需要分析JVM堆转储文件来进行定位。</p>
+<!-- more -->
+<h2 id="jvm-heap-dump堆转储文件的生成">JVM Heap Dump（堆转储文件）的生成</h2>
+<p>正如Thread Dump文件记录了当时JVM中线程运行的情况一样，Heap Dump记录了JVM中堆内存运行的情况。<br>
+可以通过以下几种方式生成Heap Dump文件：</p>
+<h3 id="使用-jmap-命令生成">使用 jmap 命令生成</h3>
+<p>jmap 命令是JDK提供的用于生成堆内存信息的工具，可以执行下面的命令生成Heap Dump：</p>
+<p><code> jmap -dump:live,format=b,file=heap-dump.bin &lt;pid&gt;</code><br>
+其中的pid是JVM进程的id，<strong>heap-dump.bin</strong>是生成的文件名称，在执行命令的目录下面。推荐此种方法。</p>
+<h3 id="使用-jconsole-生成">使用 JConsole 生成</h3>
+<p>JConsole是JDK提供的一个基于GUI查看JVM系统信息的工具，既可以管理本地的JVM，也可以管理远程的JVM，可以通过下图的 dumpHeap 按钮生成 Heap Dump文件。<br>
+<img src="https://chenbaicheng.top/post-images/1647079166329.png" alt="" loading="lazy"></p>
+<h3 id="在jvm中增加参数生成">在JVM中增加参数生成</h3>
+<p>在JVM的配置参数中可以添加 -XX:+HeapDumpOnOutOfMemoryError 参数，当应用抛出 OutOfMemoryError 时自动生成dump文件；<br>
+在JVM的配置参数中添加 -Xrunhprof:head=site 参数，会生成java.hprof.txt 文件，不过这样会影响JVM的运行效率，不建议在生产环境中使用（未亲测）。</p>
+<h2 id="常见的heap-dump文件分析工具">常见的Heap Dump文件分析工具</h2>
+<p>JVM Heap Dump文件可以使用常用的分析工具如下：</p>
+<h3 id="jhat">jhat</h3>
+<p><a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jhat.html">jhat</a> 是JDK自带的用于分析JVM Heap Dump文件的工具，使用下面的命令可以将堆文件的分析结果以HTML网页的形式进行展示：</p>
+<p><code> jhat &lt;heap-dump-file&gt;</code><br>
+其中 heap-dump-file 是文件的路径和文件名，可以使用 -J-Xmx512m 参数设置命令的内存大小。执行成功之后显示如下结果：</p>
+<blockquote>
+<p>Snapshot resolved.<br>
+Started HTTP server on port 7000<br>
+Server is ready.</p>
+</blockquote>
+<p>这个时候访问 http://localhost:7000/ 就可以看到结果了。</p>
+<h3 id="eclipse-memory-analyzermat">Eclipse Memory Analyzer(MAT)</h3>
+<p><a href="http://www.eclipse.org/mat/">Eclipse Memory Analyzer(MAT)</a>是Eclipse提供的一款用于Heap Dump文件的工具，操作简单明了，下面将详细进行介绍。</p>
+<h3 id="ibm-heap-analyzer">IBM Heap Analyzer</h3>
+<p><a href="https://www.ibm.com/support/pages/ibm-heapanalyzer">IBM Heap Analyzer</a> 是IBM公司推出的一款用于分析Heap Dump信息的工具，下载之后是一个jar文件，执行结果如下：<br>
+<img src="https://chenbaicheng.top/post-images/1647079266617.png" alt="" loading="lazy"></p>
+<h3 id="memory-analyzer的安装和使用">Memory Analyzer的安装和使用</h3>
+<p>如前文所述，Eclipse Memory Analyzer（简称MAT）是一个功能丰富且操作简单的JVM Heap Dump分析工具，可以用来辅助发现内存泄漏减少内存占用。<br>
+使用 Memory Analyzer 来分析生产环境的 Java 堆转储文件，可以从数以百万计的对象中快速计算出对象的 Retained Size，查看是谁在阻止垃圾回收，并自动生成一个 Leak Suspect（内存泄露可疑点）报表。</p>
+<h3 id="下载与安装">下载与安装</h3>
+<p>Eclipse Memory Analyzer（MAT）支持两种安装方式，一是Eclipse插件的方式，另外一个就是独立运行的方式，建议使用独立运行的方式。<br>
+在 http://www.eclipse.org/mat/downloads.php 下载安装MAT，启动之后打开 File - Open Heap Dump... 菜单，然后选择生成的Heap DUmp文件，选择 &quot;Leak Suspects Report&quot;，然后点击 &quot;Finish&quot; 按钮。<br>
+<img src="https://chenbaicheng.top/post-images/1647079318323.png" alt="" loading="lazy"></p>
+<h3 id="主界面">主界面</h3>
+<p>第一次打开因为需要分析dump文件，所以需要等待一段时间进行分析，分析完成之后dump文件目录下面的文件信息如下：<br>
+<img src="https://chenbaicheng.top/post-images/1647079338781.png" alt="" loading="lazy"><br>
+上图中 heap-27311.bin 文件是原始的Heap Dump文件，zip文件是生成的html形式的报告文件。</p>
+<p>打开之后，主界面如下所示：<br>
+<img src="https://chenbaicheng.top/post-images/1647079369932.png" alt="" loading="lazy"></p>
+<p>接下来介绍界面中常用到的功能：<br>
+<img src="https://chenbaicheng.top/post-images/1647079394019.png" alt="" loading="lazy"></p>
+<p><strong>按图标顺序介绍</strong></p>
+<h3 id="overview">Overview</h3>
+<p>Overview视图，即概要界面，显示了概要的信息，并展示了MAT常用的一些功能。</p>
+<ul>
+<li>Details 显示了一些统计信息，包括整个堆内存的大小、类（Class）的数量、对象（Object）的数量、类加载器（Class Loader)的数量。</li>
+<li>Biggest Objects by Retained Size 使用饼图的方式直观地显示了在JVM堆内存中最大的几个对象，当光标移到饼图上的时候会在左边Inspector和Attributes窗口中显示详细的信息。</li>
+<li>Actions 这里显示了几种常用到的操作，算是功能的快捷方式，包括 Histogram、Dominator Tree、Top Consumers、Duplicate Classes，具体的含义和用法见下面；</li>
+<li>Reports 列出了常用的报告信息，包括 Leak Suspects和Top Components，具体的含义和内容见下；</li>
+<li>Step By Step 以向导的方式引导使用功能。</li>
+</ul>
+<h3 id="histogram-histogram">Histogram Histogram</h3>
+<p>直方图，可以查看每个类的实例（即对象）的数量和大小。</p>
+<h3 id="dominator-tree">Dominator Tree</h3>
+<p>支配树，列出Heap Dump中处于活跃状态中的最大的几个对象，默认按 retained size进行排序，因此很容易找到占用内存最多的对象。</p>
+<h3 id="oql">OQL</h3>
+<p>MAT提供了一个对象查询语言（OQL），跟SQL语言类似，将类当作表、对象当作记录行、成员变量当作表中的字段。通过OQL可以方便快捷的查询一些需要的信息，是一个非常有用的工具。</p>
+<h3 id="thread-overview">Thread Overview</h3>
+<p>此工具可以查看生成Heap Dump文件的时候线程的运行情况，用于线程的分析。</p>
+<h3 id="run-expert-system-test">Run Expert System Test</h3>
+<p>可以查看分析完成的HTML形式的报告，也可以打开已经产生的分析报告文件，子菜单项如下图所示：<br>
+<img src="https://chenbaicheng.top/post-images/1647079550598.png" alt="" loading="lazy"><br>
+常用的主要有Leak Suspects和Top Components两种报告：</p>
+<ul>
+<li>Leak Suspects 可以说是非常常用的报告了，该报告分析了 Heap Dump并尝试找出内存泄漏点，最后在生成的报告中对检测到的可疑点做了详细的说明；</li>
+<li>Top Components 列出占用总堆内存超过1%的对象。</li>
+</ul>
+<h3 id="open-query-browser">Open Query Browser</h3>
+<p>提供了在分析过程中用到的工具，通常都集成在了右键菜单中，在后面具体举例分析的时候会做详细的说明。如下图：<br>
+<img src="https://chenbaicheng.top/post-images/1647079593730.png" alt="" loading="lazy"></p>
+<p>这里仅针对在 Overview 界面中的 Acations中列出的两项进行说明：</p>
+<ul>
+<li>
+<p>Top Consumers 按类、类加载器和包分别进行查询，并以饼图的方式列出最大的几个对象。菜单打开方式如下：<br>
+<img src="https://chenbaicheng.top/post-images/1647079635330.png" alt="" loading="lazy"></p>
+</li>
+<li>
+<p>Duplicate Classes 列出被加载多次的类，结果按类加载器进行分组，目标是加载同一个类多次被类加载器加载。使用该工具很容易找到部署应用的时候使用了同一个库的多个版本。菜单打开方式如下图：<br>
+<img src="https://chenbaicheng.top/post-images/1647079670928.png" alt="" loading="lazy"></p>
+</li>
+</ul>
+<h3 id="find-object-by-address">Find Object by address</h3>
+<p>通过十六进制的地址查找对应的对象，见下图：<br>
+<img src="https://chenbaicheng.top/post-images/1647079699374.png" alt="" loading="lazy"></p>
+<p>上面简单介绍了MAT工具的功能列表，下一篇文章将要通过实例详细进行分析。</p>
+<p>参考资料：<br>
+<a href="https://blog.csdn.net/zapldy/article/details/7727572">利用MemoryAnalyzer进行OutOfMemoryError的诊断分析</a><br>
+<a href="https://eclipsesource.com/blogs/2013/01/21/10-tips-for-using-the-eclipse-memory-analyzer/">10 Tips for using the Eclipse Memory Analyzer</a><br>
+<a href="https://developer.ibm.com/devpractices/open-source-development/">使用 Eclipse Memory Analyzer 进行堆转储文件分析</a><br>
+<a href="https://www.cnblogs.com/xianzhedeyu/p/5800666.html">Java内存分析</a><br>
+<a href="https://www.iteye.com/blog/tivan-1487855">一次使用Eclipse Memory Analyzer分析Tomcat内存溢出</a><br>
+<a href="https://www.iteye.com/blog/wensong-1986449">Memory Analyzer Tool 使用手记</a><br>
+<a href="https://www.zhyea.com/2016/07/17/memory-analyzer-all.html">MemoryAnalyzer介绍及使用</a></p>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/jvm-system-V/">下一篇->JVM故障分析及性能优化系列之五：ThreadDump日志分析</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+

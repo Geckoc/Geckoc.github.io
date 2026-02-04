@@ -1,0 +1,475 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>JVM故障分析及性能优化系列之五：ThreadDump日志分析 | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://chenbaicheng.top/post-images/jvm-system-V.jpg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2022-03-08 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>JVM故障分析及性能优化系列之五：ThreadDump日志分析</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <p>我们在上篇文章中详细描述了<a href="https://geckoc.github.io/post/jvm-system-IV/">Thread Dump中Native Thread和JVM Thread线程的各种状态及描述</a>，今天总结分析的一些原则，并详细列举一些案例进行说明。</p>
+<!-- more -->
+<p>下面列出几种常见的症状即对应的解决方案：<br>
+CPU占用率很高，响应很慢<br>
+CPU占用率不高，但响应很慢</p>
+<h1 id="cpu占用率很高响应很慢">CPU占用率很高，响应很慢</h1>
+<p>按照《Java内存泄漏分析系列之一：使用jstack定位线程堆栈信息》中所说的方法，先找到占用CPU的进程，然后再定位到对应的线程，最后分析出对应的堆栈信息。<br>
+在同一时间多次使用上述的方法，然后进行对比分析，从代码中找到问题所在的原因。如果线程指向的是&quot;VM Thread&quot;或者无法从代码中直接找到原因，就需要进行内存分析，具体的见下一篇文章。</p>
+<h1 id="cpu占用率不高但响应很慢">CPU占用率不高，但响应很慢</h1>
+<p>在整个请求的过程中多次执行Thread Dump然后进行对比，取得 BLOCKED 状态的线程列表，通常是因为线程停在了I/O、数据库连接或网络连接的地方。</p>
+<h3 id="关注点概况">关注点概况</h3>
+<p>在Thread Dump文件中，线程的状态分成两种：Native Thread Status和JVM Thread Status，具体的含义可以参考上一篇文章。在分析日志的时候需要重点关注如下几种线程状态：</p>
+<h3 id="系统线程状态为-deadlock">系统线程状态为 deadlock</h3>
+<p>线程处于死锁状态，将占用系统大量资源。</p>
+<h3 id="系统线程状态为-waiting-for-monitor-entry-或-in-objectwait">系统线程状态为 waiting for monitor entry 或 in Object.wait()</h3>
+<p>如上一篇文章中所说，系统线程处于这种状态说明它在等待进入一个临界区，此时JVM线程的状态通常都是 java.lang.Thread.State: BLOCKED。</p>
+<p>如果大量线程处于这种状态的话，可能是一个全局锁阻塞了大量线程。如果短期内多次打印Thread Dump信息，发现 waiting for monitor entry 状态的线程越来越多，没有减少的趋势，可能意味着某些线程在临界区里呆得时间太长了，以至于越来越多新线程迟迟无法进入。</p>
+<h3 id="系统线程状态为-waiting-on-condition">系统线程状态为 waiting on condition</h3>
+<p>系统线程处于此种状态说明它在等待另一个条件的发生来唤醒自己，或者自己调用了sleep()方法。此时JVM线程的状态通常是java.lang.Thread.State: WAITING (parking)（等待唤醒条件）或java.lang.Thread.State: TIMED_WAITING (parking或sleeping)（等待定时唤醒条件）。</p>
+<p>如果大量线程处于此种状态，说明这些线程又去获取第三方资源了，比如第三方的网络资源或读取数据库的操作，长时间无法获得响应，导致大量线程进入等待状态。因此，这说明系统处于一个网络瓶颈或读取数据库操作时间太长。</p>
+<h3 id="系统线程状态为-blocked">系统线程状态为 blocked</h3>
+<p>线程处于阻塞状态，需要根据实际情况进行判断。</p>
+<h3 id="案例分析">案例分析</h3>
+<p>下面通过几个案例进行分解来获得解决问题的方法。</p>
+<h3 id="waiting-for-monitor-entry-和-javalangthreadstate-blocked">waiting for monitor entry 和 java.lang.Thread.State: BLOCKED</h3>
+<pre><code class="language-java">&quot;DB-Processor-13&quot; daemon prio=5 tid=0x003edf98 nid=0xca waiting for monitor entry [0x000000000825f000]
+java.lang.Thread.State: BLOCKED (on object monitor)
+                at beans.ConnectionPool.getConnection(ConnectionPool.java:102)
+                - waiting to lock &lt;0xe0375410&gt; (a beans.ConnectionPool)
+                at beans.cus.ServiceCnt.getTodayCount(ServiceCnt.java:111)
+                at beans.cus.ServiceCnt.insertCount(ServiceCnt.java:43)
+
+&quot;DB-Processor-14&quot; daemon prio=5 tid=0x003edf98 nid=0xca waiting for monitor entry [0x000000000825f020]
+java.lang.Thread.State: BLOCKED (on object monitor)
+                at beans.ConnectionPool.getConnection(ConnectionPool.java:102)
+                - waiting to lock &lt;0xe0375410&gt; (a beans.ConnectionPool)
+                at beans.cus.ServiceCnt.getTodayCount(ServiceCnt.java:111)
+                at beans.cus.ServiceCnt.insertCount(ServiceCnt.java:43)
+
+&quot;DB-Processor-3&quot; daemon prio=5 tid=0x00928248 nid=0x8b waiting for monitor entry [0x000000000825d080]
+java.lang.Thread.State: RUNNABLE
+                at oracle.jdbc.driver.OracleConnection.isClosed(OracleConnection.java:570)
+                - waiting to lock &lt;0xe03ba2e0&gt; (a oracle.jdbc.driver.OracleConnection)
+                at beans.ConnectionPool.getConnection(ConnectionPool.java:112)
+                - locked &lt;0xe0386580&gt; (a java.util.Vector)
+                - locked &lt;0xe0375410&gt; (a beans.ConnectionPool)
+                at beans.cus.Cue_1700c.GetNationList(Cue_1700c.java:66)
+                at org.apache.jsp.cue_1700c_jsp._jspService(cue_1700c_jsp.java:120)
+</code></pre>
+<p>上面系统线程的状态是 <code>waiting for monitor entry</code>，说明此线程通过 synchronized(obj) { } 申请进入临界区，但obj对应的 Monitor 被其他线程所拥有，所以 JVM线程的状态是 java.lang.Thread.State: BLOCKED (on object monitor)，说明线程等待资源超时。</p>
+<p>下面的 <code>waiting to lock &lt;0xe0375410&gt;</code> 说明线程在等待给 <code>0xe0375410</code> 这个地址上锁（trying to obtain 0xe0375410 lock），如果在日志中发现有大量的线程都在等待给 0xe0375410 上锁的话，这个时候需要在日志中查找那个线程获取了这个锁 locked &lt;0xe0375410&gt;，如上面的例子中是 &quot;DB-Processor-14&quot; 这个线程，这样就可以顺藤摸瓜了。上面的例子是因为获取数据库操作等待的时间太长所致的，这个时候就需要修改数据库连接的配置信息。</p>
+<p>如果两个线程相互都被对方的线程锁锁住，这样就造成了 死锁 现象，如下面的例子所示：</p>
+<figure data-type="image" tabindex="1"><img src="https://chenbaicheng.top/post-images/1646789942356.png" alt="" loading="lazy"></figure>
+<h3 id="waiting-on-condition-和-javalangthreadstate-timed_waiting">waiting on condition 和 java.lang.Thread.State: TIMED_WAITING</h3>
+<pre><code class="language-java">&quot;RMI TCP Connection(idle)&quot; daemon prio=10 tid=0x00007fd50834e800 nid=0x56b2 waiting on condition [0x00007fd4f1a59000]
+java.lang.Thread.State: TIMED_WAITING (parking)
+                at sun.misc.Unsafe.park(Native Method)
+                - parking to wait for  &lt;0x00000000acd84de8&gt; (a java.util.concurrent.SynchronousQueue$TransferStack)
+                at java.util.concurrent.locks.LockSupport.parkNanos(LockSupport.java:198)
+                at java.util.concurrent.SynchronousQueue$TransferStack.awaitFulfill(SynchronousQueue.java:424)
+                at java.util.concurrent.SynchronousQueue$TransferStack.transfer(SynchronousQueue.java:323)
+                at java.util.concurrent.SynchronousQueue.poll(SynchronousQueue.java:874)
+                at java.util.concurrent.ThreadPoolExecutor.getTask(ThreadPoolExecutor.java:945)
+                at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:907)
+                at java.lang.Thread.run(Thread.java:662)
+</code></pre>
+<p>JVM线程的状态是 java.lang.Thread.State: TIMED_WAITING (parking)，说明线程处于定时等待的状态，parking指线程处于挂起中。</p>
+<p>waiting on condition需要结合堆栈中的 parking to wait for &lt;0x00000000acd84de8&gt; (a java.util.concurrent.SynchronousQueue$TransferStack) 一起来分析。首先，本线程肯定是在等待某个条件的发生来把自己唤醒。其次，SynchronousQueue并不是一个队列，只是线程之间移交信息的机制，当我们把一个元素放入到 SynchronousQueue 中的时候必须有另一个线程正在等待接受移交的任务，因此这就是本线程在等待的条件。</p>
+<h3 id="in-objectwait-和-javalangthreadstate-timed_waiting">in Object.wait() 和 java.lang.Thread.State: TIMED_WAITING</h3>
+<pre><code class="language-java">&quot;RMI RenewClean-[172.16.5.19:28475]&quot; daemon prio=10 tid=0x0000000041428800 nid=0xb09 in Object.wait() [0x00007f34f4bd0000]
+java.lang.Thread.State: TIMED_WAITING (on object monitor)
+                at java.lang.Object.wait(Native Method)
+                - waiting on &lt;0x00000000aa672478&gt; (a java.lang.ref.ReferenceQueue$Lock)
+                at java.lang.ref.ReferenceQueue.remove(ReferenceQueue.java:118)
+                - locked &lt;0x00000000aa672478&gt; (a java.lang.ref.ReferenceQueue$Lock)
+                at sun.rmi.transport.DGCClient$EndpointEntry$RenewCleanThread.run(DGCClient.java:516)
+                at java.lang.Thread.run(Thread.java:662)       
+</code></pre>
+<p>本例中JVM线程的状态是 java.lang.Thread.State: TIMED_WAITING (on object monitor)，说明线程调用了 java.lang.Object.wait(long timeout) 方法而进入了等待状态。</p>
+<p>&quot;Wait Set&quot;中等待的线程状态就是 in Object.wait()，当线程获得了 Monitor进入临界区之后，如果发现线程继续运行的条件没有满足，它就调用对象（通常是被 synchronized 的对象）的wait()方法，放弃了Monitor，进入 &quot;Wait Set&quot; 队列中。只有当别的线程在该对象上调用了 notify()或notifyAll()方法， &quot;Wait Set&quot; 队列中线程才得到机会去竞争，但是只有一个线程获得对象的 Monitor，恢复到的运行态。</p>
+<p>另外需要注意的是，是先 locked &lt;0x00000000aa672478&gt; 然后再 waiting on &lt;0x00000000aa672478&gt;，之所以如此，可以通过下面的代码进行演示：</p>
+<pre><code class="language-java">static private class  Lock { };
+private Lock lock = new Lock();
+public Reference&lt;? extends T&gt; remove(long timeout) {
+    synchronized (lock) {
+        Reference&lt;? extends T&gt; r = reallyPoll();
+        if (r != null) return r;
+        for (;;) {
+            lock.wait(timeout);
+            r = reallyPoll();
+            // ……
+       }
+}
+</code></pre>
+<p>线程在执行的过程中，先用 synchronized 获得了这个对象的 Monitor（对应 locked &lt;0x00000000aa672478&gt;），当执行到 lock.wait(timeout); 的时候，线程就放弃了Monitor的所有权，进入 &quot;Wait Set&quot; 队列（对应 waiting on &lt;0x00000000aa672478&gt;）。</p>
+<p>前面几篇文章详细说明了如何分析Thread Dump文件，除此之外还可以通过分析JVM堆内存信息来进一步找到问题的原因。</p>
+<p>参考资料：<br>
+<a href="https://www.iteye.com/blog/just2do-2275894">性能分析之-- JAVA Thread Dump 分析综述</a><br>
+<a href="https://www.cnblogs.com/zhengyun_ustc/archive/2013/01/06/dumpanalysis.html">三个实例演示 Java Thread Dump 日志分析</a><br>
+<a href="https://www.iteye.com/blog/sesame-428012">如何分析Java虚拟机死锁</a><br>
+<a href="https://www.cnblogs.com/zhengyun_ustc/archive/2013/03/18/tda.html">各种 Java Thread State 第一分析法则</a><br>
+<a href="https://dzone.com/articles/how-analyze-java-thread-dumps">How to Analyze Java Thread Dumps</a> | <a href="https://segmentfault.com/a/1190000000615690">中文版</a></p>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/jvm-system-IV/">下一篇->JVM故障分析及性能优化系列之四：Thread Dump日志线程状态</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+

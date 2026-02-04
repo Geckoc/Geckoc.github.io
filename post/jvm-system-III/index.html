@@ -1,0 +1,470 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>JVM故障分析及性能优化系列之三：VM Thread分析 | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://chenbaicheng.top/post-images/jvm-system-III.jpg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2022-03-03 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>JVM故障分析及性能优化系列之三：VM Thread分析</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <p>当服务器CPU100%的时候，通过定位占用资源最大的线程定位到 VM Thread：</p>
+<pre><code class="language-java">&quot;VM Thread&quot; prio=10 tid=0x00007fbea80d3800 nid=0x5e9 runnable
+</code></pre>
+<!-- more -->
+<p><a href="#%E4%BD%BF%E7%94%A8jstat%E5%91%BD%E4%BB%A4">使用jstat命令</a><br>
+<a href="#jvm%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B">JVM内存模型</a><br>
+<a href="#jvm%E5%86%85%E5%AD%98%E5%8F%82%E6%95%B0%E8%AE%BE%E7%BD%AE">JVM内存参数设置</a><br>
+<a href="#%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90">日志分析</a></p>
+<h1 id="使用jstat命令">使用jstat命令</h1>
+<p>这个时候需要使用<code> jstat -gc &lt;pid&gt; &lt;period&gt; &lt;times&gt;</code>命令查看gc的信息，显示结果如下：<br>
+<img src="https://chenbaicheng.top/post-images/1646373793721.jpg" alt="" loading="lazy"></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">S0C</th>
+<th style="text-align:center">S1C</th>
+<th style="text-align:center">S0U</th>
+<th style="text-align:center">S1U</th>
+<th style="text-align:center">EC</th>
+<th style="text-align:center">EU</th>
+<th style="text-align:center">OC</th>
+<th style="text-align:center">OU</th>
+<th style="text-align:center">PC</th>
+<th style="text-align:center">PU</th>
+<th style="text-align:center">YGC</th>
+<th style="text-align:center">YGCT</th>
+<th style="text-align:center">FGC</th>
+<th style="text-align:center">FGCT</th>
+<th style="text-align:center">GCT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">26176.0</td>
+<td style="text-align:center">26176.0</td>
+<td style="text-align:center">3340.6</td>
+<td style="text-align:center">0.0</td>
+<td style="text-align:center">209792.0</td>
+<td style="text-align:center">76381.1</td>
+<td style="text-align:center">18350008.0</td>
+<td style="text-align:center">722292.2</td>
+<td style="text-align:center">262144.0</td>
+<td style="text-align:center">251937.2</td>
+<td style="text-align:center">156690</td>
+<td style="text-align:center">1838.487</td>
+<td style="text-align:center">103</td>
+<td style="text-align:center">45.870</td>
+<td style="text-align:center">1884.356</td>
+</tr>
+</tbody>
+</table>
+<p>结果中每个项目的含义可以参考官方对<a href="https://docs.oracle.com/javase/1.5.0/docs/tooldocs/share/jstat.html">jstat</a>的文档，简单翻译如下：</p>
+<ul>
+<li>S0C: Young Generation第一个survivor space的内存大小 (kB).</li>
+<li>S1C: Young Generation第二个survivor space的内存大小 (kB).</li>
+<li>S0U: Young Generation第一个Survivor space当前已使用的内存大小 (kB).</li>
+<li>S1U: Young Generation第二个Survivor space当前已经使用的内存大小 (kB).</li>
+<li>EC: Young Generation中eden space的内存大小 (kB).</li>
+<li>EU: Young Generation中Eden space当前已使用的内存大小 (kB).</li>
+<li>OC: Old Generation的内存大小 (kB).</li>
+<li>OU: Old Generation当前已使用的内存大小 (kB).</li>
+<li>PC: Permanent Generation的内存大小 (kB)</li>
+<li>PU: Permanent Generation当前已使用的内存大小 (kB).</li>
+<li>YGC: 从启动到采样时Young Generation GC的次数</li>
+<li>YGCT: 从启动到采样时Young Generation GC所用的时间 (s).</li>
+<li>FGC: 从启动到采样时Old Generation GC的次数.</li>
+<li>FGCT: 从启动到采样时Old Generation GC所用的时间 (s).</li>
+<li>GCT: 从启动到采样时GC所用的总时间 (s).</li>
+</ul>
+<p>JDK8的结果稍微有所不同，结果含义可以参考：<a href="https://docs.oracle.com/javase/8/docs/technotes/tools/unix/jstat.html">JDK8的jstat</a></p>
+<h1 id="jvm内存模型">JVM内存模型</h1>
+<p>上面中的Young Generation、Permanent Generation和Old Generation等概念有一些混乱，这里简要的进行说明。简单来说，JVM内存由堆（Heap）和非堆（Non-heap）内存组成，前者共运行在JVM之上的程序使用，后者供JVM自己使用。<br>
+<img src="https://chenbaicheng.top/post-images/1646379524776.png" alt="" loading="lazy"></p>
+<p>堆内存的组成如下：<br>
+<img src="https://chenbaicheng.top/post-images/1646379571176.png" alt="" loading="lazy"></p>
+<p>非堆内存由 Permanent Generation 和 Code Cache 两部分组成：</p>
+<ul>
+<li>Permanent Generation（持久代）: 保存虚拟机自己的静态(refective)数据，主要存放加载的Class类级别静态对象如class本身，method，field等等。permanent generation空间不足会引发full GC；</li>
+<li>Code Cache: 用于编译和保存本地代码（native code）的内存，JVM内部处理或优化。</li>
+</ul>
+<h1 id="jvm内存参数设置">JVM内存参数设置</h1>
+<h2 id="堆内存设置">堆内存设置</h2>
+<ul>
+<li>堆内存（总的）由 -Xms 和 -Xmx 分别设置最小和最大堆内存</li>
+<li>New Generation 由 -Xmn 设置，-XX:SurvivorRatio=m 设置 Eden和 两个Survivor区的大小比值；-XX:NewRatio=n 设置 New Generation 和 Old Generation 的大小比值。</li>
+<li>每个线程的堆栈大小由 ·-Xss· 设置，JDK5.0以后每个线程堆栈大小为1M，以前每个线程堆栈大小为256K。在相同物理内存下，减小这个值能生成更多的线程。但是操作系统对一个进程内的线程数还是有限制的，不能无限生成，经验值在3000~5000左右。</li>
+</ul>
+<h2 id="非堆内存设置">非堆内存设置</h2>
+<p>非堆内存由 <code>-XX:PermSize=n</code> 和 <code> -XX:MaxPermSize=n</code> 分别设置最小和最大非堆内存大小</p>
+<h1 id="日志分析">日志分析</h1>
+<p>了解完上面的概念之后，我们再来看最上面的日志信息，有两个地方有问题：<br>
+一是FGC（完全GC）的数量太大了，正常来说FGC应该占整个GC（YGC+FGC）的1%到5%才正常，上面日志上完全GC的次数太多了；二是日志中PU的值太大了，基本上已经达到设置的PC了，因此需要增大MaxPermSize的值。<br>
+不过这只是权宜之计，出现这么大的非堆内存，肯定什么地方出现了问题，还需要进一步找到占用内存的原因，这也是后面文章所要说的。</p>
+<p>参考资料：<br>
+<a href="https://blog.csdn.net/yanghongchang_/article/details/42004883">JVM调优总结 + jstat 分析</a><br>
+<a href="https://blog.csdn.net/wuzhilon88/article/details/49201891">JVM调优总结(这个总结得比较全面)</a><br>
+<a href="https://www.cnblogs.com/redcreen/archive/2011/05/04/2036387.html">JVM系列一：JVM内存组成及分配</a></p>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/jvm-system-II/">下一篇->JVM故障分析及性能优化系列之二：Thread Dump日志结构解析</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+

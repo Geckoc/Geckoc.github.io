@@ -1,0 +1,478 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>思考：如何写出让你的同事难以维护的代码🐒 | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305181839902.jpg">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2023-05-15 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>思考：如何写出让你的同事难以维护的代码🐒</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <blockquote>
+<p>导读：从【程序命名&amp;注释】【数据类型&amp;类&amp;对象】【控制执行流程】和【程序/结构设计】四个方面梳理了一些真实案例，相信通过这些案例你能迅速get技能：如何写出让同事难以维护的代码👍。</p>
+</blockquote>
+<!-- more -->
+<h2 id="摘要概览">摘要概览</h2>
+<p>比起什么程序员删库跑路，我更喜欢「写出让同事难以维护的代码」，因为即使不能「名垂千古」，至少VCS可以帮你「遗臭万年」。</p>
+<p>说回正题，前几天在家附近的一个小学校旁边散步，突然听到某个学生说“上学期我是‘三好学生’，xxxx”。想了想，学生有“三好”，那么程序员“三好”是什么？<br>
+我认为程序员的“三好”是「好用」，「好看」，「好改」。这个是说程序员的代码：</p>
+<ul>
+<li>要正确且健壮，就是好用；</li>
+<li>要可读性高，易于理解，就是好看；</li>
+<li>要方便扩展和改动，就是好改；</li>
+</ul>
+<h3 id="一-程序命名注释">一、程序命名&amp;注释</h3>
+<h4 id="11教你如何挑战维护者">1.1教你如何挑战维护者</h4>
+<p><strong>容易输入的变量名</strong></p>
+<p>比如：Fred，asdf单字母的变量名。</p>
+<p>比如：a，b，c，x，y，z（如果不够用，可以考虑 a1，a2，a3，a4，….）</p>
+<p><strong>有创意地拼写错误</strong></p>
+<p>比如：SetPintleOpening， SetPintalClosing，这样可以让人很难搜索代码。</p>
+<figure data-type="image" tabindex="1"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151703732.png" alt="图片" loading="lazy"></figure>
+<p><strong>使用缩写和拼音</strong></p>
+<p>比如：WTF，RTFSC …… （使用拼音缩写也同样给力，比如：BT，TMD，TJJTDS）</p>
+<p>论注释的重要性：不然我以为是「驾校」是一类重要客户，要有单独的helper</p>
+<figure data-type="image" tabindex="2"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151739661.png" alt="图片" loading="lazy"></figure>
+<h4 id="12嵌入式文档之殇注释">1.2嵌入式文档之殇=注释</h4>
+<p>不要盲目修改，注意理解！！！</p>
+<p>注意理解，你会发现其中的不同点……</p>
+<figure data-type="image" tabindex="3"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151740416.png" alt="图片" loading="lazy"></figure>
+<p>「注意理解」之后，意外出现了……</p>
+<figure data-type="image" tabindex="4"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151741202.png" alt="图片" loading="lazy"></figure>
+<p><strong>程序回忆录</strong><br>
+long~ long ago~【狼，狼，啊狗】🐶</p>
+<figure data-type="image" tabindex="5"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151743840.png" alt="图片" loading="lazy"></figure>
+<p><strong>千万注意something</strong></p>
+<p>实在不知道注意什么……</p>
+<figure data-type="image" tabindex="6"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151744463.png" alt="图片" loading="lazy"></figure>
+<p><strong>用注释保留一些秘密</strong></p>
+<figure data-type="image" tabindex="7"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151744002.png" alt="图片" loading="lazy"></figure>
+<h3 id="二-数据类型类对象">二、数据类型&amp;类&amp;对象</h3>
+<h4 id="21教教你怎么用数组">2.1教教你怎么用数组</h4>
+<p><strong>无所不能的多维数组</strong></p>
+<p>如果你觉得二维、三维还不足够，你可以试试四维。</p>
+<p>仔细品一品，这个排版和换行可以教你快速数下标的方法：行号-44，比如“常驻工作城市”的下标就是25。</p>
+<figure data-type="image" tabindex="8"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151745914.png" alt="图片" loading="lazy"></figure>
+<p><strong>想清楚下标了再调用</strong></p>
+<p>一切皆对象，数组也是对象，用就是了</p>
+<figure data-type="image" tabindex="9"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151749384.png" alt="图片" loading="lazy"></figure>
+<h4 id="22对象类觉不爱">2.2对象？&quot;类&quot;觉不爱</h4>
+<p>员工服务的四胞胎：俩哥哥service，俩妹妹helper；</p>
+<p>——「木兰辞」：&quot;四&quot;兔傍地走，安能辨我是雌雄雄雌；</p>
+<figure data-type="image" tabindex="10"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151750426.png" alt="图片" loading="lazy"></figure>
+<h3 id="三-控制执行流程">三、控制执行流程</h3>
+<h4 id="31开胃菜if-else">3.1开胃菜：if-else</h4>
+<p>巨大的processor。写一个 processor，然后让你的所有的 consumer 类都使用这个 processor，这样你可以在这个 consumer 中整出一大堆 if…else… 语句，相当的刺激。</p>
+<figure data-type="image" tabindex="11"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151752002.png" alt="图片" loading="lazy"></figure>
+<figure data-type="image" tabindex="12"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151752808.png" alt="图片" loading="lazy"></figure>
+<p>当return和不return混杂在一起的时候，这份刺激中又多了些惊喜……</p>
+<figure data-type="image" tabindex="13"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151752460.png" alt="图片" loading="lazy"></figure>
+<h4 id="32大菜海鲜拼盘">3.2大菜：「海鲜拼盘」</h4>
+<p>下面这个600行的方法让我学会了「截长图」</p>
+<figure data-type="image" tabindex="14"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151753961.png" alt="图片" loading="lazy"></figure>
+<p>🐶这是个switch-for-if-continue-return组合，很能理解「作者实在没法把break和goto加进去」的苦衷。</p>
+<p>——报告老师：“第四章我已经掌握了”</p>
+<figure data-type="image" tabindex="15"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151754227.png" alt="图片" loading="lazy"></figure>
+<p>接下来见证遗迹的时刻……</p>
+<p>建议：多来来回回的读读这段代码，有助于锻炼眼球灵活性，并且能有效抵抗颈椎病</p>
+<figure data-type="image" tabindex="16"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151755485.png" alt="图片" loading="lazy"></figure>
+<p>看一遍，想一下，case 0的时候返回啥？😏脖子有没有舒服点儿？</p>
+<h3 id="四-程序结构设计">四、程序/结构设计</h3>
+<h4 id="认知升级">认知升级</h4>
+<p>GrayService是个灰度服务，corpId是企业ID，那么通过一次灰度放量，在脑壳里执行一下程序，就可以完成认知升级。</p>
+<figure data-type="image" tabindex="17"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151757579.png" alt="图片" loading="lazy"></figure>
+<h4 id="cv工程师佳作">CV工程师佳作</h4>
+<p>克隆和拷贝。为了效率，你要学会使用 copy + past，你几乎都不用理解别人的代码，你就可以高效地编程了。</p>
+<figure data-type="image" tabindex="18"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151758451.png" alt="图片" loading="lazy"></figure>
+<figure data-type="image" tabindex="19"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151759099.png" alt="图片" loading="lazy"></figure>
+<h4 id="包装包装再包装">包装，包装，再包装</h4>
+<p>把你所有的 API 都包装上 6 到 8 遍，包装深度多达 4层以上，以便找到足够多相似的东西。</p>
+<figure data-type="image" tabindex="20"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151759479.png" alt="图片" loading="lazy"></figure>
+<p>业务是否复杂，这不重要；重要的是1，2行代码的封装也是要的，不包个8层封装，怎么能说明理解分层了呢？</p>
+<p>还好我一屏就可以看完整个链路🐶</p>
+<figure data-type="image" tabindex="21"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151800566.png" alt="图片" loading="lazy"></figure>
+<h4 id="想必是个核心类">想必是个核心类</h4>
+<p>再多引用几个类，我还能干更多事！请大声唱：我真的还想再包500类——《康熙王朝》。</p>
+<figure data-type="image" tabindex="22"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151801444.png" alt="图片" loading="lazy"></figure>
+<h4 id="羊大为美">羊大为美</h4>
+<p>中国人喜欢大，都是“越大越好”，大房子，大车子；而现代中国人总把‘大”放在高位，把‘大”作为对于一个事物最高的评价。像大人，大神，大圣，大仙，大中国，和别人介绍起自己的家乡都会加上“大”字作前缀。所以，从古至今，大始终贯穿着人们对于美好事物的遐想。</p>
+<p>我想说还有大类，大方法：</p>
+<figure data-type="image" tabindex="23"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151802966.png" alt="图片" loading="lazy"></figure>
+<h4 id="不要过早的return或continue要v型">不要过早的return或continue，要「V型」</h4>
+<p>V型激起我写代码的欲望。</p>
+<figure data-type="image" tabindex="24"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151802633.png" alt="图片" loading="lazy"></figure>
+<p>跟左边的深V相比，右边的就太差了，行数竟然变多了。</p>
+<figure data-type="image" tabindex="25"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151803591.png" alt="图片" loading="lazy"></figure>
+<h4 id="一张图一颗心一场仗-一张网">一张图，一颗心，一场仗 + 一张网</h4>
+<p>一张网就是「码网」。渔网是打鱼的，码网是打码农。</p>
+<p>上图「包Cyclic」：Calculates the number of packages which each package directly or indirectly depends on, and which in turn directly or indirectly depend on it.</p>
+<p>下图「类Cyclic」：Calculates the number of classes or interfaces which each class directly or indirectly depends on, and which in turn directly or indirectly depend on it.</p>
+<p>Note：Such cyclic dependencies may result in code which is difficult to understand and test.</p>
+<p>翻译：能看看，不能看拉倒</p>
+<figure data-type="image" tabindex="26"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151804766.png" alt="图片" loading="lazy"></figure>
+<figure data-type="image" tabindex="27"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202305151805132.png" alt="图片" loading="lazy"></figure>
+<p>望学以致用🐶<br>
+(不会真的有人信吧)</p>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/computer-skills-you-need-to-know/">下一篇->Computer Skills You Need to Know</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+

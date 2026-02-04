@@ -1,0 +1,469 @@
+<html>
+<head>
+  <meta charset="utf-8" />
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="all,follow">
+<meta name="googlebot" content="index,follow,snippet,archive">
+<title>Java8 新特性 | Richrad&#39; Tech</title>
+<link rel="shortcut icon" href="https://chenbaicheng.top/favicon.ico?v=1770181427315">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<link rel="stylesheet" href="https://chenbaicheng.top/styles/main.css" type='text/css' media='all'>
+
+<script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/moment.js/2.23.0/moment.min.js"></script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+
+
+
+</head>
+<body class="home blog ct-body standard">
+<div id="overflow-container" class="overflow-container">
+  <a class="skip-content" href="#main">Skip to content</a>
+  <header id="site-header" class="site-header" role="banner">
+    <div class='top-navigation top-navigation-important'>
+        <div class='container'>
+            <div id="menu-secondary" class="menu-container menu-secondary" role="navigation">
+                <button id="toggle-secondary-navigation" class="toggle-secondary-navigation"><i class="fa fa-plus"></i></button>
+                <div class="menu">
+                    <ul id="menu-secondary-items" class="menu-secondary-items">
+                        
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/sIU_8mPbz/">Think</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/PsRunQe1e/">Debug</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XG4OOTZXE/">JVM</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/XNd3gqgHV/">Spring</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/zHVG6pQCx/">Read</a>
+                        </li>
+                            
+                        
+                            
+                        <li id="menu-item" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item">
+                            <a href="https://chenbaicheng.top/tag/cHqThofED/">MySQL</a>
+                        </li>
+                            
+                        
+                            
+                        
+                    </ul>
+                </div>
+            </div>
+            <ul class="social-media-icons">
+                
+                    
+                        <li>
+                            <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                                <i class="fab fa-github" title="github"></i>
+                                <span class="screen-reader-text">github</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                        <li>
+                            <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                                <i class="fab fa-qq" title="qq"></i>
+                                <span class="screen-reader-text">qq</span>
+                            </a>
+                        </li>
+                    
+                
+                    
+                
+            </ul>
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="title-info" class="title-info">
+            <div id='site-title' class='site-title'>
+                <a href="https://chenbaicheng.top">  Richrad&#39; Tech </a>
+            </div>
+        </div>
+        <button id="toggle-navigation" class="toggle-navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+        <div id="menu-primary-tracks" class="menu-primary-tracks"></div>
+        <div id="menu-primary" class="menu-container menu-primary" role="navigation">
+            <p class="site-description">温 故 而 知 新</p>
+            <div class="menu">
+                <ul id="menu-primary-items" class="menu-primary-items">
+                     
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/">HOME</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/archives">ARCHIVES</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/tags">TAGS</a>
+                            </li>
+                        
+                    
+                        
+                            <li id="menu-item" class='menu-item menu-item-type-post_type menu-item-object-page current-menu-item current_page_item'>
+                                <a href="/post/about">ABOUT ME</a>
+                            </li>
+                        
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+</header>
+
+
+  <div id="main" class="main" role="main">
+    <div id="loop-container" class="loop-container">
+      <div class="post type-post status-publish format-standard has-post-thumbnail hentry category-design tag-design tag-standard-2 tag-tagalicious tag-travel entry full-without-featured odd excerpt-1">
+        
+          <div class='featured-image lazy lazy-bg-image' data-background="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202207212117138.png">
+          </div>
+        
+
+        <div class="entry-meta">
+          <span class="date">· 2022-07-21 ·</span> <span> / </span>
+          <span class="author">
+            <a href="https://chenbaicheng.top" title="" rel="author"> Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></a>
+          </span>
+          
+            <span class="category">
+                    <span> / </span>
+                    <a href="https://chenbaicheng.top/tag/87i8TcHoj/">Java</a>
+                </span>
+          
+        </div>
+        <div class='entry-header'>
+          <h1 class='entry-title'>Java8 新特性</h1>
+        </div>
+        <div class="entry-container">
+          <div class="entry-content">
+            <article>
+              <blockquote>
+<p>代码更少(增加了新的语法 <em>Lambda</em> 表达式)，速度更快，强大的 <em>Stream API</em>， 便于并行， 最大化减少空指针异常 <em>Optional</em></p>
+<p>其中核心为： <em>Lambda</em> 表达式与 <em>Stream API</em></p>
+</blockquote>
+<!-- more -->
+<h3 id="升级改动">升级改动：</h3>
+<ul>
+<li>
+<p>HashMap</p>
+<ul>
+<li>数组 --&gt; 链表 = 红黑树</li>
+<li>当元素容量大于 <strong>64</strong> 并且链表长度大于 <strong>8</strong> ，转换为 <strong>红黑树</strong> [除了添加操作以外都比链表效率高]</li>
+</ul>
+</li>
+<li>
+<p>ConcurrentHashMap</p>
+<ul>
+<li>JDK8前：concurrentLevel = 16 ，锁分段机制</li>
+<li>JDK8：CAS算法（<strong>无锁算法</strong>）</li>
+</ul>
+</li>
+<li>
+<p>JVM空间</p>
+<ul>
+<li>没有了永久区 <em>PermGen</em> 使用 <em>Meta Space</em> 元空间的概念，并且使用物理内存分配空间，会 <em>GC</em> ，发生条件苛刻。</li>
+<li><s><u>PermGenSize</u></s> 、<s><u>MaxPremGen</u></s> 在JDK1.8已经无效，取而代之的是  <em>MetaSpaceSize</em> 、<em>MaxMetaSpaceSize</em></li>
+</ul>
+</li>
+</ul>
+<h3 id="1-lambda表达式">1. Lambda表达式</h3>
+<ul>
+<li>
+<p>Lmabda 表达式的基础语法：Java8中引入了一个新的操作符 &quot; -&gt; &quot; (箭头操作符 OR Lambda 操作符)</p>
+</li>
+<li>
+<p>箭头操作符 &quot; -&gt; &quot; 将表达式拆分成两部分</p>
+<ul>
+<li>左侧： Lambda 表达式的参数列表</li>
+<li>右侧： Lambda 表达式所需执行的功能，即 Lambda 体</li>
+</ul>
+</li>
+<li>
+<p>语法格式</p>
+<ul>
+<li>无参数，无返回值： 	<code>() -&gt; System.out.println(&quot;Helld Lambda!&quot;);</code></li>
+<li>一个参数，无返回值：  <code>(param) -&gt; System.out.println(param);</code>
+<ul>
+<li>只有一个参数时，小括号可省略  <code>param -&gt; System.out.println(param);</code></li>
+</ul>
+</li>
+<li>两个参数以上，有返回值，Lambda 体中只有一条语句，return 关键字和花括号可以省略</li>
+</ul>
+<pre><code class="language-java">Comparator&lt;Integer&gt; com = (x, y) -&gt; Integer.compare(x, y);
+</code></pre>
+<ul>
+<li>两个参数以上，有返回值，Lambda 体中有多条语句，使用花括号</li>
+</ul>
+<pre><code class="language-java">Comparator&lt;Integer&gt; com = (x, y) -&gt; {
+  System.out.println(&quot;Functional Interface&quot;);
+  return Integer.compare(x, y);
+};
+</code></pre>
+</li>
+<li>
+<p>Lambda 表达式参数列表的数据类型可以省略不写，因为JVM编译器可以通过上下文推断出数据类型，这个过程被称为 “类型推断”。</p>
+</li>
+</ul>
+<h3 id="2-函数式接口">2. 函数式接口</h3>
+<p><strong>Lambda 表达式需要&quot;函数式接口的支持&quot;</strong></p>
+<p><strong>函数式接口：接口中只有一个抽象方法的接口，称为函数式接口</strong></p>
+<p><strong>可以用注解 @Functional Interface修饰，可以检查是否是函数式接口</strong></p>
+<h4 id="java8-内置的四大核心函数式接口">Java8 内置的四大核心函数式接口</h4>
+<p>Consumer&lt;T&gt; ：消费型接口</p>
+<p>​	<code>void accept(T t);</code></p>
+<p>Supplier&lt;T&gt; ：供给型接口</p>
+<p>​	<code>T get();</code></p>
+<p>Function&lt;T, R&gt; ：函数式接口</p>
+<p>​	<code>R apply(T t);</code></p>
+<p>Predicate&lt;T&gt; ： 断言式接口</p>
+<p>​	<code>boolean test(T t);</code></p>
+<p>​</p>
+<h3 id="3-方法引用与构造器引用">3. 方法引用与构造器引用</h3>
+<p><strong>若 Lambda 体中的内容有方法有方法已经实现了，可以使用方法引用</strong></p>
+<p><strong>方法引用主要有三种语法格式</strong></p>
+<ol>
+<li>对象 <strong>::</strong> 实例方法名</li>
+<li>类 <strong>::</strong> 实例方法名</li>
+<li>类 <strong>::</strong> 静态方法名</li>
+</ol>
+<p><em>注意： Lambda体中调用方法参数列表与返回值类型，要与函数式接口中抽象方法的函数列表和返回值类型保持一致！</em></p>
+<p><em>若 Lambda 参数列表中第一参数是 实例方法的调用者，第二参数是实例方法的参数时，可以使用 ClassName :: method</em></p>
+<h3 id="4-stream-api">4. Stream API</h3>
+<figure data-type="image" tabindex="1"><img src="https://ricpic.oss-cn-hangzhou.aliyuncs.com/img/202207211836638.png" alt="image-20220721183628459" loading="lazy"></figure>
+<h3 id="5-接口中的默认方法与静态方法">5. 接口中的默认方法与静态方法</h3>
+<h3 id="6-新时间日期api">6. 新时间日期API</h3>
+<h3 id="7-其他新特性">7. 其他新特性</h3>
+
+            </article>
+          </div>
+          <div class='entry-meta-bottom'>
+            <div class="entry-categories">
+              <p>
+                <span>Categories</span>
+                
+                  
+                    
+                  <a href="https://chenbaicheng.top/tag/sIU_8mPbz/" title="View all posts in Think">Think</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/PsRunQe1e/" title="View all posts in Debug">Debug</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/87i8TcHoj/" title="View all posts in Java">Java</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XG4OOTZXE/" title="View all posts in JVM">JVM</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/XNd3gqgHV/" title="View all posts in Spring">Spring</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/zHVG6pQCx/" title="View all posts in Read">Read</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/cHqThofED/" title="View all posts in MySQL">MySQL</a>
+                    
+                    
+                    
+                  <a href="https://chenbaicheng.top/tag/el5cAgJ_2/" title="View all posts in Git">Git</a>
+                    
+                    
+              </p>
+            </div>
+            <div class="entry-tags">
+              <p><span>Tags</span>
+              </p>
+            </div>
+          </div>
+          <div class="author-meta">
+            <div class="author">
+              <img alt='' src="https://chenbaicheng.top/images/avatar.png?v=1770181427315" class='avatar avatar-72 photo' height='72' width='72'>
+              <span>WRITTEN BY: &nbsp;&nbsp;&nbsp;<a href='https://chenbaicheng.top'>Richard</a> </span>
+            </div>
+            <div class="bio">
+              <p>I&#39;m discombobulated !</p>
+              
+                
+                  <a class="github" target="_blank"
+                     href="https://github.com/Geckoc">
+                    <i class="fab fa-github" title="github"></i>
+                  </a>
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+              
+                
+                  <a class="qq" target="_blank"
+                     href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes">
+                    <i class="fab fa-qq" title="qq"></i>
+                  </a>
+                
+              
+                
+              
+            </div>
+          </div>
+        </div>
+          
+            <nav class="navigation pagination" role="navigation">
+              <h2 class="screen-reader-text">Posts navigation</h2>
+              <div class="nav-links">
+                <a class="next page-numbers" href="https://chenbaicheng.top/post/dev-config-manual/">下一篇->Dev Config Manual</a>
+              </div>
+            </nav>
+          
+      </div>
+      <section id="comments" class="comments">
+        
+          
+            <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+
+<div id="gitalk-container"></div>
+
+<script>
+
+  var gitalk = new Gitalk({
+    clientID: 'efb43fc5663c1b20fb9a',
+    clientSecret: '0bdfc98eafa5818bcec98b80af709f19443f73d3',
+    repo: 'geckoc.github.io',
+    owner: 'Geckoc',
+    admin: ['Geckoc'],
+    id: location.pathname,      // Ensure uniqueness and length less than 50
+    distractionFreeMode: false  // Facebook-like distraction free mode
+  })
+
+  gitalk.render('gitalk-container')
+
+</script>
+
+          
+
+          
+        
+      </section>
+    </div>
+  </div>
+  <footer id="site-footer" class="site-footer" role="contentinfo">
+    <h1>
+        <a href="https://chenbaicheng.top"> Richrad&#39; Tech </a>
+    </h1>
+    <p class="site-description">温 故 而 知 新</p>
+    <div id="menu-footer" class="menu-container menu-footer" role="navigation">
+        <div class="menu">
+            <ul id="menu-footer-items" class="menu-footer-items">
+            </ul>
+        </div>
+    </div>
+    <ul class="social-media-icons">
+        
+            
+                <li>
+                    <a href="https://github.com/Geckoc" data-animate-hover="pulse" class="github" target="_blank">
+                        <i class="fab fa-github" title="github"></i>
+                        <span class="screen-reader-text">github</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+                <li>
+                    <a href="http://wpa.qq.com/msgrd?v=3&amp;uin=574297900&amp;site=qq&amp;menu=yes" data-animate-hover="pulse" class="qq" target="_blank">
+                        <i class="fab fa-qq" title="qq"></i>
+                        <span class="screen-reader-text">qq</span>
+                    </a>
+                </li>
+            
+        
+            
+        
+    </ul>
+    <div class="design-credit">
+        <p>Powered by <a href="https://github.com/Geckoc?tab=repositories" target="_blank">Ric</a></p>
+    </div>
+</footer>
+<script>
+    hljs.initHighlightingOnLoad()
+</script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquery.min.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/jquerymigrate.js"></script>
+<script src="https://chenbaicheng.top/media/scripts/lib/production.min.js"></script>
+
+</div>
+</body>
+</html>
+
